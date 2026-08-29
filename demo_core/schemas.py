@@ -62,16 +62,16 @@ class StagePlan(BaseModel):
     @field_validator("subtitle")
     @classmethod
     def validate_subtitle_width(cls, value: str) -> str:
-        if display_units(value) > 44:
-            raise ValueError("stage subtitle must be 44 display units or fewer")
+        if display_units(value) > 28:
+            raise ValueError("stage subtitle must be 28 display units or fewer")
         return value
 
     @field_validator("body")
     @classmethod
     def validate_body(cls, values: list[str]) -> list[str]:
         cleaned = [value.strip() for value in values if value.strip()]
-        if any(len(value) > 42 for value in cleaned):
-            raise ValueError("stage body lines must be 42 characters or fewer")
+        if any(display_units(value) > 24 for value in cleaned):
+            raise ValueError("stage body lines must be 24 display units or fewer")
         return cleaned
 
 

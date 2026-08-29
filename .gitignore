@@ -2,6 +2,14 @@
 .env
 .env.*
 !.env.example
+.envrc
+.direnv/
+secrets/
+credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
 
 # Python
 __pycache__/
@@ -20,6 +28,15 @@ dist/
 
 # Generated demo artifacts
 demo/output/
+skill/design-research-figures/demo/output/
+
+# Private benchmark observations and evidence
+benchmark/results.csv
+benchmark/results.local.csv
+benchmark/analysis.json
+benchmark/analysis.md
+benchmark/evidence/
+benchmark/recordings/
 
 # Editor and operating-system files
 .DS_Store

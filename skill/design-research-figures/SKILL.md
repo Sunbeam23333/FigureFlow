@@ -130,6 +130,14 @@ python3 "$FIGURE_SKILL_ROOT/scripts/qa_pdf.py" output/figure.pdf output/table.pd
 python3 "$FIGURE_SKILL_ROOT/scripts/qa_pdf.py" output/paper.pdf --expect-pages 3 --log output/paper.log --json
 ```
 
+Before publishing a repository or delivery ZIP, run the public-release gate. Pass ignored delivery artifacts explicitly; the default repository inventory covers tracked and non-ignored files.
+
+```bash
+python3 "$FIGURE_SKILL_ROOT/scripts/check_public_release.py" --root /path/to/repository --artifact output/delivery.zip
+```
+
+The gate rejects credentials, custom API endpoints, local machine paths, unsafe ZIP members, and non-empty provider response IDs in manifests. It reports locations and rule names without echoing matched values.
+
 Reject clipping, node/label overlap, arrows through text, stale page renders, accidental second pages, Type 3 or unembedded fonts, `Overfull` boxes, unexplained encodings, and text below the target readable size. Re-render final pages from the current PDF rather than reusing old contact sheets. Read [references/qa.md](references/qa.md).
 
 ## Complete demo
@@ -157,5 +165,4 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - `assets/themes/academic_audit.json`: shared Python/SVG/LaTeX design tokens
 - `assets/tikz/`: NVIDIA Green, Emerald, Warm Editorial, and mechanism templates
 - `demo/source/`: working YAML examples for every deterministic module
-- `demo/README.md`: exact demo outputs and rebuild instructions
 - `demo/README.md`: rebuild instructions and the expected gallery filename (generated locally, not committed)

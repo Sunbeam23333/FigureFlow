@@ -9,6 +9,8 @@ from pathlib import Path
 
 from PIL import Image, ImageChops
 
+from public_safety import portable_path
+
 
 def content_bbox(image: Image.Image, tolerance: int) -> tuple[int, int, int, int] | None:
     rgb = image.convert("RGB")
@@ -25,7 +27,13 @@ def content_bbox(image: Image.Image, tolerance: int) -> tuple[int, int, int, int
     return mask.getbbox()
 
 
-def audit(path: Path, margin: int, tolerance: int) -> dict[str, object]:
+def audit(
+    path: Path,
+    margin: int,
+    tolerance: int,
+    *,
+    display_path: str | None = None,
+) -> dict[str, object]:
     image = Image.open(path)
     bbox = content_bbox(image, tolerance)
     if bbox is None:
@@ -41,7 +49,7 @@ def audit(path: Path, margin: int, tolerance: int) -> dict[str, object]:
         }
         risk = any(value < margin for value in distances.values())
     return {
-        "file": str(path),
+        "file": display_path or path.name,
         "width": image.width,
         "height": image.height,
         "mode": image.mode,
@@ -65,7 +73,16 @@ def main() -> int:
     for raw in args.inputs:
         path = raw.expanduser().resolve()
         paths.extend(sorted(path.rglob(args.pattern)) if path.is_dir() else [path])
-    results = [audit(path, args.margin, args.tolerance) for path in paths]
+    report_base = Path.cwd().resolve()
+    results = [
+        audit(
+            path,
+            args.margin,
+            args.tolerance,
+            display_path=portable_path(path, report_base),
+        )
+        for path in paths
+    ]
 
     if args.json:
         print(json.dumps(results, indent=2))

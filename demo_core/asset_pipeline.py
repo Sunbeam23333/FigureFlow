@@ -104,6 +104,21 @@ def _run(command: list[str], *, timeout: int = 120) -> subprocess.CompletedProce
     return completed
 
 
+def normalize_chroma_border(path: Path, *, border: int = 12) -> int:
+    """Make the outer canvas exactly magenta without touching a centered icon."""
+    with Image.open(path) as source:
+        image = source.convert("RGB")
+    if min(image.size) < border * 4:
+        return 0
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, image.width - 1, border - 1), fill="#FF00FF")
+    draw.rectangle((0, image.height - border, image.width - 1, image.height - 1), fill="#FF00FF")
+    draw.rectangle((0, 0, border - 1, image.height - 1), fill="#FF00FF")
+    draw.rectangle((image.width - border, 0, image.width - 1, image.height - 1), fill="#FF00FF")
+    image.save(path, format="PNG", optimize=True)
+    return border
+
+
 def generate_live_icon(stage: StagePlan, output_path: Path, *, model: str = DEFAULT_MODEL) -> dict[str, object]:
     """Generate one text-free component through the GPT-5.6-sol Responses API."""
     if not os.getenv("OPENAI_API_KEY"):
@@ -156,6 +171,8 @@ Strictly no letters, words, numbers, formulas, watermarks, logos, borders, or sh
         raise AssetPipelineError("GPT-5.6-sol 未返回可用的图像生成结果。")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_bytes(base64.b64decode(image_call.result))
+    generated_sha256 = hashlib.sha256(output_path.read_bytes()).hexdigest()
+    border_normalized_px = normalize_chroma_border(output_path)
     with Image.open(output_path) as image:
         image.verify()
     return {
@@ -164,14 +181,26 @@ Strictly no letters, words, numbers, formulas, watermarks, logos, borders, or sh
         "image_model": image_model,
         "prompt_template": "isolated-semantic-icon-v1",
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+        "generated_sha256": generated_sha256,
+        "border_normalized_px": border_normalized_px,
         "generation_ms": round((perf_counter() - started) * 1000),
     }
 
 
-def process_asset(raw_path: Path, output_path: Path, manifest_path: Path) -> int:
+def process_asset(
+    raw_path: Path,
+    output_path: Path,
+    manifest_path: Path,
+    *,
+    live_generated: bool = False,
+) -> int:
     started = perf_counter()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    transparent_distance = "70" if live_generated else "18"
+    opaque_distance = "210" if live_generated else "115"
+    despill = "1.0" if live_generated else "0.92"
+    trim_threshold = "28" if live_generated else "8"
     _run(
         [
             sys.executable,
@@ -181,16 +210,16 @@ def process_asset(raw_path: Path, output_path: Path, manifest_path: Path) -> int
             "--auto-key",
             "border",
             "--transparent-distance",
-            "18",
+            transparent_distance,
             "--opaque-distance",
-            "115",
+            opaque_distance,
             "--despill",
-            "0.92",
+            despill,
             "--trim",
             "--padding",
             "28",
             "--trim-threshold",
-            "8",
+            trim_threshold,
             "--max-size",
             "720",
             "--manifest",
@@ -241,7 +270,12 @@ def prepare_assets(
             raise AssetPipelineError(f"缺少白名单素材：{key}.png")
         output_path = processed_run / f"{key}.png"
         manifest_path = manifest_run / f"{key}.json"
-        cutout_ms = process_asset(raw_path, output_path, manifest_path)
+        cutout_ms = process_asset(
+            raw_path,
+            output_path,
+            manifest_path,
+            live_generated=key == live_key,
+        )
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         edge_excess = float(manifest.get("stats", {}).get("mean_edge_key_excess", 0.0))
         if edge_excess > 25.0:

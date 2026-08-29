@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "run_id": "20260829T050415Z-adcacab6",
+  "created_at": "2026-08-29T05:05:09.235648+00:00",
+  "evidence_status": "implemented",
+  "notice": "演示素材与耗时仅代表本次运行；未完成团队范围对照实验。",
+  "planning": {
+    "mode": "online",
+    "requested_mode": "online",
+    "model": "gpt-5.6-sol"
+  },
+  "selected_layout": "ribbon",
+  "metrics_ms": {
+    "planning_ms": 30398,
+    "icon_generation_ms": 18598,
+    "cutout_ms": 2316,
+    "asset_pipeline_ms": 20947,
+    "render_3_layouts_ms": 1942,
+    "qa_ms": 769,
+    "packaging_ms": 288,
+    "total_ms": 54521
+  },
+  "assets": [
+    {
+      "key": "layout_planner",
+      "source": "live-openai-image-generation",
+      "generation_ms": 18598,
+      "cutout_ms": 570
+    },
+    {
+      "key": "icon_factory",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 398
+    },
+    {
+      "key": "chroma_matte",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 368
+    },
+    {
+      "key": "vector_typeset",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 499
+    },
+    {
+      "key": "qa_export",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 481
+    }
+  ],
+  "live_icon": {
+    "model": "gpt-5.6-sol",
+    "image_model": "gpt-image-2",
+    "prompt_template": "isolated-semantic-icon-v1",
+    "prompt_sha256": "142a095760de27e3faa330bdb61d8d74d6e8cf09e3ad206045fc57c1d3028424",
+    "border_normalized_px": 12,
+    "generation_ms": 18598
+  },
+  "qa": {
+    "ok": true,
+    "selected_layout": "ribbon",
+    "selected": {
+      "ok": true,
+      "cjk_font_embedded": true,
+      "font_names": [
+        "ZAEAIS+ArialUnicodeMS",
+        "BKHABW+ArialUnicodeMS",
+        "DJSHMB+ArialUnicodeMS",
+        "SBSSKR+ArialUnicodeMS"
+      ],
+      "png": [
+        {
+          "file": "figureflow_ribbon.png",
+          "width": 2700,
+          "height": 1500,
+          "mode": "RGB",
+          "content_bbox": [
+            77,
+            50,
+            2623,
+            1451
+          ],
+          "edge_distances": {
+            "left": 77,
+            "top": 50,
+            "right": 77,
+            "bottom": 49
+          },
+          "margin_threshold": 16,
+          "clipping_risk": false
+        }
+      ],
+      "pdf": {
+        "ok": true,
+        "summary": {
+          "artifacts": 1,
+          "errors": 0,
+          "warnings": 0
+        },
+        "results": [
+          {
+            "kind": "pdf",
+            "file": "figureflow_ribbon.pdf",
+            "pages": 1,
+            "page_sizes": [
+              {
+                "page": 1,
+                "width_pt": 1350.0,
+                "height_pt": 750.0,
+                "label": null
+              }
+            ],
+            "fonts": [
+              {
+                "name": "ZAEAIS+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "BKHABW+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "DJSHMB+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "SBSSKR+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              }
+            ],
+            "findings": []
+          }
+        ]
+      }
+    },
+    "by_layout": {
+      "ribbon": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "ZAEAIS+ArialUnicodeMS",
+          "BKHABW+ArialUnicodeMS",
+          "DJSHMB+ArialUnicodeMS",
+          "SBSSKR+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_ribbon.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              50,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 50,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_ribbon.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "ZAEAIS+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "BKHABW+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "DJSHMB+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "SBSSKR+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      },
+      "bowtie": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "ZAEAIS+ArialUnicodeMS",
+          "BKHABW+ArialUnicodeMS",
+          "ABJPCV+ArialUnicodeMS",
+          "PIKSBK+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_bowtie.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              50,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 50,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_bowtie.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "ZAEAIS+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "BKHABW+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "ABJPCV+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "PIKSBK+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      },
+      "dual-rail": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "ZAEAIS+ArialUnicodeMS",
+          "BKHABW+ArialUnicodeMS",
+          "IEKCKA+ArialUnicodeMS",
+          "MQFHDQ+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_dual_rail.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              50,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 50,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_dual_rail.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "ZAEAIS+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "BKHABW+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "IEKCKA+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "MQFHDQ+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "figure_plan.json": "44438b17c857e748b5da467fec92df0c289b028be7a8f1b3a472dbdf6d9c5f49",
+    "figureflow_live.png": "cd5291bf26024811fbfcf3038d3ccd2cdd3283a2755c59be9f3b7182cd14795d",
+    "figureflow_live.svg": "04a92c7fa113264d0dc10f15f540bbb83cfb912860f69bb660281cd7d1a7c96d",
+    "figureflow_live.pdf": "b8db11627e3762c980b13c8220c42bd91a79c2ccec83f31d1a97d7f03d887ff6",
+    "asset_pipeline.png": "d343dcd53219cb7cd57ca19e2db85117f5b78a2b4156e9d9e8d63cbbb3062c02",
+    "live_icon_raw.png": "4b7f137ac7235fa860822392324c885d6a8aa86f45a62e82dc2b4a7c8173a157",
+    "live_icon_processed.png": "bdd655354453425b58c0a181fcadfb18477c91a55dbd2908f4b89e08131afe34"
+  },
+  "public_export": true,
+  "public_export_notice": "Response identifiers, token counts, serving route, raw prompt and absolute paths are not retained."
+}

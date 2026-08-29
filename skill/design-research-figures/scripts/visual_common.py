@@ -20,6 +20,8 @@ os.environ.setdefault("XDG_CACHE_HOME", str(_CACHE_ROOT / "xdg"))
 import matplotlib as mpl
 import yaml
 
+from public_safety import portable_path, sanitize_log_text
+
 mpl.use("Agg", force=True)
 
 
@@ -102,7 +104,8 @@ def render_pdf(pdf: Path, png: Path, *, dpi: int = 220) -> None:
         check=False,
     )
     if result.returncode:
-        raise RuntimeError(f"pdftoppm failed for {pdf}:\n{result.stdout}")
+        safe_output = sanitize_log_text(result.stdout, local_roots=(pdf.parent,))
+        raise RuntimeError(f"pdftoppm failed for {pdf.name}:\n{safe_output}")
 
 
 def write_json(path: Path, data: Any) -> None:
@@ -130,18 +133,19 @@ def write_artifact_manifest(
     if evidence_status not in EVIDENCE_STATUSES:
         allowed = ", ".join(sorted(EVIDENCE_STATUSES))
         raise ValueError(f"spec needs evidence_status in {{{allowed}}}")
-    all_outputs = [Path(path).resolve() for path in outputs]
-    all_inputs = [Path(spec_path).resolve(), *(Path(path).resolve() for path in inputs)]
+    path = output_stem.with_name(f"{output_stem.name}_manifest.json")
+    manifest_base = path.parent.resolve()
+    all_outputs = [Path(item).resolve() for item in outputs]
+    all_inputs = [Path(spec_path).resolve(), *(Path(item).resolve() for item in inputs)]
     manifest = {
         "id": output_stem.name,
         "evidence_status": evidence_status,
         "visible_status": spec.get("status"),
-        "source_spec": str(Path(spec_path).resolve()),
-        "inputs": [str(path) for path in all_inputs],
-        "outputs": [str(path) for path in all_outputs],
-        "sha256": {path.name: file_sha256(path) for path in all_outputs if path.is_file()},
+        "source_spec": portable_path(Path(spec_path), manifest_base),
+        "inputs": [portable_path(item, manifest_base) for item in all_inputs],
+        "outputs": [portable_path(item, manifest_base) for item in all_outputs],
+        "sha256": {item.name: file_sha256(item) for item in all_outputs if item.is_file()},
     }
-    path = output_stem.with_name(f"{output_stem.name}_manifest.json")
     write_json(path, manifest)
     return path
 

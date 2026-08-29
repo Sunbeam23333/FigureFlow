@@ -1,5 +1,4 @@
 interface:
-  display_name: "FigureFlow Research Studio"
-  short_description: "Build editable, evidence-grounded research and workflow figures"
-  brand_color: "#16827A"
-  default_prompt: "Use $design-research-figures to turn my paper, report, SOP, or patent evidence into an editable technical figure, keep AI-generated assets text-free, preserve evidence status, and verify SVG/PDF/PNG outputs."
+  display_name: "FigureFlow Technical Visuals"
+  short_description: "Create editable research, SOP, report, and patent figures"
+  default_prompt: "Use $design-research-figures to turn my paper, report, SOP, or patent evidence into an editable technical figure, keep generated assets text-free, preserve evidence status, and verify SVG/PDF/PNG outputs."

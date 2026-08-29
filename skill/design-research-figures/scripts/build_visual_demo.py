@@ -13,12 +13,14 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import yaml
 from PIL import Image, ImageDraw, ImageFont
 
 from render_data_figure import render as render_data
 from render_link_graph import render as render_link
 from render_overview import render as render_overview
 from render_table import render as render_table
+from public_safety import portable_path, sanitize_log_file, sanitize_log_text
 from visual_common import PALETTE, render_pdf, write_json
 
 
@@ -84,6 +86,46 @@ def generate_source_data(data_dir: Path) -> list[Path]:
         }
     ).to_csv(frontier_path, index=False, float_format="%.6g")
     return [training_path, residuals_path, gates_path, frontier_path]
+
+
+def materialize_data_spec(
+    template_path: Path,
+    data_files: list[Path],
+    output_dir: Path,
+) -> Path:
+    """Write an output-local data spec whose CSV paths follow --output-dir."""
+    spec = yaml.safe_load(template_path.read_text(encoding="utf-8"))
+    if not isinstance(spec, dict) or not isinstance(spec.get("panels"), list):
+        raise ValueError("data-figure template must contain a panels list")
+
+    resolved_output = output_dir.resolve()
+    files_by_name: dict[str, Path] = {}
+    for path in data_files:
+        resolved = path.resolve()
+        if resolved.name in files_by_name:
+            raise ValueError(f"duplicate generated data filename: {resolved.name}")
+        try:
+            resolved.relative_to(resolved_output)
+        except ValueError as exc:
+            raise ValueError("generated demo data must stay inside --output-dir") from exc
+        files_by_name[resolved.name] = resolved
+
+    for panel in spec["panels"]:
+        if not isinstance(panel, dict) or not panel.get("csv"):
+            raise ValueError("every data-figure panel must reference a generated CSV")
+        filename = Path(str(panel["csv"])).name
+        data_path = files_by_name.get(filename)
+        if data_path is None:
+            raise ValueError(f"data-figure template references unknown CSV: {filename}")
+        panel["csv"] = data_path.relative_to(resolved_output).as_posix()
+
+    output_name = str(spec.get("output_name", "data_figure"))
+    materialized = resolved_output / f"{output_name}_source.yaml"
+    materialized.write_text(
+        yaml.safe_dump(spec, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
+    return materialized
 
 
 def compile_demo_paper(output_dir: Path) -> tuple[Path, Path]:
@@ -188,9 +230,14 @@ Final delivery requires editable source, PDF and high-resolution PNG, source dat
             stderr=subprocess.STDOUT,
             check=False,
         )
-        logs.append(result.stdout)
+        safe_output = sanitize_log_text(result.stdout, local_roots=(output_dir, SKILL_DIR))
+        logs.append(safe_output)
+        sanitize_log_file(
+            output_dir / "demo_paper.log",
+            local_roots=(output_dir, SKILL_DIR),
+        )
         if result.returncode:
-            raise RuntimeError(f"xelatex failed:\n{result.stdout[-5000:]}")
+            raise RuntimeError(f"xelatex failed:\n{safe_output[-5000:]}")
     log_path = output_dir / "demo_paper_compile.log.txt"
     log_path.write_text("\n\n".join(logs), encoding="utf-8")
     pdf = output_dir / "demo_paper.pdf"
@@ -239,8 +286,13 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     data_files = generate_source_data(output_dir / "source_data")
+    data_spec = materialize_data_spec(
+        SOURCE_DIR / "data_figure.yaml",
+        data_files,
+        output_dir,
+    )
     overview_svg, overview_pdf, overview_png = render_overview(SOURCE_DIR / "overview.yaml", output_dir)
-    data_pdf, data_png = render_data(SOURCE_DIR / "data_figure.yaml", output_dir)
+    data_pdf, data_png = render_data(data_spec, output_dir)
     link_pdf, link_png = render_link(SOURCE_DIR / "link_graph.yaml", output_dir)
     table_tex, table_fragment, table_pdf, table_png = render_table(SOURCE_DIR / "table.yaml", output_dir)
     paper_tex, paper_pdf = compile_demo_paper(output_dir)
@@ -259,7 +311,7 @@ def main() -> int:
         check=False,
     )
     if rendered.returncode:
-        raise RuntimeError(rendered.stdout)
+        raise RuntimeError(sanitize_log_text(rendered.stdout, local_roots=(output_dir, SKILL_DIR)))
     paper_pages = sorted(output_dir.glob("demo_paper_page-*.png"))
     gallery = make_gallery([overview_png, data_png, link_png, table_png], output_dir / "demo_gallery.png")
 
@@ -301,7 +353,8 @@ def main() -> int:
             check=False,
         )
         if checked.returncode:
-            raise RuntimeError(f"visual PDF QA failed:\n{checked.stdout}")
+            safe_output = sanitize_log_text(checked.stdout, local_roots=(output_dir, SKILL_DIR))
+            raise RuntimeError(f"visual PDF QA failed:\n{safe_output}")
     output_hashes = {
         path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in outputs
     }
@@ -309,16 +362,24 @@ def main() -> int:
         "evidence_status": "synthetic-demo",
         "seed": 20260825,
         "source_specs": [
-            str(SOURCE_DIR / name)
-            for name in ("overview.yaml", "data_figure.yaml", "link_graph.yaml", "table.yaml")
+            portable_path(path, output_dir)
+            for path in (
+                SOURCE_DIR / "overview.yaml",
+                data_spec,
+                SOURCE_DIR / "link_graph.yaml",
+                SOURCE_DIR / "table.yaml",
+            )
         ],
-        "source_data": [str(path) for path in data_files],
-        "editable_sources": [str(overview_svg), str(table_tex), str(table_fragment), str(paper_tex)],
-        "pdf_outputs": [str(path) for path in outputs],
+        "source_data": [portable_path(path, output_dir) for path in data_files],
+        "editable_sources": [
+            portable_path(path, output_dir)
+            for path in (overview_svg, table_tex, table_fragment, paper_tex)
+        ],
+        "pdf_outputs": [portable_path(path, output_dir) for path in outputs],
         "pdf_sha256": output_hashes,
-        "qa_reports": [str(qa_single), str(qa_paper)],
+        "qa_reports": [portable_path(path, output_dir) for path in (qa_single, qa_paper)],
         "module_manifests": [
-            str(output_dir / f"{stem}_manifest.json")
+            portable_path(output_dir / f"{stem}_manifest.json", output_dir)
             for stem in (
                 "demo_main_overview",
                 "demo_quantitative",
@@ -326,14 +387,17 @@ def main() -> int:
                 "demo_results_table",
             )
         ],
-        "review_pngs": [str(overview_png), str(data_png), str(link_png), str(table_png), *map(str, paper_pages)],
-        "gallery": str(gallery),
+        "review_pngs": [
+            portable_path(path, output_dir)
+            for path in (overview_png, data_png, link_png, table_png, *paper_pages)
+        ],
+        "gallery": portable_path(gallery, output_dir),
         "statement": "All demo numbers are synthetic and are not experimental results.",
     }
     manifest_path = output_dir / "demo_manifest.json"
     write_json(manifest_path, manifest)
     print(json.dumps(manifest, indent=2))
-    print(manifest_path)
+    print(portable_path(manifest_path, output_dir))
     return 0
 
 

@@ -5,6 +5,7 @@
 | Reader question | Use | Avoid |
 |---|---|---|
 | What is the paper's end-to-end logic? | semantic overview | dense axes or exact result values |
+| How does a report, SOP, or patent process move from input to checked output? | FigureFlow workflow | free-form AI coordinates or whole-image text generation |
 | What changed, by how much, and with what uncertainty? | quantitative figure | icon-driven framework art |
 | Which entities transfer, depend, or explicitly do not transfer? | link graph | a generic box-and-arrow pipeline |
 | What are the exact values and statuses? | result table | encoding every number as a bar |
@@ -77,6 +78,51 @@ gates:
 ```
 
 Keep stage titles short. If one stage branches, use independent source/destination ports and distinct curves; do not stack coincident arrows. The lower gate belt is for preregistered stopping or falsification criteria, not feature marketing.
+
+## Report, SOP, or patent workflow
+
+Use `render_workflow.py` when the deliverable is a Chinese-friendly process figure rather than a paper method overview. Treat the language model as a planner only: it may propose semantic stages and asset prompts, but the renderer owns geometry, connectors, exact text, evidence labels, and file output. Validate the JSON before rendering; never execute model-produced code or accept model-produced file paths.
+
+The standalone `FigurePlan` contract is:
+
+```json
+{
+  "title": "One claim-shaped title",
+  "takeaway": "The single conclusion a reader should retain.",
+  "layout_family": "ribbon",
+  "theme": "academic-audit",
+  "evidence_status": "synthetic-demo",
+  "status_label": "合成演示｜未含实测提效",
+  "stages": [
+    {
+      "title": "需求提炼",
+      "subtitle": "形成节点与证据链",
+      "body": ["提炼 3–6 个节点", "标注证据状态"],
+      "accent": "navy",
+      "asset_key": "data",
+      "asset_prompt": "Text-free semantic icon on a flat chroma background; no labels or watermark.",
+      "evidence_status": "synthetic-demo"
+    }
+  ],
+  "gates": ["节点与证据完整", "边界字体通过"],
+  "caption": "State what the figure establishes and what it does not.",
+  "warnings": ["全部内容均为合成演示"]
+}
+```
+
+Contract limits:
+
+- provide 3–6 stages with unique titles and unique `asset_key` values;
+- choose `ribbon`, `bowtie`, or `dual-rail`; use `ribbon` when the process is simply sequential;
+- choose assets only from `layout_planner`, `icon_factory`, `chroma_matte`, `vector_typeset`, `qa_export`, `data`, `process`, `decision`, `store`, and `output`;
+- choose accents only from `navy`, `blue`, `teal`, `orange`, and `violet`;
+- keep each body to at most three short lines, gates to five labels, and warnings to six items;
+- use one canonical evidence status from the shared list, and do not mark the overall plan `measured` unless every stage is measured;
+- keep stage titles within 24 display units, subtitles within 28, body lines within 24, gate labels within 20, and the top status label within 30. CJK characters consume two display units.
+
+Place optional transparent icons in `--asset-dir` as `<asset_key>.png`. Missing files deliberately fall back to deterministic vector symbols, so a missing generated asset must not abort the whole figure. If a generated icon is used, generate it without text on a flat chroma background, run `remove_chroma.py`, inspect its alpha edge, and retain its provenance. The renderer emits SVG, PDF, PNG, and a hash manifest; run `audit_figure.py`, `qa_pdf.py`, and `check_public_release.py` before delivery.
+
+An online planner may use an OpenAI-compatible structured-output call outside this standalone skill folder. Keep provider credentials and service routing in server-side environment configuration only. An offline preset is acceptable for a stable demo only when the UI, figure, and manifest all disclose that it is a preset or `synthetic-demo`; never label it as a live model response.
 
 ## Link or transfer graph
 

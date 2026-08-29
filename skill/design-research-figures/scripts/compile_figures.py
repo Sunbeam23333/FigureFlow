@@ -10,6 +10,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from public_safety import portable_path, sanitize_log_file, sanitize_log_text
+
 
 def discover_sources(items: list[str], pattern: str) -> list[Path]:
     sources: list[Path] = []
@@ -91,10 +93,21 @@ def main() -> int:
         )
         pdf = job_dir / f"{source.stem}.pdf"
         log = job_dir / "compile.log"
-        log.write_text(result.stdout, encoding="utf-8")
+        safe_output = sanitize_log_text(
+            result.stdout,
+            local_roots=(source.parent, output_dir),
+        )
+        log.write_text(safe_output, encoding="utf-8")
+        sanitize_log_file(
+            job_dir / f"{source.stem}.log",
+            local_roots=(source.parent, output_dir),
+        )
         if result.returncode != 0 or not pdf.exists():
             failed += 1
-            print(f"FAIL {source} (see {log})")
+            print(
+                f"FAIL {source.name} "
+                f"(see {portable_path(log, output_dir)})"
+            )
             continue
 
         final_pdf = output_dir / f"{output_stem}.pdf"
@@ -115,7 +128,11 @@ def main() -> int:
             )
             if rendered.returncode != 0:
                 failed += 1
-                print(f"FAIL render {final_pdf}: {rendered.stdout.strip()}")
+                safe_render_output = sanitize_log_text(
+                    rendered.stdout,
+                    local_roots=(source.parent, output_dir),
+                )
+                print(f"FAIL render {final_pdf.name}: {safe_render_output.strip()}")
                 continue
         print(f"OK   {source.name} -> {final_pdf.name}")
 

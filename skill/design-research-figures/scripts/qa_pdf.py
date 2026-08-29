@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from public_safety import portable_path, sanitize_log_text
+
 
 PAGE_SIZE_RE = re.compile(
     r"^Page(?:\s+\d+)?\s+size:\s*"
@@ -83,10 +85,12 @@ def audit_pdf(
     pdffonts: str | None,
     expected_pages: int | None,
     minimum_pages: int | None,
+    *,
+    display_path: str | None = None,
 ) -> dict[str, Any]:
     result: dict[str, Any] = {
         "kind": "pdf",
-        "file": str(path),
+        "file": display_path or path.name,
         "pages": None,
         "page_sizes": [],
         "fonts": [],
@@ -112,7 +116,7 @@ def audit_pdf(
                 "pdfinfo-failed",
                 "pdfinfo could not inspect the PDF.",
                 returncode=returncode,
-                stderr=stderr.strip(),
+                stderr=sanitize_log_text(stderr, local_roots=(path.parent,)).strip(),
             )
         )
         return result
@@ -158,7 +162,7 @@ def audit_pdf(
                 "page-size-check-failed",
                 "pdfinfo could not read per-page dimensions.",
                 returncode=size_code,
-                stderr=size_stderr.strip(),
+                stderr=sanitize_log_text(size_stderr, local_roots=(path.parent,)).strip(),
             )
         )
     else:
@@ -200,7 +204,7 @@ def audit_pdf(
                     "pdffonts-failed",
                     "pdffonts could not inspect the PDF.",
                     returncode=font_code,
-                    stderr=font_stderr.strip(),
+                    stderr=sanitize_log_text(font_stderr, local_roots=(path.parent,)).strip(),
                 )
             )
         else:
@@ -244,21 +248,25 @@ def audit_pdf(
     return result
 
 
-def audit_log(path: Path) -> dict[str, Any]:
-    result: dict[str, Any] = {"kind": "latex-log", "file": str(path), "findings": []}
+def audit_log(path: Path, *, display_path: str | None = None) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "kind": "latex-log",
+        "file": display_path or path.name,
+        "findings": [],
+    }
     findings: list[dict[str, Any]] = result["findings"]
     if not path.is_file():
         findings.append(finding("error", "missing-file", "LaTeX log does not exist."))
         return result
     try:
         lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError as exc:
-        findings.append(finding("error", "unreadable-log", f"Could not read log: {exc}"))
+    except OSError:
+        findings.append(finding("error", "unreadable-log", "Could not read log."))
         return result
 
     seen: set[tuple[str, str]] = set()
     for line_number, raw_line in enumerate(lines, start=1):
-        line = raw_line.strip()
+        line = sanitize_log_text(raw_line, local_roots=(path.parent,)).strip()
         for severity, code, pattern in LOG_PATTERNS:
             if not pattern.search(line):
                 continue
@@ -386,17 +394,28 @@ def main() -> int:
     expected_pages = 1 if args.single_page else args.expect_pages
     pdfinfo = shutil.which("pdfinfo")
     pdffonts = shutil.which("pdffonts")
+    report_base = (
+        args.json_output.expanduser().resolve().parent
+        if args.json_output
+        else Path.cwd().resolve()
+    )
+    pdf_paths = [path.expanduser().resolve() for path in args.pdfs]
+    log_paths = [path.expanduser().resolve() for path in args.log]
     results = [
         audit_pdf(
-            path.expanduser().resolve(),
+            path,
             pdfinfo,
             pdffonts,
             expected_pages,
             args.min_pages,
+            display_path=portable_path(path, report_base),
         )
-        for path in args.pdfs
+        for path in pdf_paths
     ]
-    results.extend(audit_log(path.expanduser().resolve()) for path in args.log)
+    results.extend(
+        audit_log(path, display_path=portable_path(path, report_base))
+        for path in log_paths
+    )
     report = build_report(results)
 
     if args.json_output:

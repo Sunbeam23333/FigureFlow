@@ -182,7 +182,7 @@ def validate_plan(plan: dict[str, Any]) -> None:
         if not isinstance(stage, dict):
             raise ValueError(f"stage {index} must be an object")
         title = require_text(stage.get("title"), f"stage {index} title", max_units=24)
-        require_text(stage.get("subtitle"), f"stage {index} subtitle", max_units=44)
+        require_text(stage.get("subtitle"), f"stage {index} subtitle", max_units=28)
         if title in seen_titles:
             raise ValueError("stage titles must be unique")
         seen_titles.add(title)
@@ -200,7 +200,7 @@ def validate_plan(plan: dict[str, Any]) -> None:
         if not isinstance(body, list) or len(body) > 3:
             raise ValueError("stage body must contain at most three lines")
         for body_index, line in enumerate(body, start=1):
-            require_text(line, f"stage {index} body {body_index}", max_units=84)
+            require_text(line, f"stage {index} body {body_index}", max_units=24)
     gates = plan.get("gates", [])
     warnings = plan.get("warnings", [])
     if not isinstance(gates, list) or len(gates) > 5:
@@ -268,7 +268,7 @@ def fallback_icon(kind: str, cx: float, cy: float, accent: str) -> str:
     return (
         f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="72" fill="#FFFFFF" stroke="{accent}" stroke-width="6"/>'
         f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="24" fill="{accent}"/>'
-        f'<path d="M {cx-56:.1f} {cy:.1f} H {cx+56:.1f} M {cx:.1f} {cy-56:.1f} V {cx+56:.1f}" stroke="{accent}" stroke-width="7" stroke-linecap="round"/>'
+        f'<path d="M {cx-56:.1f} {cy:.1f} H {cx+56:.1f} M {cx:.1f} {cy-56:.1f} V {cy+56:.1f}" stroke="{accent}" stroke-width="7" stroke-linecap="round"/>'
     )
 
 

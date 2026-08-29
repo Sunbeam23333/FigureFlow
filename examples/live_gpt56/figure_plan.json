@@ -1,0 +1,84 @@
+{
+  "title": "FigureFlow：可编辑、可复核技术配图流程",
+  "takeaway": "通过受约束计划、独立图标、透明抠图、矢量排版和交付质检，形成可编辑、可复核的技术配图。",
+  "layout_family": "ribbon",
+  "theme": "academic-audit",
+  "evidence_status": "implemented",
+  "status_label": "工作流已实现",
+  "stages": [
+    {
+      "title": "业务约束化",
+      "subtitle": "GPT-5.6-sol整理受约束计划",
+      "body": [
+        "输入业务描述与用途",
+        "输出受约束FigurePlan"
+      ],
+      "accent": "blue",
+      "asset_key": "layout_planner",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "独立图标生成",
+      "subtitle": "生成无文字独立语义图标",
+      "body": [
+        "图标可独立替换",
+        "不含标签与公式"
+      ],
+      "accent": "teal",
+      "asset_key": "icon_factory",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "透明抠图",
+      "subtitle": "色键、柔边与去溢色",
+      "body": [
+        "执行Chroma key",
+        "应用soft matte与despill",
+        "输出透明独立图层"
+      ],
+      "accent": "orange",
+      "asset_key": "chroma_matte",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "矢量排版",
+      "subtitle": "写入准确文字、箭头与版式",
+      "body": [
+        "程序写入准确中文",
+        "统一箭头与版式",
+        "标注证据状态"
+      ],
+      "accent": "violet",
+      "asset_key": "vector_typeset",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "质检与导出",
+      "subtitle": "校验字体、边界与交付项",
+      "body": [
+        "检查字体与画布边界",
+        "导出SVG、PDF、PNG",
+        "附带Manifest"
+      ],
+      "accent": "navy",
+      "asset_key": "qa_export",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    }
+  ],
+  "gates": [
+    "计划约束通过",
+    "图标无字可替换",
+    "抠图边缘通过",
+    "排版交付通过"
+  ],
+  "caption": "图示确认已实现从业务描述到多格式交付的可编辑、可复核工作流；不证明团队提效，仍需三方法同任务对照实测。",
+  "warnings": [
+    "团队提效尚未证实，仍需三方法同任务对照实测。",
+    "不得以工作流已实现替代效率、质量或稳定性测量。"
+  ]
+}

@@ -11,11 +11,11 @@ FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅�
 
 这个设计的核心是：**AI 负责语义和创意，确定性渲染器负责精确内容。**
 
-![FigureFlow 合成演示输出](examples/figureflow_workflow.png)
+![FigureFlow GPT-5.6-sol 在线演示输出](examples/live_gpt56/figureflow_live.png)
 
-[播放 56 秒操作 Demo](demo/figureflow-demo.mp4) · [查看旁白与现场讲解稿](demo/video_script.md) · [查看可编辑 SVG](examples/figureflow_workflow.svg) · [查看结构化计划](examples/figure_plan.json) · [查看单次运行 Manifest](examples/run_manifest.json)
+[播放 72 秒真实在线操作 Demo（中文语音与字幕）](demo/figureflow-demo.mp4) · [查看局部替换证明](examples/live_gpt56/local_edit_proof.png) · [查看旁白与现场讲解稿](demo/video_script.md) · [查看可编辑 SVG](examples/live_gpt56/figureflow_live.svg) · [查看结构化计划](examples/live_gpt56/figure_plan.json) · [查看脱敏 Manifest](examples/live_gpt56/run_manifest.json)
 
-上图和 Manifest 是一次明确标注的离线合成复演，用于验证排版、素材、QA 与交付链路；其中约 5 秒的数值只是该机器上的单次流水线耗时，不是团队提效结论。
+上图来自一次真实 `gpt-5.6-sol` 语义规划与一次 `gpt-image-2` 无文字 Icon 生成，随后执行透明抠图、三布局渲染和自动 QA。公开样例不保留实际服务路由、响应标识、token 数、原始提示词或绝对路径。运行耗时只是该机器上的单次流水线记录，不是团队提效结论；可复现的固定离线样例仍保留在 [`examples/`](examples/README.md)。
 
 ## 要解决的问题
 

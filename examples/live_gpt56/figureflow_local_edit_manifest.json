@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "evidence_status": "implemented",
+  "layout_family": "ribbon",
+  "font_family": "Arial Unicode MS",
+  "plan": "figure_plan_local_edit.json",
+  "plan_sha256": "577f470641211e8e93e8305ba8140a0247a0c29a88a51444c48f519a67089fbc",
+  "assets": [
+    {
+      "file": "layout_planner.png",
+      "sha256": "bdd655354453425b58c0a181fcadfb18477c91a55dbd2908f4b89e08131afe34"
+    },
+    {
+      "file": "icon_factory.png",
+      "sha256": "5e53834454e7b3a916b1592e782788fce286e29cc31de900996dd37ba0e078a0"
+    },
+    {
+      "file": "chroma_matte.png",
+      "sha256": "5b79dc9ad8300b29790c247dcd662c6496d76a2eda4bdcc78921e16e9b4c782d"
+    },
+    {
+      "file": "vector_typeset.png",
+      "sha256": "573c9bb4954dd7833fe4d4d3dadf33c5285ea8670cabc58f9b060d412c398639"
+    },
+    {
+      "file": "qa_export.png",
+      "sha256": "a524c09b5c349ac35a8ae383c464a40515ddccda2aa69f91be26607867cd94b4"
+    }
+  ],
+  "outputs": {
+    "svg": "figureflow_local_edit.svg",
+    "pdf": "figureflow_local_edit.pdf",
+    "png": "figureflow_local_edit.png"
+  },
+  "output_sha256": {
+    "figureflow_local_edit.svg": "ee40dc1a1ead77ed654e0946c8a197571d57ad2ae42679528d19f9156f149644",
+    "figureflow_local_edit.pdf": "11a21c5cfad4d885ecccf076e59a6e5fe9ab221fa45e5669e6ced39243d3266c",
+    "figureflow_local_edit.png": "959ba63448f00b033186247e55fa0e5c333bfac9d9920ccdb5a75f4f0463cafe"
+  }
+}

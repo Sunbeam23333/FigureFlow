@@ -9,6 +9,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from public_safety import sanitize_log_file, sanitize_log_text
 from visual_common import PALETTE, load_yaml, render_pdf, write_artifact_manifest
 
 
@@ -210,12 +211,17 @@ def _compile(tex: Path, output_dir: Path) -> Path:
         stderr=subprocess.STDOUT,
         check=False,
     )
-    (output_dir / f"{tex.stem}.log.txt").write_text(result.stdout, encoding="utf-8")
+    safe_output = sanitize_log_text(result.stdout, local_roots=(tex.parent, output_dir))
+    (output_dir / f"{tex.stem}.log.txt").write_text(safe_output, encoding="utf-8")
+    sanitize_log_file(
+        output_dir / f"{tex.stem}.log",
+        local_roots=(tex.parent, output_dir),
+    )
     if result.returncode:
-        raise RuntimeError(f"xelatex failed for {tex}:\n{result.stdout[-4000:]}")
+        raise RuntimeError(f"xelatex failed for {tex.name}:\n{safe_output[-4000:]}")
     pdf = output_dir / f"{tex.stem}.pdf"
     if not pdf.exists():
-        raise RuntimeError(f"xelatex did not create {pdf}")
+        raise RuntimeError(f"xelatex did not create {pdf.name}")
     return pdf
 
 

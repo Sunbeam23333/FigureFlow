@@ -36,6 +36,14 @@ class SchemaAndApiTests(unittest.TestCase):
         payload["evidence_status"] = "measured"
         with self.assertRaises(ValidationError):
             FigurePlan.model_validate(payload)
+        payload = preset.model_dump()
+        payload["stages"][0]["subtitle"] = "这是一个明显超过卡片预算的中文阶段副标题"
+        with self.assertRaises(ValidationError):
+            FigurePlan.model_validate(payload)
+        payload = preset.model_dump()
+        payload["stages"][0]["body"] = ["这是一条超过十二个中文字符的正文说明"]
+        with self.assertRaises(ValidationError):
+            FigurePlan.model_validate(payload)
 
     def test_online_planner_uses_exact_responses_contract(self) -> None:
         calls: list[dict[str, object]] = []
@@ -78,6 +86,30 @@ class SchemaAndApiTests(unittest.TestCase):
         self.assertEqual(calls[0]["tool_choice"], {"type": "image_generation"})
         self.assertNotIn("prompt", metadata)
         self.assertEqual(len(str(metadata["prompt_sha256"])), 64)
+        self.assertEqual(metadata["border_normalized_px"], 0)
+
+    def test_live_chroma_profile_clears_generated_canvas_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            raw = Path(temporary) / "live.png"
+            processed = Path(temporary) / "processed.png"
+            manifest = Path(temporary) / "manifest.json"
+            image = Image.new("RGB", (128, 128), "#FF00FF")
+            image.putpixel((0, 0), (255, 0, 230))
+            for x in range(32, 96):
+                for y in range(32, 96):
+                    image.putpixel((x, y), (30, 90, 180))
+            image.save(raw)
+            self.assertEqual(asset_pipeline.normalize_chroma_border(raw), 12)
+            asset_pipeline.process_asset(raw, processed, manifest, live_generated=True)
+            with Image.open(processed) as result:
+                alpha = result.convert("RGBA").getchannel("A")
+                corners = (
+                    alpha.getpixel((0, 0)),
+                    alpha.getpixel((alpha.width - 1, 0)),
+                    alpha.getpixel((0, alpha.height - 1)),
+                    alpha.getpixel((alpha.width - 1, alpha.height - 1)),
+                )
+            self.assertEqual(corners, (0, 0, 0, 0))
 
 
 class PipelineTests(unittest.TestCase):

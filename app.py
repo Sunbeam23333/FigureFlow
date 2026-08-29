@@ -65,7 +65,9 @@ def _run_demo(brief: str, mode_label: str, layout_label: str, live_icon: bool):
             live_icon=live_icon,
         )
     except Exception as exc:
-        LOGGER.exception("FigureFlow run failed: %s", type(exc).__name__)
+        # Keep public logs useful without persisting SDK exception text, which may
+        # contain request identifiers or a deployment-specific service URL.
+        LOGGER.error("FigureFlow run failed: %s", type(exc).__name__)
         message = "运行失败（PIPELINE_FAILED）。请检查服务端日志、字体与 API 配置。"
         return (
             f"### 运行失败\n\n{message}",
