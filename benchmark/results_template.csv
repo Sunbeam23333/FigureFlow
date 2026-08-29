@@ -1,0 +1,10 @@
+assignment_id,run_id,participant_id,reviewer_id,task_id,method,trial_index,method_order,measurement_status,exclusion_reason,started_at,ended_at,time_limit_seconds,total_elapsed_seconds,first_pass_seconds,active_work_seconds,local_edit_seconds,pipeline_runtime_seconds,semantic_items_total,semantic_items_correct,text_formula_errors,layout_defects,non_target_items_total,non_target_items_unchanged,interaction_rounds,editable_delivery,acceptance_pass,reviewer_blinded,evidence_uri,notes
+T01-manual_docs,,,,T01,manual_docs,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T01-whole_image_edit,,,,T01,whole_image_edit,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T01-figureflow,,,,T01,figureflow,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T02-manual_docs,,,,T02,manual_docs,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T02-whole_image_edit,,,,T02,whole_image_edit,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T02-figureflow,,,,T02,figureflow,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T03-manual_docs,,,,T03,manual_docs,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T03-whole_image_edit,,,,T03,whole_image_edit,1,,planned,,,,,,,,,,,,,,,,,,,,,
+T03-figureflow,,,,T03,figureflow,1,,planned,,,,,,,,,,,,,,,,,,,,,

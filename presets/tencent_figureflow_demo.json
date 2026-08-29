@@ -1,0 +1,58 @@
+{
+  "title": "FigureFlow｜从业务描述到可编辑精美图",
+  "takeaway": "AI 负责语义规划与视觉组件，确定性程序负责文字、公式、连线与质量验收。",
+  "layout_family": "ribbon",
+  "theme": "academic-audit",
+  "evidence_status": "synthetic-demo",
+  "status_label": "合成演示 · 非业务实测",
+  "stages": [
+    {
+      "title": "结构规划",
+      "subtitle": "GPT-5.6-sol 提炼节点与约束",
+      "body": ["生成可检查 FigurePlan", "先锁语义，再选构图"],
+      "accent": "blue",
+      "asset_key": "layout_planner",
+      "asset_prompt": null,
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "语义资产",
+      "subtitle": "只生成无文字独立 Icon",
+      "body": ["每个组件语义唯一", "失败时可局部替换"],
+      "accent": "violet",
+      "asset_key": "icon_factory",
+      "asset_prompt": null,
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "透明抠图",
+      "subtitle": "Chroma key + soft matte",
+      "body": ["自动去色边与裁白边", "保留原始图和处理记录"],
+      "accent": "teal",
+      "asset_key": "chroma_matte",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "矢量排版",
+      "subtitle": "程序写入准确中文与连线",
+      "body": ["文字不交给生图模型", "布局与素材彼此可编辑"],
+      "accent": "orange",
+      "asset_key": "vector_typeset",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    },
+    {
+      "title": "QA 与导出",
+      "subtitle": "检查边界、字体与证据状态",
+      "body": ["PNG · SVG · PDF", "Manifest 记录来源与耗时"],
+      "accent": "navy",
+      "asset_key": "qa_export",
+      "asset_prompt": null,
+      "evidence_status": "implemented"
+    }
+  ],
+  "gates": ["无 AI 伪文字", "支持局部替换", "证据状态可见", "输出可继续编辑"],
+  "caption": "该图展示 FigureFlow 的工作流与可交付形式；图中组件为演示素材，不代表已完成团队范围的提效实验。",
+  "warnings": ["提效比例必须通过同任务、同验收清单的对照计时后再报告。"]
+}

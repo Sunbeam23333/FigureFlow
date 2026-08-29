@@ -1,0 +1,85 @@
+title: "From evidence to a falsifiable scaling claim"
+evidence_status: "synthetic-demo"
+status: "SYNTHETIC DEMO - NOT MEASURED"
+output_name: "demo_main_overview"
+gate_title: "HARD EVIDENCE GATES"
+gate_subtitle: "Freeze success criteria, compute accounting, and non-transfer boundaries before final outcomes."
+footer: "All labels, arrows, formulas, and icons are deterministic vector objects."
+stages:
+  - number: 1
+    title: "Evidence ledger"
+    subtitle: "paper + code + logs"
+    accent: "blue"
+    background: "light_blue"
+    icon: "data"
+    tags:
+      - {label: "claims", fill: "light_blue", color: "blue"}
+      - {label: "artifacts", fill: "light_violet", color: "violet"}
+    body:
+      - {text: "Measured / illustrative", strong: true}
+      - "Seeds + units + lineage"
+  - number: 2
+    title: "Frozen probe"
+    subtitle: "pre-training probe"
+    accent: "teal"
+    background: "light_teal"
+    icon: "probe"
+    tags:
+      - {label: "fixed budget", fill: "light_teal", color: "teal"}
+      - {label: "3 seeds", fill: "light_blue", color: "blue"}
+    body:
+      - {text: "No target final loss", strong: true, color: "orange"}
+      - "Stable complexity trace"
+  - number: 3
+    title: "Rank trajectory"
+    subtitle: "one mesoscopic statistic"
+    accent: "violet"
+    background: "light_violet"
+    icon: "curve"
+    formula: "r_t^{\\star}=\\left(\\frac{a_t\\,A_t}{\\lambda c_t}\\right)^{1/(\\beta+\\nu)}"
+    formula_size: 20
+    tags:
+      - {label: "spectral shape", fill: "light_violet", color: "violet"}
+    body:
+      - {text: "Freeze before outcomes", strong: true, color: "orange"}
+      - "Rank-1 exact control"
+  - number: 4
+    title: "Two decisions"
+    subtitle: "one statistic, two tests"
+    accent: "navy"
+    background: "offwhite"
+    width_weight: 1.14
+    blocks:
+      - label: "FORECAST"
+        title: "Held-out scaling residual"
+        formula: "\\widehat L_1=\\widehat L_0+\\delta\\log r"
+        formula_size: 17
+        note: "grouped OOD + intervals"
+        color: "violet"
+        light: "light_violet"
+      - label: "ALLOCATE"
+        title: "Compute-optimal capacity"
+        formula: "q_t\\propto(r_t/c_t)^{1/(1+\\rho)}"
+        formula_size: 17
+        note: "correct objective + equal FLOPs"
+        color: "teal"
+        light: "light_teal"
+  - number: 5
+    title: "Stress tests"
+    subtitle: "scale + null reporting"
+    accent: "orange"
+    background: "light_orange"
+    icon: "stress"
+    tags:
+      - {label: "350M", fill: "light_blue", color: "blue"}
+      - {label: "7B", fill: "light_teal", color: "teal"}
+      - {label: "14B", fill: "light_violet", color: "violet"}
+    body:
+      - {text: "Keep nulls and harms", strong: true, color: "orange"}
+      - "No physics-OOD transfer"
+gates:
+  - {label: "OOD RMSE improves >=15%", fill: "light_blue", color: "blue"}
+  - {label: "Beat rank-1 at equal FLOPs", fill: "light_teal", color: "teal"}
+  - {label: "Recovery >=90%", fill: "light_orange", color: "orange"}
+  - {label: "Probe overhead <1%", fill: "light_violet", color: "violet"}
+  - {label: "Negative result retained", fill: "light_red", color: "red"}

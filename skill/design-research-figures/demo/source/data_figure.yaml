@@ -1,0 +1,56 @@
+title: "A complete quantitative story: convergence, prediction, gates, and efficiency"
+evidence_status: "synthetic-demo"
+subtitle: "Each panel answers one question; color, marker, and line style remain redundant encodings."
+status: "SYNTHETIC DEMO - NOT MEASURED"
+status_kind: "warning"
+footer: "Deterministic demo data - seed 20260825 - source CSVs and rendering spec included"
+output_name: "demo_quantitative"
+figsize: [8.4, 3.7]
+top: 0.68
+wspace: 0.42
+panels:
+  - title: "Stable pretraining"
+    csv: "../output/source_data/training.csv"
+    x_label: "optimizer tokens (B)"
+    y_label: "cross-entropy loss"
+    x_lim: [0, 30]
+    y_lim: [2.6, 8.0]
+    legend_location: "upper right"
+    series:
+      - {label: "train", x: "tokens_b", y: "train_loss", low: "train_low", high: "train_high", color: "blue", width: 2.1}
+      - {label: "validation", x: "tokens_b", y: "validation_loss", low: "validation_low", high: "validation_high", color: "orange", width: 2.1}
+  - title: "Held-out residual"
+    csv: "../output/source_data/residuals.csv"
+    x_label: "log effective rank"
+    y_label: "scaling residual"
+    legend_location: "upper left"
+    series:
+      - {label: "held-out groups", x: "log_rank", y: "observed", kind: "scatter", color: "blue", size: 25}
+      - {label: "frozen predictor", x: "log_rank", y: "fitted", color: "teal", width: 2.3}
+    gates:
+      - {value: 0, label: "base-law residual = 0", color: "gray", linestyle: "--", label_y: 0.12}
+  - title: "Recovery gate"
+    type: "grouped_bar"
+    csv: "../output/source_data/gates.csv"
+    category: "family"
+    x_label: "held-out family"
+    y_label: "recovery (%)"
+    y_lim: [0, 105]
+    rotation: 18
+    legend_location: "lower right"
+    series:
+      - {label: "old objective", y: "old", color: "gray"}
+      - {label: "faithful objective", y: "faithful", color: "teal"}
+    gates:
+      - {value: 90, label: "90% gate", color: "orange", linestyle: "--", label_y: 0.98}
+  - title: "Equal-FLOP frontier"
+    csv: "../output/source_data/frontier.csv"
+    x_label: "relative train FLOPs"
+    y_label: "few-step gPPL (lower)"
+    y_lim: [2.7, 4.7]
+    invert_y: true
+    legend_location: "upper right"
+    series:
+      - {label: "rank-1", x: "flops", y: "rank1", color: "gray", linestyle: "--", width: 1.8}
+      - {label: "fixed rank-4", x: "flops", y: "rank4", color: "violet", marker: "s", width: 2.0}
+      - {label: "adaptive rank", x: "flops", y: "adaptive", color: "blue", marker: "o", width: 2.4}

@@ -1,0 +1,37 @@
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{
+  arrows.meta,
+  backgrounds,
+  calc,
+  decorations.pathreplacing,
+  fit,
+  positioning,
+  shapes.geometric,
+  shapes.symbols
+}
+
+\IfFontExistsTF{Comic Sans MS}
+  {\setmainfont{Comic Sans MS}}
+  {\setmainfont{TeX Gyre Heros}}
+
+\tikzset{
+  >={Stealth[length=2.2mm,width=1.6mm]},
+  figure title/.style={font=\fontsize{14}{16}\selectfont,align=center},
+  figure subtitle/.style={font=\fontsize{8}{10}\selectfont,align=center},
+  figure label/.style={font=\fontsize{7.5}{9}\selectfont,align=center},
+  figure tiny/.style={font=\fontsize{6.2}{7.4}\selectfont,align=center},
+  data flow/.style={-Stealth,line width=1.0pt},
+  control flow/.style={-Stealth,dashed,line width=.8pt},
+  projection/.style={densely dotted,line width=.8pt},
+  compute/.style={rectangle,rounded corners=1.6mm,line width=.8pt,
+    minimum height=.72cm,inner xsep=5pt,inner ysep=3pt,figure label},
+  event/.style={diamond,aspect=1.3,line width=.8pt,inner sep=1.4pt,figure tiny},
+  store/.style={cylinder,shape border rotate=90,aspect=.28,line width=.8pt,
+    minimum height=.78cm,figure label},
+  state/.style={circle,line width=.8pt,minimum size=.72cm,figure tiny},
+  fusion/.style={regular polygon,regular polygon sides=6,line width=.8pt,
+    minimum width=1.4cm,figure tiny}
+}

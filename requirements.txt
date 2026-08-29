@@ -1,0 +1,10 @@
+# Keep this list aligned with [project.dependencies] in pyproject.toml.
+openai>=2.14.0,<3
+gradio>=6.2.0,<7
+pydantic>=2.12.0,<3
+numpy>=2.0,<3
+pandas>=2.2,<3
+matplotlib>=3.8,<4
+Pillow>=11.0,<13
+CairoSVG>=2.7,<3
+PyYAML>=6.0,<7

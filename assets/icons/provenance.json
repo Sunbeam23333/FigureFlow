@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-08-29",
+  "evidence_status": "synthetic-demo",
+  "generator": "OpenAI image generation tool; exact model version was not exposed by the tool response",
+  "prompt_record": "Reconstructed summaries of the generation instructions, not claimed as byte-for-byte transcripts.",
+  "shared_constraints": [
+    "single isolated text-free semantic object",
+    "refined miniature 3D/isometric style",
+    "navy, blue, teal, amber and white palette",
+    "flat magenta chroma background or transparent background",
+    "no letters, numbers, formulas, logos or watermark"
+  ],
+  "assets": {
+    "layout_planner.png": "workflow/layout planning board with connected modules",
+    "icon_factory.png": "semantic icon factory producing one modular component",
+    "chroma_matte.png": "soft-matte chroma extraction represented as a clean cutout pipeline",
+    "vector_typeset.png": "vector typography and connector layout workstation",
+    "qa_export.png": "quality gate and export package with checkmark"
+  }
+}

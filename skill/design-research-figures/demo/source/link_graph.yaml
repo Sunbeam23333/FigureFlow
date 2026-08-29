@@ -1,0 +1,44 @@
+title: "Preregistered transfer graph with an explicit non-transfer boundary"
+evidence_status: "synthetic-demo"
+subtitle: "Line width encodes planned evidence strength; dashed red means the claim is not licensed."
+status: "ILLUSTRATIVE LINK STRUCTURE - NOT A RESULT"
+status_kind: "warning"
+output_name: "demo_link_graph"
+figsize: [8.4, 4.35]
+center:
+  label: "shared\nprotocol"
+nodes:
+  - {id: "probe", label: "Probe", angle: 90, color: "navy"}
+  - {id: "small", label: "350M", angle: 150, color: "blue"}
+  - {id: "dense", label: "7B dense", angle: 210, color: "teal"}
+  - {id: "mid", label: "14B", angle: 270, color: "violet"}
+  - {id: "world", label: "World", angle: 330, color: "orange"}
+  - {id: "large", label: "100B MoE", angle: 30, color: "rose"}
+edges:
+  - {source: "probe", target: "small", color: "blue", width: 5.2, alpha: 0.68}
+  - {source: "probe", target: "dense", color: "teal", width: 4.3, alpha: 0.62}
+  - {source: "probe", target: "mid", color: "violet", width: 3.3, alpha: 0.58}
+  - {source: "probe", target: "large", color: "rose", width: 2.6, alpha: 0.52}
+  - {source: "small", target: "dense", color: "teal", width: 2.2, alpha: 0.45}
+  - {source: "dense", target: "mid", color: "violet", width: 2.0, alpha: 0.42}
+  - {source: "mid", target: "world", color: "orange", width: 2.8, alpha: 0.55}
+  - {source: "world", target: "probe", color: "red", width: 1.8, style: "nontransfer", curvature: -0.35}
+notes_title: "How to read the graph"
+notes:
+  - title: "Supported transfer"
+    text: "Solid curves are prespecified tests. Width is evidence priority, not a measured effect size."
+    color: "blue"
+    background: "light_blue"
+    height: 0.18
+  - title: "Explicit boundary"
+    text: "The dashed edge forbids claiming that generation quality establishes physical-world validity."
+    color: "red"
+    background: "light_red"
+    height: 0.19
+  - title: "Shared protocol"
+    text: "All nodes keep data order, metric definitions, compute accounting, and evaluation seeds fixed."
+    color: "teal"
+    background: "light_teal"
+    height: 0.19
+gate: "Gate: report every planned edge, including null and negative transfer."
+footer: "Illustrative topology only - source YAML is the editable graph definition"

@@ -1,0 +1,13 @@
+metric_id,metric_name,result_fields,measurement_protocol,unit,direction,aggregation,notes
+M01,首个合格版本耗时,first_pass_seconds,"从任务首次展示到第一次满足该任务全部验收项；失败时留空。",seconds,lower_is_better,median_and_iqr,"只统计 acceptance_pass=true 且有实测值的行。"
+M02,总墙钟耗时,total_elapsed_seconds,"从任务首次展示到本次试验结束，包含软件和模型等待。",seconds,lower_is_better,median_and_iqr,"每条 measured 行必填。"
+M03,主动人工操作时间,active_work_seconds,"累计实际点击、拖拽、输入和修改时间；排除等待。",seconds,lower_is_better,median_and_iqr,"不要用 FigureFlow 的流水线运行时长代替。"
+M04,本地修改耗时,local_edit_seconds,"从本地修改指令展示到修改版重新满足验收项。",seconds,lower_is_better,median_and_iqr,"未进入修改阶段可留空，并在 notes 说明。"
+M05,验收成功率,acceptance_pass,"由评审按 tasks.csv 的统一验收清单判定。",boolean,higher_is_better,success_count_over_measured,"布尔值只填 true 或 false。"
+M06,语义准确率,semantic_items_correct/semantic_items_total,"逐项核对必需节点、角色、连接、方向、分支和状态；正确项除以总检查项。",proportion,higher_is_better,median_and_iqr,"分子不得大于分母，分母必须大于零。"
+M07,文字或公式错误,text_formula_errors,"每个错字、丢字、伪文字、公式、符号、单位或数值错误计一次。",count,lower_is_better,sum_and_median,"同一缺陷不要重复计数。"
+M08,版式缺陷,layout_defects,"每个重叠、裁切、箭头穿字、方向难辨或字号不可读问题计一次。",count,lower_is_better,sum_and_median,"使用同一投影尺寸或查看比例评审。"
+M09,非目标稳定性,non_target_items_unchanged/non_target_items_total,"本地修改后逐项检查未要求变化的文字、图标、连线和位置。",proportion,higher_is_better,median_and_iqr,"未执行本地修改时两项均留空。"
+M10,可编辑交付率,editable_delivery,"无需从头重做即可继续修改的交付物为 true。",boolean,higher_is_better,success_count_over_measured,"只交付扁平图片且局部修改必须重生成整图时为 false。"
+M11,交互轮数,interaction_rounds,"完成初稿和指定修改期间的人工指令、生成或主要编辑轮次总数。",count,lower_is_better,median_and_iqr,"所有方法采用一致的计数规则。"
+M12,流水线运行耗时,pipeline_runtime_seconds,"FigureFlow 从已提交输入到产物和 QA 完成的程序耗时。",seconds,context_only,median_and_iqr,"仅描述系统运行，不与手工主动操作时间直接比较。"

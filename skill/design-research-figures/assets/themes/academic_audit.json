@@ -1,0 +1,34 @@
+{
+  "id": "academic-audit",
+  "description": "Paper-white visual system with redundant semantic colors and explicit evidence-state styling.",
+  "palette": {
+    "navy": "#142B4A",
+    "blue": "#2A6FBB",
+    "teal": "#16827A",
+    "orange": "#E58B2A",
+    "violet": "#7A5195",
+    "rose": "#C05A76",
+    "red": "#B84A3A",
+    "gray": "#647180",
+    "line": "#C8D5E2",
+    "paper": "#FFFFFF",
+    "offwhite": "#F8FAFD",
+    "light_blue": "#EAF3FB",
+    "light_teal": "#E9F6F4",
+    "light_orange": "#FFF2E2",
+    "light_violet": "#F2ECF8",
+    "light_red": "#FDE9E4",
+    "predgray": "#F2F2F2"
+  },
+  "typography": {
+    "display": ["Comic Sans MS", "Comic Neue", "Chalkboard SE", "cursive"],
+    "quantitative": "DejaVu Sans",
+    "formula": "STIX Sans",
+    "paper": ["TeX Gyre Heros", "Arial"]
+  },
+  "render": {
+    "review_png_dpi": 240,
+    "pdf_fonttype": 42,
+    "minimum_final_body_pt": 6.5
+  }
+}

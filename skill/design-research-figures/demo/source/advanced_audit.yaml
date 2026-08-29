@@ -1,0 +1,63 @@
+title: "Capability gains survive the systems audit"
+evidence_status: "synthetic-demo"
+subtitle: "A normalized capability view is paired with strong-scaling evidence; both panels preserve redundant encodings."
+status: "SYNTHETIC DEMO - NOT MEASURED"
+status_kind: "synthetic-demo"
+footer: "Synthetic-demo values only - direct YAML arrays - prediction bands are illustrative"
+output_name: "advanced_audit"
+figsize: [8.4, 4.0]
+radar:
+  title: "Capability profile"
+  rotation_degrees: -30
+  metrics:
+    - "T2V\nquality"
+    - "Long-horizon\nstability"
+    - "Control\nfidelity"
+    - "Memory\nefficiency"
+    - "Kernel\noverlap"
+    - "Failure\nrecovery"
+  value_lim: [0, 1.0]
+  rings: [0.25, 0.50, 0.75, 1.0]
+  ring_labels: ["", "50", "", "100"]
+  series:
+    - label: "baseline"
+      values: [0.62, 0.54, 0.58, 0.51, 0.47, 0.57]
+      color: "gray"
+      linestyle: "--"
+      fill_alpha: 0.05
+    - label: "candidate"
+      values: [0.84, 0.79, 0.82, 0.76, 0.86, 0.81]
+      color: "teal"
+      linestyle: "-"
+      fill_alpha: 0.13
+scaling:
+  title: "GPU strong scaling"
+  gpu_values: [1, 2, 4, 8, 16]
+  x_label: "GPU count"
+  throughput_label: "video samples / hour"
+  throughput_lim: [0, 2100]
+  right_label: "efficiency / communication (%)"
+  right_lim: [0, 110]
+  throughput:
+    label: "throughput"
+    values: [118, 231, 445, 824, 1475]
+    low_values: [113, 221, 427, 790, 1408]
+    high_values: [123, 242, 464, 860, 1542]
+    color: "blue"
+    marker: "o"
+    band_alpha: 0.13
+  right_series:
+    - label: "parallel efficiency"
+      values: [100, 98, 94, 87, 78]
+      color: "teal"
+      marker: "s"
+    - label: "communication share"
+      values: [4, 6, 9, 14, 23]
+      color: "orange"
+      linestyle: "--"
+      marker: "^"
+  show_ideal: true
+  ideal_label: "ideal linear"
+  legend_location: "upper left"
+  legend_columns: 2
+  annotation: "Band: illustrative prediction interval"

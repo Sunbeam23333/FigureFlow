@@ -1,0 +1,48 @@
+title: "Faithful implementation gate"
+evidence_status: "synthetic-demo"
+caption: "A compact scoreboard separates the engineering result, scientific gate, and evidence status."
+status: "SYNTHETIC DEMO - GRAY CELLS ARE NOT MEASURED"
+output_name: "demo_results_table"
+label: "tab:demo-gate"
+environment: "table*"
+standalone_width_mm: 195
+columns:
+  - {header: "Method", align: "l", width_cm: 3.75}
+  - {latex_header: "$r$", align: "c", width_cm: 1.25}
+  - {latex_header: "OOD RMSE $\\downarrow$", align: "c", width_cm: 2.45}
+  - {latex_header: "Recovery $\\uparrow$", align: "c", width_cm: 2.35}
+  - {latex_header: "Few-step gPPL $\\downarrow$", align: "c", width_cm: 2.55}
+  - {header: "Evidence status", align: "l", width_cm: 3.45}
+rows:
+  - cells:
+      - "Rank-1 factorized control"
+      - {latex: "$1$"}
+      - {latex: "$1.00^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$72\\%^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$3.61^{\\mathrm{P}}$", kind: "predicted"}
+      - "exact control"
+  - cells:
+      - "Fixed-rank adapter"
+      - {latex: "$4$"}
+      - {latex: "$0.88^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$86\\%^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$3.34^{\\mathrm{P}}$", kind: "predicted"}
+      - "implemented"
+  - style: "warning"
+    cells:
+      - "Uncorrected residual head"
+      - {latex: "$4$"}
+      - {latex: "$1.07^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$61\\%^{\\mathrm{P}}$", kind: "predicted"}
+      - {latex: "$3.89^{\\mathrm{P}}$", kind: "predicted"}
+      - "objective drift"
+  - style: "ours"
+    cells:
+      - {latex: "\\textbf{Faithful bridge KTH}"}
+      - {latex: "$2/4$"}
+      - {latex: "$\\mathbf{0.79}^{\\mathrm{P}}$", kind: "predicted", best: true}
+      - {latex: "$\\mathbf{94\\%}^{\\mathrm{P}}$", kind: "predicted", best: true}
+      - {latex: "$\\mathbf{3.08}^{\\mathrm{P}}$", kind: "predicted", best: true}
+      - {latex: "\\textbf{preregistered target}"}
+note: "P = design-time prediction; blue = selected method; orange = known-invalid comparison."
+paper_caption: "Demo results table. Superscript P and gray cells denote synthetic design-time values, not measurements. The highlighted row is the preregistered target, while the orange row is retained as an invalid-objective diagnostic."

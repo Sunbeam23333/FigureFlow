@@ -1,0 +1,449 @@
+{
+  "schema_version": 1,
+  "run_id": "20260829T024047Z-85a8e5c7",
+  "created_at": "2026-08-29T02:40:51.730843+00:00",
+  "evidence_status": "synthetic-demo",
+  "notice": "演示素材与耗时仅代表本次运行；未完成团队范围对照实验。",
+  "planning": {
+    "mode": "offline",
+    "requested_mode": "offline",
+    "model": null,
+    "response_id": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "fallback_reason": "offline mode selected"
+  },
+  "selected_layout": "ribbon",
+  "metrics_ms": {
+    "planning_ms": 1,
+    "icon_generation_ms": 0,
+    "cutout_ms": 1892,
+    "asset_pipeline_ms": 1924,
+    "render_3_layouts_ms": 1795,
+    "qa_ms": 578,
+    "packaging_ms": 308,
+    "total_ms": 4788
+  },
+  "assets": [
+    {
+      "key": "layout_planner",
+      "raw_path": "assets/raw/layout_planner.png",
+      "processed_path": "assets/processed/layout_planner.png",
+      "manifest_path": "assets/manifests/layout_planner.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 405
+    },
+    {
+      "key": "icon_factory",
+      "raw_path": "assets/raw/icon_factory.png",
+      "processed_path": "assets/processed/icon_factory.png",
+      "manifest_path": "assets/manifests/icon_factory.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 347
+    },
+    {
+      "key": "chroma_matte",
+      "raw_path": "assets/raw/chroma_matte.png",
+      "processed_path": "assets/processed/chroma_matte.png",
+      "manifest_path": "assets/manifests/chroma_matte.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 358
+    },
+    {
+      "key": "vector_typeset",
+      "raw_path": "assets/raw/vector_typeset.png",
+      "processed_path": "assets/processed/vector_typeset.png",
+      "manifest_path": "assets/manifests/vector_typeset.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 313
+    },
+    {
+      "key": "qa_export",
+      "raw_path": "assets/raw/qa_export.png",
+      "processed_path": "assets/processed/qa_export.png",
+      "manifest_path": "assets/manifests/qa_export.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 469
+    }
+  ],
+  "live_icon": null,
+  "qa": {
+    "ok": true,
+    "selected_layout": "ribbon",
+    "selected": {
+      "ok": true,
+      "cjk_font_embedded": true,
+      "font_names": [
+        "YLGCLV+ArialUnicodeMS",
+        "JXKLWY+ArialUnicodeMS",
+        "FXNANL+ArialUnicodeMS",
+        "INSHWU+ArialUnicodeMS"
+      ],
+      "png": [
+        {
+          "file": "figureflow_ribbon.png",
+          "width": 2700,
+          "height": 1500,
+          "mode": "RGB",
+          "content_bbox": [
+            77,
+            49,
+            2623,
+            1451
+          ],
+          "edge_distances": {
+            "left": 77,
+            "top": 49,
+            "right": 77,
+            "bottom": 49
+          },
+          "margin_threshold": 16,
+          "clipping_risk": false
+        }
+      ],
+      "pdf": {
+        "ok": true,
+        "summary": {
+          "artifacts": 1,
+          "errors": 0,
+          "warnings": 0
+        },
+        "results": [
+          {
+            "kind": "pdf",
+            "file": "figureflow_ribbon.pdf",
+            "pages": 1,
+            "page_sizes": [
+              {
+                "page": 1,
+                "width_pt": 1350.0,
+                "height_pt": 750.0,
+                "label": null
+              }
+            ],
+            "fonts": [
+              {
+                "name": "YLGCLV+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "JXKLWY+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "FXNANL+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "INSHWU+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              }
+            ],
+            "findings": []
+          }
+        ]
+      }
+    },
+    "by_layout": {
+      "ribbon": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "YLGCLV+ArialUnicodeMS",
+          "JXKLWY+ArialUnicodeMS",
+          "FXNANL+ArialUnicodeMS",
+          "INSHWU+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_ribbon.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              49,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 49,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_ribbon.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "YLGCLV+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "JXKLWY+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "FXNANL+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "INSHWU+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      },
+      "bowtie": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "YLGCLV+ArialUnicodeMS",
+          "JXKLWY+ArialUnicodeMS",
+          "XLZMDW+ArialUnicodeMS",
+          "NLCSDI+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_bowtie.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              49,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 49,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_bowtie.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "YLGCLV+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "JXKLWY+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "XLZMDW+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "NLCSDI+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      },
+      "dual-rail": {
+        "ok": true,
+        "cjk_font_embedded": true,
+        "font_names": [
+          "YLGCLV+ArialUnicodeMS",
+          "JXKLWY+ArialUnicodeMS",
+          "XLZMDW+ArialUnicodeMS",
+          "JYJBDO+ArialUnicodeMS"
+        ],
+        "png": [
+          {
+            "file": "figureflow_dual_rail.png",
+            "width": 2700,
+            "height": 1500,
+            "mode": "RGB",
+            "content_bbox": [
+              77,
+              49,
+              2623,
+              1451
+            ],
+            "edge_distances": {
+              "left": 77,
+              "top": 49,
+              "right": 77,
+              "bottom": 49
+            },
+            "margin_threshold": 16,
+            "clipping_risk": false
+          }
+        ],
+        "pdf": {
+          "ok": true,
+          "summary": {
+            "artifacts": 1,
+            "errors": 0,
+            "warnings": 0
+          },
+          "results": [
+            {
+              "kind": "pdf",
+              "file": "figureflow_dual_rail.pdf",
+              "pages": 1,
+              "page_sizes": [
+                {
+                  "page": 1,
+                  "width_pt": 1350.0,
+                  "height_pt": 750.0,
+                  "label": null
+                }
+              ],
+              "fonts": [
+                {
+                  "name": "YLGCLV+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "JXKLWY+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "XLZMDW+ArialUnicodeMS",
+                  "type": "TrueType",
+                  "encoding": "WinAnsi",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                },
+                {
+                  "name": "JYJBDO+ArialUnicodeMS",
+                  "type": "CID TrueType",
+                  "encoding": "Identity-H",
+                  "embedded": true,
+                  "subset": true,
+                  "unicode": true
+                }
+              ],
+              "findings": []
+            }
+          ]
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "figure_plan.json": "42a76f19f1a7c34f2be68aa863872f9344e69fc631efdf65a627d49c032a2611",
+    "assets/asset_pipeline.png": "68313e59d737916c43807a05b407d68e33a0f942d3424b431863dfdd38542371",
+    "candidates/ribbon/figureflow_ribbon.svg": "2549f51a7e5813d2b692d7a1a3f5d0c4f7639eda6ebcbe66636b575989a08269",
+    "candidates/ribbon/figureflow_ribbon.pdf": "39c493cfd0fee1992e467db29d6afca1be76b7308e3ecdf7fb7709d4d1400901",
+    "candidates/ribbon/figureflow_ribbon.png": "cf439474c207934b21cae4048f65f42a7e6466fe73a5c0fa16e12c442e2bf865",
+    "candidates/ribbon/figureflow_ribbon_manifest.json": "8ef300b30f195531da7de1ca9bf265b81c103b0eb7b11620bbfcdc4031985c8d"
+  }
+}

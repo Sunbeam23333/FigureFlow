@@ -1,0 +1,39 @@
+\documentclass[tikz,border=3mm]{standalone}
+\input{base_style.tex}
+\input{palette_emerald.tex}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[figure title,text=ink] at (7.5,5.2) {Evidence-grounded mechanism};
+  \node[figure subtitle,text=graphite] at (7.5,4.82)
+    {Replace these semantic placeholders only after checking the paper and code.};
+
+  \fill[rounded corners=2.2mm,fill=paper,draw=divider,line width=.55pt]
+    (.25,.35) rectangle (14.75,4.52);
+
+  \node[compute,fill=pale,draw=accent] (input) at (2.0,2.95)
+    {input / condition};
+  \node[compute,fill=white,draw=accent] (teacher) at (5.2,3.45)
+    {reference path\\$\hat v_T=f_T(z,\tau)$};
+  \node[compute,fill=pale,draw=secondary] (student) at (5.2,2.10)
+    {optimized path\\$\hat v_S=f_S(z,\tau)$};
+  \node[event,fill=highlight!25,draw=highlight] (event) at (8.1,3.45)
+    {$E$};
+  \node[fusion,fill=accent,draw=accentdark,text=white] (merge) at (10.2,2.78)
+    {target};
+  \node[state,fill=white,draw=ink] (step) at (13.1,2.78)
+    {step};
+
+  \draw[data flow,draw=accent] (input) -- (teacher);
+  \draw[data flow,draw=secondary] (input) -- (student);
+  \draw[data flow,draw=accent] (teacher) -- (event);
+  \draw[control flow,draw=highlight] (event) -- (merge);
+  \draw[data flow,draw=secondary] (student) -- (merge);
+  \draw[data flow,draw=ink] (merge) -- (step);
+
+  \draw[decorate,decoration={brace,mirror,amplitude=4pt},draw=secondary]
+    (3.55,1.38) -- (8.75,1.38);
+  \node[figure tiny,text=secondary] at (6.15,1.02)
+    {annotate verified overlap, cache, or sparse execution here};
+\end{tikzpicture}
+\end{document}
