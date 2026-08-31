@@ -2,7 +2,9 @@
   "title": "FigureFlow｜从业务描述到可编辑精美图",
   "takeaway": "AI 负责语义规划与视觉组件，确定性程序负责文字、公式、连线与质量验收。",
   "layout_family": "ribbon",
+  "layout_preset": "standard",
   "theme": "academic-audit",
+  "reference_assets": [],
   "evidence_status": "synthetic-demo",
   "status_label": "合成演示 · 非业务实测",
   "stages": [

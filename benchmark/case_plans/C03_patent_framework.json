@@ -1,0 +1,55 @@
+{
+  "title": "多源数据融合专利框架",
+  "takeaway": "以可编辑节点表达多源输入、编码、融合、证据沉淀与任务输出。",
+  "layout_family": "bowtie",
+  "layout_preset": "presentation-spacious",
+  "theme": "academic-audit",
+  "reference_assets": [],
+  "evidence_status": "synthetic-demo",
+  "status_label": "代表任务 · 合成演示",
+  "stages": [
+    {
+      "title": "多源采集",
+      "subtitle": "接入文本、图像与日志",
+      "body": ["异构输入", "时间对齐"],
+      "accent": "blue",
+      "asset_key": "data",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "特征编码",
+      "subtitle": "统一语义表示空间",
+      "body": ["模态编码", "特征归一"],
+      "accent": "teal",
+      "asset_key": "process",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "跨源融合",
+      "subtitle": "门控选择互补信息",
+      "body": ["关系建模", "冲突消解"],
+      "accent": "orange",
+      "asset_key": "decision",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "证据入库",
+      "subtitle": "保留来源与版本轨迹",
+      "body": ["特征索引", "证据追溯"],
+      "accent": "violet",
+      "asset_key": "store",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "任务输出",
+      "subtitle": "形成推理与决策结果",
+      "body": ["预测结果", "解释证据"],
+      "accent": "navy",
+      "asset_key": "output",
+      "evidence_status": "synthetic-demo"
+    }
+  ],
+  "gates": ["术语保持一致", "证据链可追溯", "图文层级明确", "PDF单页", "SVG可编辑"],
+  "caption": "代表性合成输入；机器实测从已写入的结构计划开始，不包含专利内容撰写、查新或法律审查。",
+  "warnings": ["该图是绘图链路案例，不构成专利有效性或新颖性证据。"]
+}

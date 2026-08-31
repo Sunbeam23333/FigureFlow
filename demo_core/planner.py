@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Sequence
 
 from openai import OpenAI
 
-from .schemas import FigurePlan, PlanningMetadata
+from .schemas import FigurePlan, PlanningMetadata, ReferenceAsset
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +23,13 @@ class PlanningError(RuntimeError):
 
 def load_preset(path: Path = DEFAULT_PRESET) -> FigurePlan:
     return FigurePlan.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def _attach_references(plan: FigurePlan, assets: Sequence[ReferenceAsset]) -> FigurePlan:
+    """Attach only caller/provider-validated references, never model-invented URLs."""
+    payload = plan.model_dump()
+    payload["reference_assets"] = [ReferenceAsset.model_validate(asset).model_dump() for asset in assets]
+    return FigurePlan.model_validate(payload)
 
 
 def _usage_value(response: object, field: str) -> int | None:
@@ -62,6 +69,7 @@ def plan_figure(
     *,
     mode: Literal["auto", "online", "offline"] = "auto",
     model: str | None = None,
+    reference_assets: Sequence[ReferenceAsset] = (),
 ) -> tuple[FigurePlan, PlanningMetadata]:
     """Plan a figure without ever silently substituting the requested online model."""
 
@@ -82,7 +90,7 @@ def plan_figure(
             model=None,
             fallback_reason=reason,
         )
-        return load_preset(), metadata
+        return _attach_references(load_preset(), reference_assets), metadata
 
     if mode == "online" and not has_key:
         raise PlanningError(
@@ -92,7 +100,7 @@ def plan_figure(
     try:
         plan, metadata = _online_plan(brief, target_model)
         metadata.requested_mode = mode
-        return plan, metadata
+        return _attach_references(plan, reference_assets), metadata
     except Exception as exc:  # the UI maps this to a concise, non-secret message
         if mode == "online":
             raise PlanningError(
@@ -106,4 +114,4 @@ def plan_figure(
         )
         preset = load_preset()
         preset.warnings.append("在线规划失败，本次展示离线预设；未替换为其他模型。")
-        return preset, metadata
+        return _attach_references(preset, reference_assets), metadata

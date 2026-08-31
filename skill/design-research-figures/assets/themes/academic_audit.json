@@ -26,6 +26,17 @@
     "formula": "STIX Sans",
     "paper": ["TeX Gyre Heros", "Arial"]
   },
+  "workflow": {
+    "background_start": "#F8FBFE",
+    "background_mid": "#F4F8FC",
+    "background_end": "#EEF4FA",
+    "decoration_primary": "#DCEAF7",
+    "decoration_secondary": "#E4F4F1",
+    "card": "#FFFFFF",
+    "card_border": "#D9E3EE",
+    "rail": "#D7E4F0",
+    "shadow": "#425C78"
+  },
   "render": {
     "review_png_dpi": 240,
     "pdf_fonttype": 42,

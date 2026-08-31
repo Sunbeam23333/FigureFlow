@@ -1,6 +1,8 @@
 # FigureFlow
 
-> 把“一段业务描述”转成语义正确、文字准确、可继续编辑的流程图。
+> 把“一段业务描述”转成语义可审查、文字准确、可继续编辑的流程图。
+
+本仓库是独立的答辩 Demo，与其他同名开源项目或商业产品无关联；发布包名使用 `figureflow-demo`，不占用通用的 `figureflow` 名称。
 
 FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅助绘图 Demo。它不让生图模型一次性“猜”完整张图，而是把任务拆成可检查的四层：
 
@@ -52,6 +54,50 @@ flowchart LR
 `offline` 展示的是同一条素材处理、排版、QA 和导出链路，但它**不是一次实时 GPT-5.6-sol 调用**。`online` 模式缺少 Key 时会报错，不会悄悄替换成其他模型。
 
 默认使用仓库内已准备的无文字演示 Icon。在线时可勾选“额外实时生成 1 个 Icon”，这会由 `gpt-5.6-sol` 通过 Responses API 调用图像工具，默认图像模型为 `gpt-image-2`。该选项会增加等待时间和 API 费用；其余 Icon 仍使用本地可复现素材。
+
+仓库额外包含 `gpu_server` 与 `robot_inspection` 两个无文字色键案例：它们由内置 ImageGen 工作流生成，并在每次使用时继续走同一套 chroma soft-matte → RGBA → 排版链路。真实参考来源、作者和许可证角色记录在 [`assets/icons/provenance.json`](assets/icons/provenance.json)；生成图仍标注为 `synthetic-demo`，不会冒充参考照片或官方品牌素材。
+
+## 可体验的主题、投屏字号与真实参考
+
+界面现在把三个原先隐含的设计选择显式化，并将其写入 `FigurePlan`、renderer manifest 与 QA：
+
+- `academic-audit`：默认论文/汇报配色；
+- `gpu-green-tech`：以高对比绿色为主强调色的通用 GPU Systems 技术配色，不使用第三方 Logo，也不暗示背书、授权或关联；
+- `standard`：保持原有兼容版式；
+- `presentation-spacious`：stage 标题、副标题、正文和 gate 字号相对标准档提高约 25%，每个 stage 最多两条正文，并在三种布局上记录可机读的 `layout_qa`。
+
+参考图入口是 metadata-only：检索结果可在页面中查看标题、来源页、作者和许可证，然后作为 `reference_assets` 写入计划与清单，但不会自动下载或放进画布。
+
+| Provider | 默认联网 | 行为与边界 |
+|---|---:|---|
+| `offline-example` | 否 | 返回仓库内的可移植合成示例 URI，适合复现与录屏 |
+| `user-url` | 否 | 只校验和记录用户 URL；查询串与片段会被丢弃，服务端绝不抓取、预览或跟随该 URL |
+| `wikimedia-commons` | 是 | 只调用固定的 Commons MediaWiki API；仅保留 JPEG/PNG/WebP 且同时具有来源页与许可证的结果 |
+
+命令行可独立验证 provider：
+
+```bash
+python -m demo_core.reference_search "GPU cluster data centre" --provider wikimedia-commons --limit 3
+python -m demo_core.reference_search --provider user-url --url "https://example.org/reference.png"
+```
+
+也可以把结果直接送入流水线：
+
+```python
+from demo_core.pipeline import run_pipeline
+from demo_core.reference_search import search_references
+
+references = search_references("GPU cluster", provider="wikimedia-commons", limit=3)
+result = run_pipeline(
+    "把 GPU 集群告警处理流程画成投屏图",
+    mode="offline",
+    theme_override="gpu-green-tech",
+    layout_preset_override="presentation-spacious",
+    reference_assets=references,
+)
+```
+
+这里的“搜索”只提供构图参考与溯源，不证明素材可直接商用。交付前仍需人工确认许可证、署名、商标与组织内部合规要求。
 
 ## 快速开始
 
@@ -140,6 +186,7 @@ docker run --rm -p 7860:7860 \
 FigureFlow/
 ├── app.py                         # Gradio 体验界面
 ├── demo_core/                    # 规划、素材处理、渲染与 QA 编排
+│   └── reference_search.py       # 可插拔参考检索（默认离线 / 用户 URL 不抓取）
 ├── presets/                      # 离线回放的结构化预设
 ├── prompts/                      # 受约束规划提示词
 ├── assets/icons/                 # 原始和处理后的无文字素材
@@ -157,6 +204,7 @@ FigureFlow/
 - 离线回放不发起语义规划 API 请求；运行前仍应检查所在环境的网络和日志配置。
 - 产物中可能包含用户提交的文字；分享 ZIP、manifest 或录屏前请做脱敏检查。
 - 不要把 API Key 放入前端、URL、日志、manifest 或截图。
+- `user-url` provider 不发起请求；如果实现新的联网 provider，应固定允许的 API endpoint、限制响应体，并只返回经过 schema 校验的 metadata。
 
 更完整的部署边界和漏洞报告方式见 [SECURITY.md](SECURITY.md)。
 

@@ -1,0 +1,69 @@
+{
+  "title": "GPU 集群训练发布链路",
+  "takeaway": "用大字号展示任务输入、GPU调度、容量决策、检查点沉淀与模型发布。",
+  "layout_family": "dual-rail",
+  "layout_preset": "presentation-spacious",
+  "theme": "gpu-green-tech",
+  "reference_assets": [
+    {
+      "id": "wm-csiro-gpu-cluster",
+      "title": "The CSIRO GPU cluster at the data centre",
+      "uri": "https://upload.wikimedia.org/wikipedia/commons/f/f9/CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+      "source_type": "provider-search",
+      "provider": "wikimedia-commons",
+      "media_type": "image",
+      "source_url": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+      "author": "CSIRO",
+      "license_name": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "attribution": "CSIRO · CC BY 3.0 · visual reference only"
+    }
+  ],
+  "evidence_status": "synthetic-demo",
+  "status_label": "代表任务 · 合成演示",
+  "stages": [
+    {
+      "title": "任务输入",
+      "subtitle": "接收数据与训练配置",
+      "body": ["数据版本", "资源需求"],
+      "accent": "blue",
+      "asset_key": "data",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "GPU调度",
+      "subtitle": "分配计算与通信资源",
+      "body": ["队列优先级", "拓扑亲和"],
+      "accent": "teal",
+      "asset_key": "gpu_server",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "容量决策",
+      "subtitle": "选择扩缩容与重试动作",
+      "body": ["显存门槛", "失败恢复"],
+      "accent": "orange",
+      "asset_key": "decision",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "检查点库",
+      "subtitle": "沉淀权重与运行证据",
+      "body": ["模型版本", "训练日志"],
+      "accent": "violet",
+      "asset_key": "store",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "模型发布",
+      "subtitle": "导出服务与回滚信息",
+      "body": ["发布包", "回滚锚点"],
+      "accent": "navy",
+      "asset_key": "output",
+      "evidence_status": "synthetic-demo"
+    }
+  ],
+  "gates": ["任务字段完整", "资源方向一致", "版本可追溯", "PDF单页", "SVG可编辑"],
+  "caption": "代表性合成输入；使用 gpu-green-tech 主题与 presentation-spacious 大字号预设验证新版交付链路。",
+  "warnings": ["图中GPU链路是合成演示，不代表真实集群吞吐或训练性能。"]
+}

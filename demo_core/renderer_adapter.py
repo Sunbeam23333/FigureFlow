@@ -72,7 +72,16 @@ def render_plan(plan_path: Path, asset_dir: Path, output_dir: Path, output_name:
 def audit_outputs(png_path: Path, pdf_path: Path, report_dir: Path) -> dict[str, object]:
     report_dir.mkdir(parents=True, exist_ok=True)
     png_run = _run(
-        [sys.executable, str(PNG_AUDITOR), str(png_path), "--margin", "16", "--json"],
+        [
+            sys.executable,
+            str(PNG_AUDITOR),
+            str(png_path),
+            "--margin",
+            "16",
+            "--background-model",
+            "bilinear-corners",
+            "--json",
+        ],
         allow_failure=True,
     )
     pdf_report_path = report_dir / "pdf_qa.json"

@@ -1,0 +1,332 @@
+{
+  "status": "ok",
+  "generated_from": {
+    "case_definitions": "benchmark/machine_cases.csv",
+    "machine_results": "benchmark/machine_results.csv"
+  },
+  "measurement_scope": {
+    "included": "已写入 FigurePlan → 通用fallback生成或本地语义素材读取/抠图 → SVG/PDF/PNG渲染 → 自动交付QA → ZIP关闭",
+    "excluded": [
+      "自然语言规划",
+      "人工计划编写",
+      "参考图在线搜索",
+      "局部语义素材首次生成",
+      "人工语义评审",
+      "上传",
+      "PPT编辑"
+    ],
+    "single_run_per_case": true
+  },
+  "summary": {
+    "representative_cases": 5,
+    "measured_machine_runs": 5,
+    "successful_machine_runs": 5,
+    "delivery_qa_passes": 5,
+    "presentation_spacious_cases": 2,
+    "gpu_green_tech_cases": 1,
+    "reference_linked_cases": 2,
+    "reference_assets_total": 2,
+    "machine_end_to_end_seconds": {
+      "min": 1.333,
+      "median": 1.491,
+      "max": 1.737
+    },
+    "relative_lower_bound_multiple": {
+      "min": 2072.6,
+      "max": 21611.1,
+      "label": "相对个人自报下界的时间尺度倍率"
+    }
+  },
+  "human_comparison_benchmark": {
+    "planned": 9,
+    "measured": 0,
+    "source": "benchmark/results_template.csv",
+    "interpretation": "人工对照尚未实测，不得据此声称团队人效或人工节省。"
+  },
+  "case_runs": [
+    {
+      "case_id": "C01",
+      "case_title": "线上故障处置周报流程",
+      "scenario": "汇报流程图",
+      "complexity_class": "simple_flow",
+      "render_profile": {
+        "layout_family": "ribbon",
+        "layout_preset": "standard",
+        "theme": "academic-audit"
+      },
+      "baseline": {
+        "kind": "personal_self_reported_historical_lower_bound",
+        "seconds": 3600.0,
+        "display": "≥1小时",
+        "source": "用户在本次答辩准备对话中的个人历史经验自报",
+        "scope": "简单流程图至少1小时；非本案例同题现场计时",
+        "same_task_human_timing": false
+      },
+      "machine_measurement": {
+        "run_id": "20260831T180218Z-c01-11bfba8f",
+        "seconds": 1.358014,
+        "runtime_environment": "Darwin-arm64; Python 3.14.6",
+        "scope": "checked_in_plan_to_delivery_package",
+        "delivery_qa_pass": true,
+        "renderer_layout_qa_pass": true,
+        "output_audit_pass": true,
+        "source_plan_sha256": "73f5373900053d7abe1207b6c2e86b9403109e574bc8824ae941b64f9a7bb89d",
+        "renderer_manifest_sha256": "f548837d064c5afc5d43a24c045ee25f34ba69a6a0fac98469f0a56e37942a8d",
+        "machine_run_success": true,
+        "semantic_review_status": "not_measured",
+        "reference_asset_count": 0,
+        "output_formats": [
+          "manifest",
+          "pdf",
+          "png",
+          "svg",
+          "zip"
+        ],
+        "evidence_manifest_path": "benchmark/machine_evidence/20260831T180218Z-c01-11bfba8f.json",
+        "artifact_zip_path": "",
+        "artifact_zip_sha256": "8d4a329a9e1e6098ef4c059603ac4bae0ae464c6f0cc539fb751a3a53e3c184c",
+        "artifact_zip_bytes": 914874,
+        "artifact_retention": "not_committed_size_control",
+        "timings_seconds": {
+          "plan_validation_seconds": 0.000383,
+          "asset_prepare_seconds": 0.710417,
+          "render_seconds": 0.363572,
+          "delivery_qa_seconds": 0.262265,
+          "package_seconds": 0.02119
+        }
+      },
+      "relative_lower_bound_multiple": 2650.9,
+      "comparison_label": "相对个人自报下界的时间尺度倍率"
+    },
+    {
+      "case_id": "C02",
+      "case_title": "工厂机器人巡检SOP",
+      "scenario": "内部SOP流程图",
+      "complexity_class": "simple_flow",
+      "render_profile": {
+        "layout_family": "dual-rail",
+        "layout_preset": "standard",
+        "theme": "academic-audit"
+      },
+      "baseline": {
+        "kind": "personal_self_reported_historical_lower_bound",
+        "seconds": 3600.0,
+        "display": "≥1小时",
+        "source": "用户在本次答辩准备对话中的个人历史经验自报",
+        "scope": "简单流程图至少1小时；非本案例同题现场计时",
+        "same_task_human_timing": false
+      },
+      "machine_measurement": {
+        "run_id": "20260831T180220Z-c02-0099f45f",
+        "seconds": 1.736913,
+        "runtime_environment": "Darwin-arm64; Python 3.14.6",
+        "scope": "checked_in_plan_to_delivery_package",
+        "delivery_qa_pass": true,
+        "renderer_layout_qa_pass": true,
+        "output_audit_pass": true,
+        "source_plan_sha256": "3aa16fc6d893d0034466020a6add1497bd801e8426f0b63a4c0e6863c320d831",
+        "renderer_manifest_sha256": "32ce0dad2b1d73d562dfbb34a1a58fc9066a7954b19cc7a045643c06cd572934",
+        "machine_run_success": true,
+        "semantic_review_status": "not_measured",
+        "reference_asset_count": 1,
+        "output_formats": [
+          "manifest",
+          "pdf",
+          "png",
+          "svg",
+          "zip"
+        ],
+        "evidence_manifest_path": "benchmark/machine_evidence/20260831T180220Z-c02-0099f45f.json",
+        "artifact_zip_path": "",
+        "artifact_zip_sha256": "5056565dd0d13c004584e7b4b467cd080e685595040ee21d9668697847748ec0",
+        "artifact_zip_bytes": 3761509,
+        "artifact_retention": "not_committed_size_control",
+        "timings_seconds": {
+          "plan_validation_seconds": 0.000695,
+          "asset_prepare_seconds": 1.001757,
+          "render_seconds": 0.405872,
+          "delivery_qa_seconds": 0.255031,
+          "package_seconds": 0.073314
+        }
+      },
+      "relative_lower_bound_multiple": 2072.6,
+      "comparison_label": "相对个人自报下界的时间尺度倍率"
+    },
+    {
+      "case_id": "C03",
+      "case_title": "多源数据融合专利框架",
+      "scenario": "专利技术框架图",
+      "complexity_class": "paper_grade",
+      "render_profile": {
+        "layout_family": "bowtie",
+        "layout_preset": "presentation-spacious",
+        "theme": "academic-audit"
+      },
+      "baseline": {
+        "kind": "personal_self_reported_historical_lower_bound",
+        "seconds": 28800.0,
+        "display": "≥8小时（1个工作日下界）",
+        "source": "用户在本次答辩准备对话中的个人历史经验自报",
+        "scope": "论文级配图至少1个工作日；按8小时下界；非本案例同题现场计时",
+        "same_task_human_timing": false
+      },
+      "machine_measurement": {
+        "run_id": "20260831T180221Z-c03-781f0a5e",
+        "seconds": 1.33265,
+        "runtime_environment": "Darwin-arm64; Python 3.14.6",
+        "scope": "checked_in_plan_to_delivery_package",
+        "delivery_qa_pass": true,
+        "renderer_layout_qa_pass": true,
+        "output_audit_pass": true,
+        "source_plan_sha256": "cd7208d47e38f8b46c83a6cb699073700a279643f8dec9e65fadd0bb3c2156b9",
+        "renderer_manifest_sha256": "b6000938e0690c3adbd6be73975c99da96af1b3534db61bef284d6579d0d709e",
+        "machine_run_success": true,
+        "semantic_review_status": "not_measured",
+        "reference_asset_count": 0,
+        "output_formats": [
+          "manifest",
+          "pdf",
+          "png",
+          "svg",
+          "zip"
+        ],
+        "evidence_manifest_path": "benchmark/machine_evidence/20260831T180221Z-c03-781f0a5e.json",
+        "artifact_zip_path": "",
+        "artifact_zip_sha256": "9e21ccf332bb83a5316914ac2b1ab0bae67c1394d71d1bd45650113964b0c9c3",
+        "artifact_zip_bytes": 902323,
+        "artifact_retention": "not_committed_size_control",
+        "timings_seconds": {
+          "plan_validation_seconds": 0.000496,
+          "asset_prepare_seconds": 0.697689,
+          "render_seconds": 0.347372,
+          "delivery_qa_seconds": 0.265622,
+          "package_seconds": 0.021278
+        }
+      },
+      "relative_lower_bound_multiple": 21611.1,
+      "comparison_label": "相对个人自报下界的时间尺度倍率"
+    },
+    {
+      "case_id": "C04",
+      "case_title": "教师—学生蒸馏机制图",
+      "scenario": "论文机制图",
+      "complexity_class": "paper_grade",
+      "render_profile": {
+        "layout_family": "dual-rail",
+        "layout_preset": "standard",
+        "theme": "academic-audit"
+      },
+      "baseline": {
+        "kind": "personal_self_reported_historical_lower_bound",
+        "seconds": 28800.0,
+        "display": "≥8小时（1个工作日下界）",
+        "source": "用户在本次答辩准备对话中的个人历史经验自报",
+        "scope": "论文级配图至少1个工作日；按8小时下界；非本案例同题现场计时",
+        "same_task_human_timing": false
+      },
+      "machine_measurement": {
+        "run_id": "20260831T180223Z-c04-1032a0a4",
+        "seconds": 1.491339,
+        "runtime_environment": "Darwin-arm64; Python 3.14.6",
+        "scope": "checked_in_plan_to_delivery_package",
+        "delivery_qa_pass": true,
+        "renderer_layout_qa_pass": true,
+        "output_audit_pass": true,
+        "source_plan_sha256": "edb21338567dc164883cd70e22eddeb621092934dcd9ebfe3f0c42b8365c49a5",
+        "renderer_manifest_sha256": "9c396c0b0ff8931c7b070acb2caab2cf8c19a1dc5aa04bca768e2380471d5622",
+        "machine_run_success": true,
+        "semantic_review_status": "not_measured",
+        "reference_asset_count": 0,
+        "output_formats": [
+          "manifest",
+          "pdf",
+          "png",
+          "svg",
+          "zip"
+        ],
+        "evidence_manifest_path": "benchmark/machine_evidence/20260831T180223Z-c04-1032a0a4.json",
+        "artifact_zip_path": "",
+        "artifact_zip_sha256": "7cf7e1dc895928767087b2e59e80398c125237f299bb5b31580cd9ab21337b71",
+        "artifact_zip_bytes": 866584,
+        "artifact_retention": "not_committed_size_control",
+        "timings_seconds": {
+          "plan_validation_seconds": 0.000417,
+          "asset_prepare_seconds": 0.822619,
+          "render_seconds": 0.392603,
+          "delivery_qa_seconds": 0.255956,
+          "package_seconds": 0.019511
+        }
+      },
+      "relative_lower_bound_multiple": 19311.5,
+      "comparison_label": "相对个人自报下界的时间尺度倍率"
+    },
+    {
+      "case_id": "C05",
+      "case_title": "GPU集群训练发布链路",
+      "scenario": "GPU训练与发布架构图",
+      "complexity_class": "paper_grade",
+      "render_profile": {
+        "layout_family": "dual-rail",
+        "layout_preset": "presentation-spacious",
+        "theme": "gpu-green-tech"
+      },
+      "baseline": {
+        "kind": "personal_self_reported_historical_lower_bound",
+        "seconds": 28800.0,
+        "display": "≥8小时（1个工作日下界）",
+        "source": "用户在本次答辩准备对话中的个人历史经验自报",
+        "scope": "论文级配图至少1个工作日；按8小时下界；非本案例同题现场计时",
+        "same_task_human_timing": false
+      },
+      "machine_measurement": {
+        "run_id": "20260831T180224Z-c05-6879161e",
+        "seconds": 1.667124,
+        "runtime_environment": "Darwin-arm64; Python 3.14.6",
+        "scope": "checked_in_plan_to_delivery_package",
+        "delivery_qa_pass": true,
+        "renderer_layout_qa_pass": true,
+        "output_audit_pass": true,
+        "source_plan_sha256": "223f16c811a1e2f1c1bc7660a53bf6976d3dd69cc38d476c92a21df5d74ddd49",
+        "renderer_manifest_sha256": "06701393d7a4028fc6c540b9f59c515a3ef79cd0a5780c90c2fae8d90f7413de",
+        "machine_run_success": true,
+        "semantic_review_status": "not_measured",
+        "reference_asset_count": 1,
+        "output_formats": [
+          "manifest",
+          "pdf",
+          "png",
+          "svg",
+          "zip"
+        ],
+        "evidence_manifest_path": "benchmark/machine_evidence/20260831T180224Z-c05-6879161e.json",
+        "artifact_zip_path": "",
+        "artifact_zip_sha256": "f72c6f27a8a793be238f913ea3603324bb39594397f39b17b0e708fb222b8a07",
+        "artifact_zip_bytes": 3710920,
+        "artifact_retention": "not_committed_size_control",
+        "timings_seconds": {
+          "plan_validation_seconds": 0.000993,
+          "asset_prepare_seconds": 0.942224,
+          "render_seconds": 0.371673,
+          "delivery_qa_seconds": 0.275822,
+          "package_seconds": 0.076123
+        }
+      },
+      "relative_lower_bound_multiple": 17275.3,
+      "comparison_label": "相对个人自报下界的时间尺度倍率"
+    }
+  ],
+  "claim_boundary": {
+    "required_note": "个人自报历史下界与机器链路实测不是同类测量；不是团队人效、不是同题人工计时、不是节省工时或因果提效结论。",
+    "allowed": [
+      "陈述每个案例的单次机器链路墙钟时间、自动交付QA结果和输出格式。",
+      "把 相对个人自报下界的时间尺度倍率 作为两个不同来源时间数字的尺度商，并保留“≥”和边界说明。"
+    ],
+    "not_supported": [
+      "团队人效提升",
+      "同题人工对照提速",
+      "节省工时",
+      "语义准确率提升",
+      "人工对照显著性"
+    ]
+  }
+}

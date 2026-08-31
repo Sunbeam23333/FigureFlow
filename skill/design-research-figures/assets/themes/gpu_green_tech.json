@@ -1,0 +1,45 @@
+{
+  "id": "gpu-green-tech",
+  "description": "Generic accelerator-systems green technical palette; no third-party logo, endorsement, or affiliation is implied.",
+  "palette": {
+    "navy": "#1A1A1A",
+    "blue": "#63B246",
+    "teal": "#087F8C",
+    "orange": "#F2A900",
+    "violet": "#6D5BD0",
+    "rose": "#B95F78",
+    "red": "#B84A3A",
+    "gray": "#5C6458",
+    "line": "#C9D0C2",
+    "paper": "#F6F8F3",
+    "offwhite": "#FAFCF7",
+    "light_blue": "#EAF6E4",
+    "light_teal": "#E4F3F1",
+    "light_orange": "#FFF1D5",
+    "light_violet": "#EFECFA",
+    "light_red": "#FBE9E6",
+    "predgray": "#EEF1EA"
+  },
+  "typography": {
+    "display": ["Noto Sans CJK SC", "Arial", "sans-serif"],
+    "quantitative": "DejaVu Sans",
+    "formula": "STIX Sans",
+    "paper": ["TeX Gyre Heros", "Arial"]
+  },
+  "workflow": {
+    "background_start": "#FBFDF8",
+    "background_mid": "#F5F9EF",
+    "background_end": "#EDF3E6",
+    "decoration_primary": "#D9EFCF",
+    "decoration_secondary": "#D7ECE8",
+    "card": "#FFFFFF",
+    "card_border": "#CFDAC4",
+    "rail": "#DDE8D2",
+    "shadow": "#27301F"
+  },
+  "render": {
+    "review_png_dpi": 240,
+    "pdf_fonttype": 42,
+    "minimum_final_body_pt": 6.5
+  }
+}

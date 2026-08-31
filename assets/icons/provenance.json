@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "created_at": "2026-08-29",
+  "updated_at": "2026-09-01",
   "evidence_status": "synthetic-demo",
   "generator": "OpenAI image generation tool; exact model version was not exposed by the tool response",
   "prompt_record": "Reconstructed summaries of the generation instructions, not claimed as byte-for-byte transcripts.",
@@ -16,6 +17,23 @@
     "icon_factory.png": "semantic icon factory producing one modular component",
     "chroma_matte.png": "soft-matte chroma extraction represented as a clean cutout pipeline",
     "vector_typeset.png": "vector typography and connector layout workstation",
-    "qa_export.png": "quality gate and export package with checkmark"
+    "qa_export.png": "quality gate and export package with checkmark",
+    "gpu_server.png": "text-free GPU server alert icon generated with the built-in ImageGen workflow on 2026-09-01 and stored on flat #FF00FF chroma; composition used an attributed CSIRO GPU-cluster photo (CC BY 3.0) only as visual reference; synthetic illustration, no third-party logo, endorsement, or affiliation implied",
+    "robot_inspection.png": "text-free factory robot inspection icon generated with the built-in ImageGen workflow on 2026-09-01 and stored on flat #FF00FF chroma; composition used a public-domain Wikimedia factory-automation photo only as visual reference; synthetic illustration with no logo or text"
+  },
+  "reference_sources": {
+    "gpu_server.png": {
+      "source_page": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+      "author": "CSIRO",
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "usage": "visual reference only; generated output is synthetic-demo"
+    },
+    "robot_inspection.png": {
+      "source_page": "https://commons.wikimedia.org/wiki/File:Factory_Automation_Robotics_Palettizing_Bread.jpg",
+      "author": "KUKA Roboter GmbH, Bachmann",
+      "license": "Public domain",
+      "usage": "visual reference only; generated output is synthetic-demo"
+    }
   }
 }

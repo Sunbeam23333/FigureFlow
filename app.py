@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-import os
+import html
 import logging
+import os
 from pathlib import Path
 
 import gradio as gr
 
 from demo_core.pipeline import OUTPUT_ROOT, RunResult, run_pipeline
+from demo_core.reference_search import search_references
+from demo_core.schemas import ReferenceAsset
 
 
 DEFAULT_BRIEF = """请把下面的内部高频画图流程做成一张适合汇报投屏的中文技术流程图：
@@ -33,6 +36,64 @@ LAYOUT_MAP = {
     "中心强调 · bowtie": "bowtie",
     "交错推进 · dual-rail": "dual-rail",
 }
+LAYOUT_PRESET_MAP = {
+    "标准排版 · standard": "standard",
+    "投屏大字 · presentation-spacious": "presentation-spacious",
+}
+THEME_MAP = {
+    "Academic Audit": "academic-audit",
+    "GPU Systems Green（通用非官方）": "gpu-green-tech",
+}
+REFERENCE_PROVIDER_MAP = {
+    "离线示例（默认，不联网）": "offline-example",
+    "Wikimedia Commons（固定接口，仅元数据）": "wikimedia-commons",
+    "用户 URL（只记录，不抓取）": "user-url",
+}
+
+
+def _reference_summary(assets: list[ReferenceAsset]) -> str:
+    if not assets:
+        return "**参考来源：** 未选择结果。渲染器不会自动下载第三方素材。"
+    rows = ["**参考来源（metadata-only；不会自动下载图片）**", ""]
+    for index, asset in enumerate(assets, start=1):
+        title = html.escape(asset.title)
+        source_url = asset.source_url if asset.source_url and asset.source_url.startswith(("http://", "https://")) else None
+        license_url = asset.license_url if asset.license_url and asset.license_url.startswith(("http://", "https://")) else None
+        title_html = (
+            f'<a href="{html.escape(source_url, quote=True)}" target="_blank" rel="noopener noreferrer">{title}</a>'
+            if source_url
+            else title
+        )
+        author = html.escape(asset.author or "作者未标注")
+        license_name = html.escape(asset.license_name or "许可证待人工核验")
+        license_html = (
+            f'<a href="{html.escape(license_url, quote=True)}" target="_blank" rel="noopener noreferrer">{license_name}</a>'
+            if license_url
+            else license_name
+        )
+        rows.append(f"{index}. {title_html} · {author} · {license_html} · `{asset.provider}`")
+    rows.extend(["", "> 这些条目只作为构图参考和溯源 metadata 写入 FigurePlan / Manifest；当前 Demo 不下载或合成第三方图片。"])
+    return "\n".join(rows)
+
+
+def _resolve_references(provider_label: str, query: str, user_urls_text: str) -> list[ReferenceAsset]:
+    provider = "offline-example" if PUBLIC_DEMO else REFERENCE_PROVIDER_MAP[provider_label]
+    user_urls = tuple(line.strip() for line in user_urls_text.splitlines() if line.strip())
+    return search_references(
+        query,
+        provider=provider,
+        limit=3,
+        user_urls=() if PUBLIC_DEMO else user_urls,
+    )
+
+
+def _preview_references(provider_label: str, query: str, user_urls_text: str):
+    try:
+        assets = _resolve_references(provider_label, query, user_urls_text)
+    except Exception as exc:
+        LOGGER.warning("Reference preview failed: %s", type(exc).__name__)
+        return "**参考检索失败。** 请检查查询词、URL 或网络后重试。", []
+    return _reference_summary(assets), [asset.model_dump() for asset in assets]
 
 
 def _metrics_markdown(result: RunResult) -> str:
@@ -52,17 +113,31 @@ def _metrics_markdown(result: RunResult) -> str:
 """
 
 
-def _run_demo(brief: str, mode_label: str, layout_label: str, live_icon: bool):
+def _run_demo(
+    brief: str,
+    mode_label: str,
+    layout_label: str,
+    layout_preset_label: str,
+    theme_label: str,
+    live_icon: bool,
+    reference_provider_label: str,
+    reference_query: str,
+    user_urls_text: str,
+):
     if PUBLIC_DEMO:
         brief = DEFAULT_BRIEF
         mode_label = "离线：稳定复演预设"
         live_icon = False
     try:
+        references = _resolve_references(reference_provider_label, reference_query, user_urls_text)
         result = run_pipeline(
             brief,
             mode=MODE_MAP[mode_label],
             layout_override=LAYOUT_MAP[layout_label],
+            layout_preset_override=LAYOUT_PRESET_MAP[layout_preset_label],
+            theme_override=THEME_MAP[theme_label],
             live_icon=live_icon,
+            reference_assets=references,
         )
     except Exception as exc:
         # Keep public logs useful without persisting SDK exception text, which may
@@ -80,9 +155,14 @@ def _run_demo(brief: str, mode_label: str, layout_label: str, live_icon: bool):
             None,
             None,
             None,
+            "**参考来源：** 运行失败，未写入交付。",
+            [],
         )
     public_notice = "公开安全模式：固定合成示例 · " if PUBLIC_DEMO else ""
-    status = f"### {public_notice}{result.notice}\n\n运行编号：`{result.run_id}` · 最终布局：`{result.selected_layout}`"
+    status = (
+        f"### {public_notice}{result.notice}\n\n运行编号：`{result.run_id}` · 最终布局：`{result.selected_layout}`"
+        f" · 主题：`{THEME_MAP[theme_label]}` · 字号版式：`{LAYOUT_PRESET_MAP[layout_preset_label]}`"
+    )
     downloads = [result.final_svg, result.final_pdf, result.bundle_zip, result.manifest]
     return (
         status,
@@ -95,6 +175,8 @@ def _run_demo(brief: str, mode_label: str, layout_label: str, live_icon: bool):
         result.final_png,
         downloads,
         result.qa,
+        _reference_summary(references),
+        [asset.model_dump() for asset in references],
     )
 
 
@@ -132,18 +214,50 @@ def build_demo() -> gr.Blocks:
                     label="运行模式",
                     interactive=not PUBLIC_DEMO,
                 )
-                layout = gr.Dropdown(list(LAYOUT_MAP), value=list(LAYOUT_MAP)[0], label="布局选择")
+                with gr.Row():
+                    layout = gr.Dropdown(list(LAYOUT_MAP), value=list(LAYOUT_MAP)[0], label="布局选择")
+                    layout_preset = gr.Dropdown(
+                        list(LAYOUT_PRESET_MAP),
+                        value="投屏大字 · presentation-spacious",
+                        label="字号版式",
+                    )
+                theme = gr.Dropdown(list(THEME_MAP), value=list(THEME_MAP)[0], label="主题配色")
                 live_icon = gr.Checkbox(
                     label="在线时额外实时生成 1 个 Icon（更慢、产生图像费用）",
                     value=False,
                     interactive=not PUBLIC_DEMO,
                 )
+                with gr.Accordion("真实参考检索（可选）", open=True):
+                    reference_choices = [next(iter(REFERENCE_PROVIDER_MAP))] if PUBLIC_DEMO else list(REFERENCE_PROVIDER_MAP)
+                    reference_provider = gr.Dropdown(
+                        reference_choices,
+                        value=reference_choices[0],
+                        label="参考来源 Provider",
+                        interactive=not PUBLIC_DEMO,
+                    )
+                    reference_query = gr.Textbox(
+                        label="检索词（Wikimedia Commons）",
+                        value="GPU cluster data centre",
+                        interactive=not PUBLIC_DEMO,
+                    )
+                    user_urls = gr.Textbox(
+                        label="用户参考 URL（每行一个；只记录、不抓取）",
+                        lines=2,
+                        placeholder="https://example.org/reference.png",
+                        interactive=not PUBLIC_DEMO,
+                    )
+                    preview_references = gr.Button("预览来源 metadata", size="sm")
                 run_button = gr.Button("生成可编辑技术图", variant="primary", size="lg")
-                gr.Markdown("密钥只从服务端环境变量读取，不会进入浏览器或运行清单。")
+                gr.Markdown(
+                    "密钥只从服务端环境变量读取，不会进入浏览器或运行清单。GPU Systems Green 是通用加速器技术配色，不使用第三方 Logo，也不暗示背书或关联。"
+                )
             with gr.Column(scale=7):
                 status = gr.Markdown("### 等待运行")
                 metrics = gr.Markdown()
                 plan = gr.JSON(label="② 受约束 FigurePlan（在线 GPT / 离线预设）")
+                reference_summary = gr.Markdown("**参考来源：** 等待预览。")
+                with gr.Accordion("参考 metadata（将写入 FigurePlan / Manifest）", open=False):
+                    reference_metadata = gr.JSON()
 
         gr.Markdown("## ③ 布局候选")
         gallery = gr.Gallery(label="相同语义、三种确定性布局", columns=3, height=350, object_fit="contain")
@@ -158,10 +272,39 @@ def build_demo() -> gr.Blocks:
         with gr.Accordion("自动 QA 报告", open=False):
             qa = gr.JSON()
 
+        preview_references.click(
+            _preview_references,
+            inputs=[reference_provider, reference_query, user_urls],
+            outputs=[reference_summary, reference_metadata],
+        )
+
         run_button.click(
             _run_demo,
-            inputs=[brief, mode, layout, live_icon],
-            outputs=[status, metrics, plan, gallery, raw, processed, contact_sheet, final, downloads, qa],
+            inputs=[
+                brief,
+                mode,
+                layout,
+                layout_preset,
+                theme,
+                live_icon,
+                reference_provider,
+                reference_query,
+                user_urls,
+            ],
+            outputs=[
+                status,
+                metrics,
+                plan,
+                gallery,
+                raw,
+                processed,
+                contact_sheet,
+                final,
+                downloads,
+                qa,
+                reference_summary,
+                reference_metadata,
+            ],
         )
     return demo
 

@@ -1,0 +1,499 @@
+{
+  "schema_version": 2,
+  "case_id": "C05",
+  "case_title": "GPU集群训练发布链路",
+  "run_id": "20260831T180224Z-c05-6879161e",
+  "measurement_status": "measured",
+  "started_at": "2026-08-31T18:02:24.670Z",
+  "ended_at": "2026-08-31T18:02:26.337Z",
+  "runtime_environment": "Darwin-arm64; Python 3.14.6",
+  "measurement_scope": "checked_in_plan_to_delivery_package",
+  "timer_definition": "Read and validate checked-in FigurePlan through generic fallback creation or bundled semantic asset loading, cutout, render, automated delivery QA, required-format check, and closed ZIP.",
+  "excluded_from_timer": [
+    "natural_language_planning",
+    "human_plan_authoring",
+    "reference_search",
+    "initial_semantic_asset_generation",
+    "human_semantic_review",
+    "upload",
+    "presentation_editing",
+    "writing_this_evidence_manifest"
+  ],
+  "timings_seconds": {
+    "plan_validation_seconds": 0.000993,
+    "asset_prepare_seconds": 0.942224,
+    "render_seconds": 0.371673,
+    "delivery_qa_seconds": 0.275822,
+    "package_seconds": 0.076123,
+    "machine_end_to_end_seconds": 1.667124
+  },
+  "checks": {
+    "plan_contract_pass": true,
+    "reference_provenance_pass": true,
+    "asset_gate_pass": true,
+    "render_success": true,
+    "renderer_layout_qa_pass": true,
+    "output_audit_pass": true,
+    "delivery_qa_pass": true,
+    "package_success": true,
+    "required_formats_present": true,
+    "editable_svg_present": true,
+    "machine_run_success": true
+  },
+  "semantic_review_status": "not_measured",
+  "evidence_status": "synthetic-demo",
+  "input_plan": {
+    "path": "benchmark/case_plans/C05_gpu_training_delivery.json",
+    "sha256": "223f16c811a1e2f1c1bc7660a53bf6976d3dd69cc38d476c92a21df5d74ddd49"
+  },
+  "render_profile": {
+    "layout_family": "dual-rail",
+    "layout_preset": "presentation-spacious",
+    "theme": "gpu-green-tech"
+  },
+  "renderer_manifest": {
+    "path": "render/c05_manifest.json",
+    "sha256": "06701393d7a4028fc6c540b9f59c515a3ef79cd0a5780c90c2fae8d90f7413de",
+    "content": {
+      "schema_version": 2,
+      "evidence_status": "synthetic-demo",
+      "layout_family": "dual-rail",
+      "layout_preset": "presentation-spacious",
+      "theme": "gpu-green-tech",
+      "theme_tokens": "gpu_green_tech.json",
+      "theme_tokens_sha256": "4d85713b3e1ea43471d4fe7e1dfe9213b789ecc1dd346cde817dc5e8db17740a",
+      "font_family": "Arial Unicode MS",
+      "layout_qa": {
+        "ok": true,
+        "layout_preset": "presentation-spacious",
+        "card_bounds_ok": true,
+        "gate_horizontal_ok": true,
+        "presentation_scale_ok": true,
+        "minimum_stage_title_size": 27.5,
+        "minimum_stage_subtitle_size": 18.75,
+        "minimum_stage_body_size": null,
+        "minimum_gate_size": 21.25,
+        "stages": [
+          {
+            "stage": 1,
+            "compact": true,
+            "title_lines": 1,
+            "subtitle_lines": 1,
+            "body_lines": 0,
+            "title_font_size": 27.5,
+            "subtitle_font_size": 18.75,
+            "body_font_size": null,
+            "horizontal_ok": true,
+            "vertical_ok": true
+          },
+          {
+            "stage": 2,
+            "compact": true,
+            "title_lines": 1,
+            "subtitle_lines": 1,
+            "body_lines": 0,
+            "title_font_size": 27.5,
+            "subtitle_font_size": 18.75,
+            "body_font_size": null,
+            "horizontal_ok": true,
+            "vertical_ok": true
+          },
+          {
+            "stage": 3,
+            "compact": true,
+            "title_lines": 1,
+            "subtitle_lines": 1,
+            "body_lines": 0,
+            "title_font_size": 27.5,
+            "subtitle_font_size": 18.75,
+            "body_font_size": null,
+            "horizontal_ok": true,
+            "vertical_ok": true
+          },
+          {
+            "stage": 4,
+            "compact": true,
+            "title_lines": 1,
+            "subtitle_lines": 1,
+            "body_lines": 0,
+            "title_font_size": 27.5,
+            "subtitle_font_size": 18.75,
+            "body_font_size": null,
+            "horizontal_ok": true,
+            "vertical_ok": true
+          },
+          {
+            "stage": 5,
+            "compact": true,
+            "title_lines": 1,
+            "subtitle_lines": 1,
+            "body_lines": 0,
+            "title_font_size": 27.5,
+            "subtitle_font_size": 18.75,
+            "body_font_size": null,
+            "horizontal_ok": true,
+            "vertical_ok": true
+          }
+        ]
+      },
+      "plan": "figure_plan.json",
+      "plan_sha256": "223f16c811a1e2f1c1bc7660a53bf6976d3dd69cc38d476c92a21df5d74ddd49",
+      "reference_assets": [
+        {
+          "id": "wm-csiro-gpu-cluster",
+          "title": "The CSIRO GPU cluster at the data centre",
+          "uri": "https://upload.wikimedia.org/wikipedia/commons/f/f9/CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+          "source_type": "provider-search",
+          "provider": "wikimedia-commons",
+          "media_type": "image",
+          "source_url": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+          "author": "CSIRO",
+          "license_name": "CC BY 3.0",
+          "license_url": "https://creativecommons.org/licenses/by/3.0/",
+          "attribution": "CSIRO · CC BY 3.0 · visual reference only"
+        }
+      ],
+      "assets": [
+        {
+          "file": "data.png",
+          "sha256": "350523c6b70ad750c62efa68994612860f9cd93e6db6f9e1c3e024b2a924b9b2"
+        },
+        {
+          "file": "gpu_server.png",
+          "sha256": "762ccf8dd992e9f6824210f1a4f9056536e4ad5a89664a659e38498a87e567f0"
+        },
+        {
+          "file": "decision.png",
+          "sha256": "5cf4cbe6799d11f7e0dc8280c40507ac89fb03332a900944c5215147e353071d"
+        },
+        {
+          "file": "store.png",
+          "sha256": "bed3754a4f8365d127047054040b278b80753f99661ee9f1356452d97e1ecf2b"
+        },
+        {
+          "file": "output.png",
+          "sha256": "5d4f255fe41d024fe5c679ff28d5f1d5935791892096b325686ea7faa6b36464"
+        }
+      ],
+      "outputs": {
+        "svg": "c05.svg",
+        "pdf": "c05.pdf",
+        "png": "c05.png"
+      },
+      "output_sha256": {
+        "c05.svg": "b15601e0bf44038c38b9620fd9b50311058a22261e81b7043c748f29dba9b326",
+        "c05.pdf": "b5845517bcd0be5704529809529e46602d25a8ae4d49dc1e62e9f8b6ffa34ac7",
+        "c05.png": "dfdf665be16798c4fcda97da42db1db5a9e70cef3ff60d9b024f4affb03aa41b"
+      }
+    }
+  },
+  "delivery_qa": {
+    "renderer_layout_qa_ok": true,
+    "output_audit_ok": true,
+    "combined_ok": true,
+    "output_audit_report": {
+      "ok": true,
+      "cjk_font_embedded": true,
+      "font_names": [
+        "AQYFTZ+ArialUnicodeMS",
+        "EEUYAG+ArialUnicodeMS",
+        "WWHHWV+ArialUnicodeMS",
+        "BETTFI+ArialUnicodeMS"
+      ],
+      "png": [
+        {
+          "file": "c05.png",
+          "width": 2700,
+          "height": 1500,
+          "mode": "RGB",
+          "content_bbox": [
+            60,
+            43,
+            2623,
+            1451
+          ],
+          "edge_distances": {
+            "left": 60,
+            "top": 43,
+            "right": 77,
+            "bottom": 49
+          },
+          "margin_threshold": 16,
+          "background_model": "bilinear-corners",
+          "clipping_risk": false
+        }
+      ],
+      "pdf": {
+        "ok": true,
+        "summary": {
+          "artifacts": 1,
+          "errors": 0,
+          "warnings": 0
+        },
+        "results": [
+          {
+            "kind": "pdf",
+            "file": "c05.pdf",
+            "pages": 1,
+            "page_sizes": [
+              {
+                "page": 1,
+                "width_pt": 1350.0,
+                "height_pt": 750.0,
+                "label": null
+              }
+            ],
+            "fonts": [
+              {
+                "name": "AQYFTZ+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "EEUYAG+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "WWHHWV+ArialUnicodeMS",
+                "type": "CID TrueType",
+                "encoding": "Identity-H",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              },
+              {
+                "name": "BETTFI+ArialUnicodeMS",
+                "type": "TrueType",
+                "encoding": "WinAnsi",
+                "embedded": true,
+                "subset": true,
+                "unicode": true
+              }
+            ],
+            "findings": []
+          }
+        ]
+      }
+    }
+  },
+  "reference_assets": [
+    {
+      "id": "wm-csiro-gpu-cluster",
+      "title": "The CSIRO GPU cluster at the data centre",
+      "uri": "https://upload.wikimedia.org/wikipedia/commons/f/f9/CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+      "source_type": "provider-search",
+      "provider": "wikimedia-commons",
+      "media_type": "image",
+      "source_url": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_11313_The_CSIRO_GPU_cluster_at_the_data_centre.jpg",
+      "author": "CSIRO",
+      "license_name": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "attribution": "CSIRO · CC BY 3.0 · visual reference only"
+    }
+  ],
+  "asset_sources": [
+    {
+      "key": "data",
+      "raw_path": "assets/raw/data.png",
+      "processed_path": "assets/processed/data.png",
+      "manifest_path": "assets/manifests/data.json",
+      "source": "deterministic-vector-fallback",
+      "generation_ms": 0,
+      "cutout_ms": 107,
+      "raw_sha256": "66c8ecbcd01f0e3fca1bedc92b478d03fbaedc350656a8bc9a7819a3fcda1135",
+      "processed_sha256": "350523c6b70ad750c62efa68994612860f9cd93e6db6f9e1c3e024b2a924b9b2",
+      "manifest_sha256": "283eb823b84e1037825b6acbfdc7b3a8e81e60bd0d0d9131f952edb4023cbead"
+    },
+    {
+      "key": "gpu_server",
+      "raw_path": "assets/raw/gpu_server.png",
+      "processed_path": "assets/processed/gpu_server.png",
+      "manifest_path": "assets/manifests/gpu_server.json",
+      "source": "bundled-generated-illustration",
+      "generation_ms": 0,
+      "cutout_ms": 360,
+      "raw_sha256": "be101df57bd35378a0e7e6791996ae8c6ca10f8ecf4c002f17dfdcedac9f129f",
+      "processed_sha256": "762ccf8dd992e9f6824210f1a4f9056536e4ad5a89664a659e38498a87e567f0",
+      "manifest_sha256": "6a51454585781c586fad767118017bd17c185df51a91e228ca4dfdf6008163f6"
+    },
+    {
+      "key": "decision",
+      "raw_path": "assets/raw/decision.png",
+      "processed_path": "assets/processed/decision.png",
+      "manifest_path": "assets/manifests/decision.json",
+      "source": "deterministic-vector-fallback",
+      "generation_ms": 0,
+      "cutout_ms": 109,
+      "raw_sha256": "7ed544affeedeec094a520492186a8dfe5ed1fe3a75e6ab1ca68dcc98bb7c4f1",
+      "processed_sha256": "5cf4cbe6799d11f7e0dc8280c40507ac89fb03332a900944c5215147e353071d",
+      "manifest_sha256": "a545bd54cff2b1d5b747197d319e50bf2a1ffdace742573ea54b267a090b2ec6"
+    },
+    {
+      "key": "store",
+      "raw_path": "assets/raw/store.png",
+      "processed_path": "assets/processed/store.png",
+      "manifest_path": "assets/manifests/store.json",
+      "source": "deterministic-vector-fallback",
+      "generation_ms": 0,
+      "cutout_ms": 105,
+      "raw_sha256": "e730206fbe2ba5d631d93f5584af179f26133af282b5b0012414b2c5ae3a915a",
+      "processed_sha256": "bed3754a4f8365d127047054040b278b80753f99661ee9f1356452d97e1ecf2b",
+      "manifest_sha256": "f0eed4f59f477f8629eb95f0514f83ee3750858d7fcd2d527f0ce3530a5eac2c"
+    },
+    {
+      "key": "output",
+      "raw_path": "assets/raw/output.png",
+      "processed_path": "assets/processed/output.png",
+      "manifest_path": "assets/manifests/output.json",
+      "source": "deterministic-vector-fallback",
+      "generation_ms": 0,
+      "cutout_ms": 108,
+      "raw_sha256": "3bd7068c3b01db19ad19590fe0312caefa3ec1a36bd9e5d769067a76cf82c2b6",
+      "processed_sha256": "5d4f255fe41d024fe5c679ff28d5f1d5935791892096b325686ea7faa6b36464",
+      "manifest_sha256": "be5c119c9a63cdea31b685e5e412b140dbf577f3282eddc9408941abb1fa4b5c"
+    }
+  ],
+  "output_formats": [
+    "manifest",
+    "pdf",
+    "png",
+    "svg",
+    "zip"
+  ],
+  "artifacts": [
+    {
+      "path": "asset_pipeline.png",
+      "bytes": 133708,
+      "sha256": "358d626a959464dc2945b76de3e315da51b48b6f9c714c40bfffb9a2f949cf32"
+    },
+    {
+      "path": "assets/manifests/data.json",
+      "bytes": 764,
+      "sha256": "283eb823b84e1037825b6acbfdc7b3a8e81e60bd0d0d9131f952edb4023cbead"
+    },
+    {
+      "path": "assets/manifests/decision.json",
+      "bytes": 776,
+      "sha256": "a545bd54cff2b1d5b747197d319e50bf2a1ffdace742573ea54b267a090b2ec6"
+    },
+    {
+      "path": "assets/manifests/gpu_server.json",
+      "bytes": 905,
+      "sha256": "6a51454585781c586fad767118017bd17c185df51a91e228ca4dfdf6008163f6"
+    },
+    {
+      "path": "assets/manifests/output.json",
+      "bytes": 771,
+      "sha256": "be5c119c9a63cdea31b685e5e412b140dbf577f3282eddc9408941abb1fa4b5c"
+    },
+    {
+      "path": "assets/manifests/store.json",
+      "bytes": 767,
+      "sha256": "f0eed4f59f477f8629eb95f0514f83ee3750858d7fcd2d527f0ce3530a5eac2c"
+    },
+    {
+      "path": "assets/processed/data.png",
+      "bytes": 16920,
+      "sha256": "350523c6b70ad750c62efa68994612860f9cd93e6db6f9e1c3e024b2a924b9b2"
+    },
+    {
+      "path": "assets/processed/decision.png",
+      "bytes": 6845,
+      "sha256": "5cf4cbe6799d11f7e0dc8280c40507ac89fb03332a900944c5215147e353071d"
+    },
+    {
+      "path": "assets/processed/gpu_server.png",
+      "bytes": 449589,
+      "sha256": "762ccf8dd992e9f6824210f1a4f9056536e4ad5a89664a659e38498a87e567f0"
+    },
+    {
+      "path": "assets/processed/output.png",
+      "bytes": 20012,
+      "sha256": "5d4f255fe41d024fe5c679ff28d5f1d5935791892096b325686ea7faa6b36464"
+    },
+    {
+      "path": "assets/processed/store.png",
+      "bytes": 26085,
+      "sha256": "bed3754a4f8365d127047054040b278b80753f99661ee9f1356452d97e1ecf2b"
+    },
+    {
+      "path": "assets/raw/data.png",
+      "bytes": 18106,
+      "sha256": "66c8ecbcd01f0e3fca1bedc92b478d03fbaedc350656a8bc9a7819a3fcda1135"
+    },
+    {
+      "path": "assets/raw/decision.png",
+      "bytes": 7295,
+      "sha256": "7ed544affeedeec094a520492186a8dfe5ed1fe3a75e6ab1ca68dcc98bb7c4f1"
+    },
+    {
+      "path": "assets/raw/gpu_server.png",
+      "bytes": 1506904,
+      "sha256": "be101df57bd35378a0e7e6791996ae8c6ca10f8ecf4c002f17dfdcedac9f129f"
+    },
+    {
+      "path": "assets/raw/output.png",
+      "bytes": 22002,
+      "sha256": "3bd7068c3b01db19ad19590fe0312caefa3ec1a36bd9e5d769067a76cf82c2b6"
+    },
+    {
+      "path": "assets/raw/store.png",
+      "bytes": 27715,
+      "sha256": "e730206fbe2ba5d631d93f5584af179f26133af282b5b0012414b2c5ae3a915a"
+    },
+    {
+      "path": "c05_delivery.zip",
+      "bytes": 3710920,
+      "sha256": "f72c6f27a8a793be238f913ea3603324bb39594397f39b17b0e708fb222b8a07"
+    },
+    {
+      "path": "figure_plan.json",
+      "bytes": 2607,
+      "sha256": "223f16c811a1e2f1c1bc7660a53bf6976d3dd69cc38d476c92a21df5d74ddd49"
+    },
+    {
+      "path": "qa/pdf_qa.json",
+      "bytes": 1232,
+      "sha256": "776157e373a3eff0af18d6b9a39fdd7db787a9467057e67fc54e67ca805bf737"
+    },
+    {
+      "path": "qa/qa_report.json",
+      "bytes": 1962,
+      "sha256": "bf6b662baed2a53a5b474b162183a5848ad0ba7b3e526c5975cee2568a51582d"
+    },
+    {
+      "path": "render/c05.pdf",
+      "bytes": 644233,
+      "sha256": "b5845517bcd0be5704529809529e46602d25a8ae4d49dc1e62e9f8b6ffa34ac7"
+    },
+    {
+      "path": "render/c05.png",
+      "bytes": 357789,
+      "sha256": "dfdf665be16798c4fcda97da42db1db5a9e70cef3ff60d9b024f4affb03aa41b"
+    },
+    {
+      "path": "render/c05.svg",
+      "bytes": 705316,
+      "sha256": "b15601e0bf44038c38b9620fd9b50311058a22261e81b7043c748f29dba9b326"
+    },
+    {
+      "path": "render/c05_manifest.json",
+      "bytes": 4031,
+      "sha256": "06701393d7a4028fc6c540b9f59c515a3ef79cd0a5780c90c2fae8d90f7413de"
+    },
+    {
+      "path": "run_context.json",
+      "bytes": 4430,
+      "sha256": "37d2f92c5ceb1d5defbe1833adbefca3170ddbe80cfe3ce2aa23d9bbf9352f27"
+    }
+  ],
+  "boundary_note": "个人自报历史下界与机器链路实测不是同类测量；不是团队人效、不是同题人工计时、不是节省工时或因果提效结论。",
+  "error": null
+}

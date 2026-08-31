@@ -37,6 +37,8 @@ Choose the renderer only after the claim and evidence status are fixed.
 
 Read [references/module-router.md](references/module-router.md) for the YAML contracts and module-specific checks. Read [references/style-system.md](references/style-system.md) when adapting the theme, typography, or final size.
 
+For a workflow intended for slides, select the allowlisted `presentation-spacious` layout preset rather than inventing font-size floats. For GPU systems visuals, `gpu-green-tech` is available as a generic accelerator-systems palette only: do not use a third-party logo or imply endorsement or affiliation.
+
 ## Authoring workflow
 
 ### 1. Establish the evidence contract
@@ -69,6 +71,8 @@ For an open-ended main-figure request, create at least six rough candidates span
 ### 4. Handle raster assets and real cases
 
 Use sources in this order: actual project output, attributed public benchmark sample, user-provided image, disclosed generated illustration, then vector placeholder. Preserve uncropped originals and provenance.
+
+Before generating a visual reference, search or attach source metadata. In the repository-level FigureFlow app, use `offline-example`, `user-url`, or `wikimedia-commons` through `demo_core.reference_search`. Keep the default offline. The user-URL provider records links without fetching them; the Commons provider calls only its fixed MediaWiki endpoint and returns licensed raster metadata. Put selected results in `FigurePlan.reference_assets`, and keep them metadata-only until a human has reviewed license, attribution, trademark, and reuse scope. Never let the workflow renderer fetch a model- or user-provided URL.
 
 When ImageGen is necessary, invoke the `imagegen` skill and generate text-free components separately. Record the prompt, date, source type, crop, and whether the asset is illustrative. Read [references/assets-and-prompts.md](references/assets-and-prompts.md).
 
@@ -163,6 +167,7 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - [references/assets-and-prompts.md](references/assets-and-prompts.md): real cases, ImageGen, crops, and provenance
 - [references/qa.md](references/qa.md): semantic, geometric, PDF, and paper-page QA
 - `assets/themes/academic_audit.json`: shared Python/SVG/LaTeX design tokens
-- `assets/tikz/`: NVIDIA Green, Emerald, Warm Editorial, and mechanism templates
+- `assets/themes/gpu_green_tech.json`: generic GPU-systems workflow tokens; no third-party logo or endorsement
+- `assets/tikz/`: GPU Green, Emerald, Warm Editorial, and mechanism templates
 - `demo/source/`: working YAML examples for every deterministic module
 - `demo/README.md`: rebuild instructions and the expected gallery filename (generated locally, not committed)

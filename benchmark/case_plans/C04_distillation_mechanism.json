@@ -1,0 +1,55 @@
+{
+  "title": "教师—学生蒸馏机制图",
+  "takeaway": "把教师推理、监督选择、证据缓存与学生输出压缩为可编辑机制链路。",
+  "layout_family": "dual-rail",
+  "layout_preset": "standard",
+  "theme": "academic-audit",
+  "reference_assets": [],
+  "evidence_status": "synthetic-demo",
+  "status_label": "代表任务 · 合成演示",
+  "stages": [
+    {
+      "title": "样本输入",
+      "subtitle": "组织训练样本与上下文",
+      "body": ["输入样本", "任务条件"],
+      "accent": "blue",
+      "asset_key": "data",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "教师推理",
+      "subtitle": "生成候选知识信号",
+      "body": ["软目标", "中间表征"],
+      "accent": "teal",
+      "asset_key": "process",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "门控监督",
+      "subtitle": "筛选可靠蒸馏信号",
+      "body": ["置信门槛", "损失加权"],
+      "accent": "orange",
+      "asset_key": "decision",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "证据缓存",
+      "subtitle": "记录版本与监督来源",
+      "body": ["教师版本", "样本索引"],
+      "accent": "violet",
+      "asset_key": "store",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "学生输出",
+      "subtitle": "形成轻量任务预测",
+      "body": ["学生模型", "任务结果"],
+      "accent": "navy",
+      "asset_key": "output",
+      "evidence_status": "synthetic-demo"
+    }
+  ],
+  "gates": ["机制标签完整", "监督方向一致", "状态标注清楚", "PDF单页", "SVG可编辑"],
+  "caption": "代表性合成输入；本图用于验证绘图交付链路，不对应某篇论文的实验结果或模型性能。",
+  "warnings": ["案例语义未经独立人工盲评；图中内容不应表述为实测科研结论。"]
+}

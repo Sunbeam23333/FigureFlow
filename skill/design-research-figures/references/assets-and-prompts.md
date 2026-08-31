@@ -12,6 +12,16 @@ Use assets in this order:
 
 Never replace an expected empirical case study with generated art without disclosure.
 
+## Reference provider boundary
+
+When the repository-level FigureFlow app is available, select one provider explicitly:
+
+- `offline-example`: deterministic and network-free;
+- `user-url`: validate and store the URL only; never fetch, proxy, thumbnail, or follow redirects;
+- `wikimedia-commons`: query only the fixed Commons MediaWiki API and retain raster results with a source page and license metadata.
+
+Store title, original asset URI, source page, author, license name/URL, provider, and attribution in `FigurePlan.reference_assets`. A search result is a reference candidate, not automatic permission to reuse. Do not send arbitrary provider URLs to the renderer or background-removal tools.
+
 ## Real rollout cases
 
 For video/world-model rollouts:

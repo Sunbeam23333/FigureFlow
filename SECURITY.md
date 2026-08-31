@@ -20,10 +20,13 @@ If private vulnerability reporting is not enabled, open a minimal issue requesti
 - For any reachable online deployment, set `FIGUREFLOW_BASIC_AUTH_USER` and `FIGUREFLOW_BASIC_AUTH_PASSWORD`, retain the default one-worker/eight-item queue or stricter limits, and set `FIGUREFLOW_MAX_RUNS` to a bounded value.
 - Run the service as an unprivileged user, keep dependencies updated, restrict public ingress, set request size and rate limits at the reverse proxy, and terminate TLS before exposing it beyond localhost.
 - The public Demo should not accept arbitrary paths, executable code, TeX, archives, or unrestricted file uploads. Keep layout and asset selection on an allowlist.
+- Treat reference URLs as untrusted metadata. The `user-url` provider validates them, strips query strings and fragments before persistence, and never performs a server-side request, thumbnail, redirect, or image download. The built-in Wikimedia provider calls only the fixed Commons MediaWiki API, limits its response size, and returns metadata for licensed raster records; the renderer does not fetch result URLs.
 
 ## Model-output boundary
 
 Model output is untrusted data. FigureFlow validates it against a strict Pydantic schema and only permits known layout, theme, accent, evidence-status, and asset identifiers. Do not weaken this boundary by evaluating model-produced Python, shell, HTML, JavaScript, TeX, or filesystem paths.
+
+Reference assets are caller/provider-owned fields. The planner output is overwritten with the validated caller list so that a model cannot invent a URL and route it into later processing.
 
 All subprocess calls should use argument arrays with `shell=False`, fixed local scripts, resolved project-owned directories, timeouts, and checked exit codes. Never interpolate the user's brief into a command.
 

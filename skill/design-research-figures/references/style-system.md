@@ -17,7 +17,7 @@ The default theme lives in `assets/themes/academic_audit.json` and is loaded by 
 
 Pastel tokens are for grouping and status, never for inventing new categories. Preserve semantic color roles across figures and tables.
 
-For CUDA/runtime figures, NVIDIA Green is available under `assets/tikz/palette_nvidia_green.tex`. Emerald is suited to memory systems and rollouts. Warm Editorial is an optional paper-friendly alternative. Dark profiler palettes are best reserved for blogs, posters, or appendices.
+For CUDA/runtime figures, a generic accelerator green is available under `assets/tikz/palette_gpu_green.tex`. The deterministic workflow renderer additionally supports `assets/themes/gpu_green_tech.json`: it maps the primary accent to `#63B246` and supplies background, card, rail, shadow, and semantic-light tokens. This is a generic technical theme: never use a third-party logo or imply endorsement, authorization, or affiliation. Emerald is suited to memory systems and rollouts. Warm Editorial is an optional paper-friendly alternative. Dark profiler palettes are best reserved for blogs, posters, or appendices.
 
 ## Typography modes
 
@@ -35,6 +35,8 @@ For an SVG with viewBox width `W`, included at `T` points, a source font of `S` 
 `final_pt = S × T / W`.
 
 Target at least 6.5 pt for meaningful figure body text; metadata footers may be smaller. Inspect both a single-column preview (about 3.25 in) and a double-column preview (about 6.75 in). If a five-stage overview cannot meet the floor, shorten labels, wrap deliberately, split the figure, or increase its paper span—do not rely on zoom.
+
+For projected workflow figures, use `layout_preset: presentation-spacious`. It increases stage title, subtitle, body, and gate sizes by about 25%, wraps long titles instead of shrinking them, and limits each stage to two body lines. Keep `standard` as the backwards-compatible default. Verify the emitted `layout_qa` for all three layout families.
 
 ## Quantitative defaults
 

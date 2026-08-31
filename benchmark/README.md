@@ -17,6 +17,11 @@
 | `rubric.csv` | 指标的统一定义、单位和统计口径 |
 | `results_template.csv` | 待填写的结果表；预置行状态均为 `planned`，不会进入统计 |
 | `analyze_results.py` | 校验实测记录，并计算中位数、四分位距、成功率、错误数和配对比值 |
+| `machine_cases.csv` | 5 个代表性合成案例；个人历史下界与机器任务定义在这里，未混入机器结果 |
+| `case_plans/` | 可公开复现的已写入 FigurePlan；含标准、大字号和通用 GPU 绿色主题配置 |
+| `run_machine_cases.py` | 从已写入计划到交付 ZIP 的确定性机器链路计时器 |
+| `machine_results.csv` | 单次机器实测结果；只含机器计时、检查与产物哈希，不含人工耗时 |
+| `analyze_machine_cases.py` | 校验机器证据，并生成严格分栏的 JSON/Markdown 摘要 |
 
 ## 推荐实验设计
 
@@ -79,6 +84,41 @@ python benchmark/analyze_results.py benchmark/results.csv \
 只有一条观测时会给出中位数，但四分位数和 IQR 标记为 `null`；至少两条观测才计算离散程度。FigureFlow 与基线的耗时比值采用严格配对：同一 `participant_id + task_id + trial_index` 同时存在两种方法且两个耗时都大于零时，才计算 `基线耗时 / FigureFlow 耗时`。比值大于 1 表示该次配对中 FigureFlow 更快。没有可配对数据时，报告只说明缺少数据，不生成比值。
 
 对空模板运行脚本是安全的：输出状态为 `no_measured_data`，统计与比较均为空。
+
+## 代表案例的机器链路实测
+
+这组实测回答的是“已写入的结构计划进入公开确定性链路后，机器需要多长时间完成素材生成/抠图、排版、自动交付 QA 与打包”，不回答人工创作需要多久。它与上面的人工对照实验是两套数据，不能混为同一实验。
+
+5 个代表案例覆盖日常汇报流程图、工厂机器人巡检 SOP、专利技术框架、论文机制图与 GPU 训练发布架构图。其中 C03 和 C05 使用 `presentation-spacious` 大字号预设；C05 同时使用通用 `gpu-green-tech` 主题。C02/C05 的计划分别保留 Public domain 与 CC BY 3.0 的 Wikimedia Commons 来源元数据，并使用仓库内已生成的 `robot_inspection` / `gpu_server` 局部语义素材；素材 provenance 会在运行前与计划交叉校验。所有输入均标记为 `synthetic-demo`，不冒充真实业务或科研结果。
+
+运行：
+
+```bash
+python3 benchmark/run_machine_cases.py
+python3 benchmark/analyze_machine_cases.py
+```
+
+默认把完整运行目录和大体积 ZIP 写入系统临时目录，只在 `benchmark/machine_evidence/` 保留脱敏、带 SHA-256 的小型 manifest，并在仓库保存 `machine_results.csv`、`machine_analysis.json` 和 `machine_analysis.md`。若要保留完整产物，可显式把 `--output-root` 指向仓库内的专用目录；提交前仍应评估仓库体积。
+
+分析器会将结果行与当前 FigurePlan SHA-256、布局/主题配置、主题 token 哈希、渲染 manifest 快照、素材/输出哈希以及 QA 快照交叉校验。输入计划漂移或小型证据被局部篡改时，分析直接失败，不继续生成汇总结论。
+
+每个案例只运行一次并保留原始墙钟数字，不报告均值、显著性或稳定性。计时器的精确定义是：
+
+- 开始：读取并校验一个已经写入磁盘的 FigurePlan；
+- 包含：生成通用 fallback 或读取仓库内已生成的局部语义素材、透明抠图、SVG/PDF/PNG 渲染、自动交付 QA、必需格式检查和关闭 ZIP；
+- 结束：交付 ZIP 成功关闭；
+- 不包含：自然语言规划、人工计划编写、参考图在线搜索、局部语义素材首次生成、人工语义评审、上传和 PPT 编辑；
+- 自动 QA 只有在渲染 manifest 的 `layout_qa.ok` 和 PNG/PDF 输出审计同时通过时才记为通过，不等于语义正确率。
+
+因此，C02/C05 证明的是“参考来源与许可可追溯、对应局部素材可在公开仓库复用，并能继续抠图/排版/QA”，不是在本次秒级计时中实时完成搜索和生图。若演示搜索与首次生成，应单独记录联网环境、模型版本、生成等待与失败重试。
+
+`machine_cases.csv` 中的 3600 秒和 28800 秒来自用户在本次答辩准备对话中的个人历史经验下界：简单流程图至少 1 小时，论文级配图至少 1 个工作日，并以 8 小时作为下界。它们不是这些案例的同题人工现场计时。分析中只允许计算：
+
+```text
+相对个人自报下界的时间尺度倍率 = 个人自报历史下界 / 机器链路单次实测
+```
+
+展示时必须保留“≥”和完整边界：这个商只用于说明两个不同来源数字的时间尺度，**不是团队人效、不是同题人工计时、不是节省工时或因果提效结论**。若要陈述人效或节省，仍需完成 `results_template.csv` 定义的同题人工对照实验。
 
 ## 答辩中的表述边界
 

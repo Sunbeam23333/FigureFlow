@@ -90,7 +90,19 @@ The standalone `FigurePlan` contract is:
   "title": "One claim-shaped title",
   "takeaway": "The single conclusion a reader should retain.",
   "layout_family": "ribbon",
+  "layout_preset": "presentation-spacious",
   "theme": "academic-audit",
+  "reference_assets": [
+    {
+      "id": "offline-figureflow-workflow",
+      "title": "FigureFlow bundled synthetic workflow example",
+      "uri": "example://figureflow/examples/figureflow_workflow.png",
+      "source_type": "offline-example",
+      "provider": "offline-example",
+      "media_type": "image",
+      "attribution": "Bundled synthetic-demo reference; no network request was made."
+    }
+  ],
   "evidence_status": "synthetic-demo",
   "status_label": "合成演示｜未含实测提效",
   "stages": [
@@ -114,15 +126,18 @@ Contract limits:
 
 - provide 3–6 stages with unique titles and unique `asset_key` values;
 - choose `ribbon`, `bowtie`, or `dual-rail`; use `ribbon` when the process is simply sequential;
-- choose assets only from `layout_planner`, `icon_factory`, `chroma_matte`, `vector_typeset`, `qa_export`, `data`, `process`, `decision`, `store`, and `output`;
+- choose `standard` or `presentation-spacious`; the presentation preset uses approximately 25% larger stage/gate typography and permits at most two body lines per stage;
+- choose `academic-audit` or the generic `gpu-green-tech` token theme; the latter uses no third-party logo and must not imply endorsement or affiliation;
+- choose assets only from `layout_planner`, `icon_factory`, `chroma_matte`, `vector_typeset`, `qa_export`, `gpu_server`, `robot_inspection`, `data`, `process`, `decision`, `store`, and `output`;
 - choose accents only from `navy`, `blue`, `teal`, `orange`, and `violet`;
 - keep each body to at most three short lines, gates to five labels, and warnings to six items;
 - use one canonical evidence status from the shared list, and do not mark the overall plan `measured` unless every stage is measured;
 - keep stage titles within 24 display units, subtitles within 28, body lines within 24, gate labels within 20, and the top status label within 30. CJK characters consume two display units.
+- attach at most eight reference assets with unique IDs and portable `example://` or non-credentialed HTTP(S) URIs. Only a caller/provider may attach them; the planner must never invent URLs.
 
 Place optional transparent icons in `--asset-dir` as `<asset_key>.png`. Missing files deliberately fall back to deterministic vector symbols, so a missing generated asset must not abort the whole figure. If a generated icon is used, generate it without text on a flat chroma background, run `remove_chroma.py`, inspect its alpha edge, and retain its provenance. The renderer emits SVG, PDF, PNG, and a hash manifest; run `audit_figure.py`, `qa_pdf.py`, and `check_public_release.py` before delivery.
 
-An online planner may use an OpenAI-compatible structured-output call outside this standalone skill folder. Keep provider credentials and service routing in server-side environment configuration only. An offline preset is acceptable for a stable demo only when the UI, figure, and manifest all disclose that it is a preset or `synthetic-demo`; never label it as a live model response.
+An online planner may use an OpenAI-compatible structured-output call outside this standalone skill folder. Keep provider credentials and service routing in server-side environment configuration only. Use the repository-level `demo_core.reference_search` interface for reference metadata: `user-url` never fetches, and `wikimedia-commons` calls one fixed public API endpoint and filters to licensed raster records. An offline preset is acceptable for a stable demo only when the UI, figure, and manifest all disclose that it is a preset or `synthetic-demo`; never label it as a live model response.
 
 ## Link or transfer graph
 

@@ -1,0 +1,55 @@
+{
+  "title": "线上故障处置周报流程",
+  "takeaway": "把告警、研判、处置、复盘证据与周报输出串成可检查链路。",
+  "layout_family": "ribbon",
+  "layout_preset": "standard",
+  "theme": "academic-audit",
+  "reference_assets": [],
+  "evidence_status": "synthetic-demo",
+  "status_label": "代表任务 · 合成演示",
+  "stages": [
+    {
+      "title": "告警汇入",
+      "subtitle": "聚合监控与用户反馈",
+      "body": ["监控告警", "用户反馈"],
+      "accent": "blue",
+      "asset_key": "data",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "影响研判",
+      "subtitle": "确认范围与优先级",
+      "body": ["影响面", "故障等级"],
+      "accent": "teal",
+      "asset_key": "process",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "处置决策",
+      "subtitle": "选择止损与恢复动作",
+      "body": ["回滚或降级", "责任人确认"],
+      "accent": "orange",
+      "asset_key": "decision",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "证据归档",
+      "subtitle": "留存时间线与根因",
+      "body": ["关键日志", "复盘结论"],
+      "accent": "violet",
+      "asset_key": "store",
+      "evidence_status": "synthetic-demo"
+    },
+    {
+      "title": "周报输出",
+      "subtitle": "生成可复用汇报图",
+      "body": ["本周事件", "后续行动"],
+      "accent": "navy",
+      "asset_key": "output",
+      "evidence_status": "synthetic-demo"
+    }
+  ],
+  "gates": ["阶段文字完整", "箭头顺序一致", "透明边界", "PDF单页", "SVG可编辑"],
+  "caption": "代表性合成输入；机器实测覆盖已写入计划后的素材处理、排版、交付QA与打包，不覆盖自然语言规划。",
+  "warnings": ["案例语义未经独立人工盲评；自动QA只检查交付质量。"]
+}

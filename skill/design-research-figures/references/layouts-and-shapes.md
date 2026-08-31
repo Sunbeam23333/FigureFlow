@@ -60,9 +60,9 @@ Do not reuse one reel icon for T2V, camera control, action rollout, and generate
 
 ## Palette families
 
-### NVIDIA Green
+### GPU Systems Green
 
-- accent `#76B900`
+- accent `#63B246`
 - ink `#1A1A1A`
 - graphite `#36393B`
 - pale `#EDF7DA`

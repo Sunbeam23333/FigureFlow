@@ -20,8 +20,8 @@ from pydantic import ValidationError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from demo_core import asset_pipeline, pipeline, planner  # noqa: E402
-from demo_core.schemas import FigurePlan, StagePlan  # noqa: E402
+from demo_core import asset_pipeline, pipeline, planner, reference_search  # noqa: E402
+from demo_core.schemas import FigurePlan, StagePlan, display_units  # noqa: E402
 
 
 class SchemaAndApiTests(unittest.TestCase):
@@ -44,23 +44,34 @@ class SchemaAndApiTests(unittest.TestCase):
         payload["stages"][0]["body"] = ["这是一条超过十二个中文字符的正文说明"]
         with self.assertRaises(ValidationError):
             FigurePlan.model_validate(payload)
+        payload = preset.model_dump()
+        payload["layout_preset"] = "presentation-spacious"
+        payload["theme"] = "gpu-green-tech"
+        payload["stages"][0]["body"] = ["第一条", "第二条", "第三条"]
+        with self.assertRaises(ValidationError):
+            FigurePlan.model_validate(payload)
 
     def test_online_planner_uses_exact_responses_contract(self) -> None:
         calls: list[dict[str, object]] = []
+        model_plan_payload = planner.load_preset().model_dump()
+        model_plan_payload["reference_assets"] = [
+            reference_search.search_references("", provider="offline-example", limit=1)[0].model_dump()
+        ]
         response = SimpleNamespace(
             id="resp_test",
-            output_parsed=planner.load_preset(),
+            output_parsed=FigurePlan.model_validate(model_plan_payload),
             usage=SimpleNamespace(input_tokens=12, output_tokens=34),
         )
         fake = SimpleNamespace(responses=SimpleNamespace(parse=lambda **kwargs: calls.append(kwargs) or response))
         with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}, clear=True), patch.object(
             planner, "OpenAI", return_value=fake
         ):
-            _, metadata = planner.plan_figure("测试输入", mode="online")
+            planned, metadata = planner.plan_figure("测试输入", mode="online")
         self.assertEqual(metadata.model, "gpt-5.6-sol")
         self.assertEqual(calls[0]["model"], "gpt-5.6-sol")
         self.assertEqual(calls[0]["reasoning"], {"effort": "medium"})
         self.assertIs(calls[0]["store"], False)
+        self.assertEqual(planned.reference_assets, [])
 
     def test_live_icon_tool_call_is_mocked_and_prompt_is_hashed(self) -> None:
         buffer = io.BytesIO()
@@ -113,11 +124,49 @@ class SchemaAndApiTests(unittest.TestCase):
 
 
 class PipelineTests(unittest.TestCase):
+    def test_spacious_override_compacts_three_line_model_body_with_audit_source(self) -> None:
+        source_plan, planning = planner.plan_figure("模型返回三行正文", mode="offline")
+        payload = source_plan.model_dump()
+        original_body = ["保留原始输入语义", "提取核心节点关系", "补充边界与证据"]
+        payload["layout_preset"] = "standard"
+        payload["stages"][0]["body"] = original_body
+        model_plan = FigurePlan.model_validate(payload)
+
+        with tempfile.TemporaryDirectory() as temporary, patch.object(
+            pipeline, "OUTPUT_ROOT", Path(temporary)
+        ), patch.object(pipeline, "plan_figure", return_value=(model_plan, planning)):
+            result = pipeline.run_pipeline(
+                "模型返回三行正文",
+                mode="online",
+                layout_preset_override="presentation-spacious",
+            )
+
+        compacted = result.plan["stages"][0]["body"]
+        self.assertEqual(result.plan["layout_preset"], "presentation-spacious")
+        self.assertEqual(compacted[0], original_body[0])
+        self.assertEqual(len(compacted), 2)
+        self.assertTrue(all(display_units(line) <= 24 for line in compacted))
+        self.assertIn("提取", compacted[1])
+        self.assertIn("补充", compacted[1])
+        self.assertEqual(
+            result.plan["warnings"][0],
+            f"投屏压缩原文[{model_plan.stages[0].title}]：{original_body[1]}｜{original_body[2]}",
+        )
+        self.assertIn(source_plan.warnings[0], result.plan["warnings"])
+        self.assertTrue(result.qa["ok"])
+
     def test_offline_pipeline_is_portable_and_qa_clean(self) -> None:
+        references = reference_search.search_references("", provider="offline-example", limit=1)
         with tempfile.TemporaryDirectory() as temporary, patch.object(
             pipeline, "OUTPUT_ROOT", Path(temporary)
         ), patch.dict(os.environ, {"FIGUREFLOW_MAX_RUNS": "2"}, clear=False):
-            result = pipeline.run_pipeline("任意输入", mode="offline")
+            result = pipeline.run_pipeline(
+                "任意输入",
+                mode="offline",
+                layout_preset_override="presentation-spacious",
+                theme_override="gpu-green-tech",
+                reference_assets=references,
+            )
             run_dir = Path(result.run_dir)
             self.assertTrue(result.qa["ok"])
             self.assertTrue(all(item["ok"] for item in result.qa["by_layout"].values()))
@@ -135,6 +184,13 @@ class PipelineTests(unittest.TestCase):
             svg = Path(result.final_svg).read_text(encoding="utf-8")
             self.assertIn('id="stage-01"', svg)
             self.assertIn("提效比例必须通过", svg)
+            self.assertIn('data-theme="gpu-green-tech"', svg)
+            self.assertIn('data-layout-preset="presentation-spacious"', svg)
+            self.assertIn("#63B246", svg)
+            self.assertEqual(result.plan["reference_assets"][0]["provider"], "offline-example")
+            self.assertTrue(
+                all(item["layout_qa"]["presentation_scale_ok"] for item in result.qa["by_layout"].values())
+            )
 
     def test_generic_asset_fallback_is_transparent(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -146,6 +202,31 @@ class PipelineTests(unittest.TestCase):
             with Image.open(processed) as image:
                 alpha = image.convert("RGBA").getchannel("A")
                 self.assertEqual(alpha.getpixel((0, 0)), 0)
+
+    def test_bundled_gpu_and_robot_cases_run_through_chroma_cutout(self) -> None:
+        stages = [
+            StagePlan(
+                title="GPU 告警",
+                subtitle="检查集群硬件状态",
+                asset_key="gpu_server",
+                evidence_status="synthetic-demo",
+            ),
+            StagePlan(
+                title="机器人质检",
+                subtitle="检查工件视觉质量",
+                asset_key="robot_inspection",
+                evidence_status="synthetic-demo",
+            ),
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            results, live = asset_pipeline.prepare_assets(stages, Path(temporary))
+            self.assertIsNone(live)
+            self.assertEqual({result.source for result in results}, {"bundled-generated-illustration"})
+            for result in results:
+                with Image.open(result.processed_path) as image:
+                    alpha = image.convert("RGBA").getchannel("A")
+                    self.assertEqual(alpha.getpixel((0, 0)), 0)
+                    self.assertGreater(alpha.getbbox()[2] - alpha.getbbox()[0], image.width // 3)
 
     def test_chroma_cli_refuses_in_place_overwrite(self) -> None:
         script = ROOT / "skill" / "design-research-figures" / "scripts" / "remove_chroma.py"

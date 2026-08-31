@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import unicodedata
 from typing import Literal
+from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -18,20 +19,69 @@ EvidenceStatus = Literal[
     "failed-gate",
 ]
 LayoutFamily = Literal["ribbon", "bowtie", "dual-rail"]
-ThemeName = Literal["academic-audit"]
+LayoutPreset = Literal["standard", "presentation-spacious"]
+ThemeName = Literal["academic-audit", "gpu-green-tech"]
 AccentName = Literal["blue", "teal", "orange", "violet", "navy"]
+ReferenceSource = Literal["offline-example", "user-url", "provider-search"]
+ReferenceMediaType = Literal["image", "webpage", "document"]
 AssetKey = Literal[
     "layout_planner",
     "icon_factory",
     "chroma_matte",
     "vector_typeset",
     "qa_export",
+    "gpu_server",
+    "robot_inspection",
     "data",
     "process",
     "decision",
     "store",
     "output",
 ]
+
+
+def validate_reference_uri(value: str) -> str:
+    """Accept portable reference URIs while discarding URL-borne secrets.
+
+    Reference URLs are provenance metadata, not fetch instructions. Query strings
+    are therefore unnecessary and unsafe to persist because signed URLs commonly
+    carry access tokens. Fragments are likewise non-portable and are removed.
+    """
+    parsed = urlsplit(value.strip())
+    if parsed.scheme == "example":
+        if not parsed.netloc or not parsed.path:
+            raise ValueError("example reference URIs require a namespace and path")
+    elif parsed.scheme in {"http", "https"}:
+        if not parsed.netloc:
+            raise ValueError("reference URLs require a host")
+        if parsed.username or parsed.password:
+            raise ValueError("reference URLs may not contain credentials")
+    else:
+        raise ValueError("reference URIs must use example, http, or https")
+    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
+
+
+class ReferenceAsset(BaseModel):
+    """Portable metadata for a visual reference; renderers never fetch the URI."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    id: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9][a-z0-9._-]*$")
+    title: str = Field(min_length=2, max_length=180)
+    uri: str = Field(min_length=8, max_length=2048)
+    source_type: ReferenceSource
+    provider: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9][a-z0-9._-]*$")
+    media_type: ReferenceMediaType = "image"
+    source_url: str | None = Field(default=None, max_length=2048)
+    author: str | None = Field(default=None, max_length=240)
+    license_name: str | None = Field(default=None, max_length=120)
+    license_url: str | None = Field(default=None, max_length=2048)
+    attribution: str | None = Field(default=None, max_length=500)
+
+    @field_validator("uri", "source_url", "license_url")
+    @classmethod
+    def validate_uri_fields(cls, value: str | None) -> str | None:
+        return validate_reference_uri(value) if value is not None else None
 
 
 def display_units(value: str) -> int:
@@ -83,7 +133,9 @@ class FigurePlan(BaseModel):
     title: str = Field(min_length=4, max_length=42)
     takeaway: str = Field(min_length=8, max_length=90)
     layout_family: LayoutFamily = "ribbon"
+    layout_preset: LayoutPreset = "standard"
     theme: ThemeName = "academic-audit"
+    reference_assets: list[ReferenceAsset] = Field(default_factory=list, max_length=8)
     evidence_status: EvidenceStatus
     status_label: str = Field(min_length=3, max_length=36)
     stages: list[StagePlan] = Field(min_length=3, max_length=6)
@@ -134,6 +186,14 @@ class FigurePlan(BaseModel):
             raise ValueError("an overall measured figure requires every stage to be measured")
         if self.evidence_status == "implemented" and not statuses.issubset({"measured", "implemented"}):
             raise ValueError("an overall implemented figure cannot contain speculative stages")
+        if self.layout_preset == "presentation-spacious" and any(len(stage.body) > 2 for stage in self.stages):
+            raise ValueError("presentation-spacious permits at most two body lines per stage")
+        reference_ids = [asset.id for asset in self.reference_assets]
+        if len(set(reference_ids)) != len(reference_ids):
+            raise ValueError("reference asset ids must be unique")
+        reference_uris = [asset.uri for asset in self.reference_assets]
+        if len(set(reference_uris)) != len(reference_uris):
+            raise ValueError("reference asset URIs must be unique")
         return self
 
 

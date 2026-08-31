@@ -13,17 +13,20 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
-from typing import Literal
+from typing import Literal, Sequence
 
 from .asset_pipeline import create_contact_sheet, prepare_assets, public_asset_records
 from .planner import DEFAULT_MODEL, plan_figure
 from .renderer_adapter import audit_outputs, render_plan
+from .schemas import FigurePlan, LayoutPreset, ReferenceAsset, ThemeName, display_units
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_ROOT = Path(os.getenv("FIGUREFLOW_OUTPUT_DIR", ROOT / "demo" / "output")).expanduser()
 LAYOUTS = ("ribbon", "bowtie", "dual-rail")
 RUN_DIR_PATTERN = re.compile(r"^\d{8}T\d{6}Z-[0-9a-f]{8}$")
+SPACIOUS_BODY_LINE_UNITS = 24
+MAX_PLAN_WARNINGS = 6
 
 
 @dataclass(frozen=True)
@@ -89,13 +92,109 @@ def _prune_outputs() -> None:
             stale.unlink()
 
 
+def _truncate_display_text(value: str, max_units: int) -> str:
+    """Keep a readable prefix within a renderer display-unit budget."""
+    if display_units(value) <= max_units:
+        return value
+    ellipsis = "…"
+    content_budget = max_units - display_units(ellipsis)
+    if content_budget <= 0:
+        return ellipsis if display_units(ellipsis) <= max_units else ""
+    kept: list[str] = []
+    used = 0
+    for char in value:
+        units = display_units(char)
+        if used + units > content_budget:
+            break
+        kept.append(char)
+        used += units
+    return "".join(kept).rstrip() + ellipsis
+
+
+def _compact_spacious_body(title: str, body: Sequence[str]) -> tuple[list[str], str | None]:
+    """Convert a valid three-line body into two lines without silent information loss.
+
+    The first semantic line remains intact. The remaining two lines are merged when
+    they fit. If they do not, both retain a visible prefix and their exact source
+    text is returned as an audit warning for the plan/manifest.
+    """
+    lines = list(body)
+    if len(lines) <= 2:
+        return lines, None
+
+    first, second, third = lines
+    separator = "；"
+    combined = f"{second}{separator}{third}"
+    if display_units(combined) <= SPACIOUS_BODY_LINE_UNITS:
+        return [first, combined], None
+
+    available = SPACIOUS_BODY_LINE_UNITS - display_units(separator)
+    second_units = display_units(second)
+    third_units = display_units(third)
+    second_budget = min(second_units, available // 2)
+    third_budget = min(third_units, available - second_budget)
+    remaining = available - second_budget - third_budget
+    if remaining:
+        add_second = min(remaining, second_units - second_budget)
+        second_budget += add_second
+        remaining -= add_second
+        third_budget += min(remaining, third_units - third_budget)
+
+    compacted = (
+        f"{_truncate_display_text(second, second_budget)}"
+        f"{separator}{_truncate_display_text(third, third_budget)}"
+    )
+    warning = f"投屏压缩原文[{title}]：{second}｜{third}"
+    if len(warning) > 80:
+        raise ValueError(f"cannot safely preserve spacious body source text for stage {title!r}")
+    return [first, compacted], warning
+
+
+def _apply_plan_overrides(
+    plan: FigurePlan,
+    *,
+    layout_override: Literal["ribbon", "bowtie", "dual-rail"] | None,
+    layout_preset_override: LayoutPreset | None,
+    theme_override: ThemeName | None,
+) -> FigurePlan:
+    """Apply UI overrides while adapting renderer-constrained presentation copy."""
+    payload = plan.model_dump()
+    if layout_override:
+        payload["layout_family"] = layout_override
+    if theme_override:
+        payload["theme"] = theme_override
+    if layout_preset_override:
+        payload["layout_preset"] = layout_preset_override
+
+    if payload["layout_preset"] == "presentation-spacious":
+        compaction_warnings: list[str] = []
+        for stage in payload["stages"]:
+            compacted, warning = _compact_spacious_body(stage["title"], stage["body"])
+            stage["body"] = compacted
+            if warning:
+                compaction_warnings.append(warning)
+        existing_warnings = list(payload["warnings"])
+        if len(compaction_warnings) + len(existing_warnings) > MAX_PLAN_WARNINGS:
+            raise ValueError(
+                "presentation-spacious override needs more warning slots to preserve truncated source text"
+            )
+        # Surface copy compression before pre-existing warnings; the exact source
+        # remains in FigurePlan and bundled figure_plan.json even when cards are terse.
+        payload["warnings"] = compaction_warnings + existing_warnings
+
+    return FigurePlan.model_validate(payload)
+
+
 def run_pipeline(
     brief: str,
     *,
     mode: Literal["auto", "online", "offline"] = "auto",
     layout_override: Literal["ribbon", "bowtie", "dual-rail"] | None = None,
+    layout_preset_override: LayoutPreset | None = None,
+    theme_override: ThemeName | None = None,
     live_icon: bool = False,
     model: str = DEFAULT_MODEL,
+    reference_assets: Sequence[ReferenceAsset] = (),
 ) -> RunResult:
     started_total = perf_counter()
     _prune_outputs()
@@ -104,10 +203,14 @@ def run_pipeline(
     run_dir.mkdir(parents=True, exist_ok=False)
 
     plan_started = perf_counter()
-    plan, planning = plan_figure(brief, mode=mode, model=model)
+    plan, planning = plan_figure(brief, mode=mode, model=model, reference_assets=reference_assets)
     planning_ms = round((perf_counter() - plan_started) * 1000)
-    if layout_override:
-        plan.layout_family = layout_override
+    plan = _apply_plan_overrides(
+        plan,
+        layout_override=layout_override,
+        layout_preset_override=layout_preset_override,
+        theme_override=theme_override,
+    )
     plan_path = run_dir / "figure_plan.json"
     plan_path.write_text(plan.model_dump_json(indent=2) + "\n", encoding="utf-8")
 
@@ -140,18 +243,23 @@ def run_pipeline(
     selected = candidate_outputs[selected_layout]
 
     qa_started = perf_counter()
-    qa_by_layout = {
-        family: audit_outputs(
+    qa_by_layout: dict[str, dict[str, object]] = {}
+    for family, outputs in candidate_outputs.items():
+        report = audit_outputs(
             Path(outputs["png"]),
             Path(outputs["pdf"]),
             run_dir / "qa" / family,
         )
-        for family, outputs in candidate_outputs.items()
-    }
+        renderer_manifest = json.loads(Path(outputs["manifest"]).read_text(encoding="utf-8"))
+        layout_qa = renderer_manifest.get("layout_qa", {})
+        report["layout_qa"] = layout_qa
+        report["ok"] = bool(report.get("ok")) and bool(layout_qa.get("ok"))
+        qa_by_layout[family] = report
     qa_ms = round((perf_counter() - qa_started) * 1000)
     qa = {
         "ok": all(report.get("ok") for report in qa_by_layout.values()),
         "selected_layout": selected_layout,
+        "reference_assets": [asset.model_dump() for asset in plan.reference_assets],
         "selected": qa_by_layout[selected_layout],
         "by_layout": qa_by_layout,
     }
