@@ -4,12 +4,13 @@
 
 本仓库是独立的答辩 Demo，与其他同名开源项目或商业产品无关联；发布包名使用 `figureflow-demo`，不占用通用的 `figureflow` 名称。
 
-FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅助绘图 Demo。它不让生图模型一次性“猜”完整张图，而是把任务拆成可检查的四层：
+FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅助绘图 Demo。它不让生图模型一次性“猜”完整张图，而是把任务拆成可检查的五层：
 
-1. `gpt-5.6-sol` 将需求整理成受约束的 `FigurePlan`；
-2. 生成式视觉能力只负责无文字、可替换的局部图标；
-3. 确定性程序完成中文、连线、版式和导出；
-4. QA 和 manifest 记录证据状态、产物与耗时。
+1. 固定的 Wikimedia Commons 搜索接口提供带来源、作者和开放许可的真实图片候选；
+2. `gpt-5.6-sol` 将需求整理成受约束的 `FigurePlan`；
+3. 生成式视觉能力只负责无文字、可替换的局部图标；也可将选定的 Commons 候选经安全导入后作为真实图片素材；
+4. 确定性程序完成本地裁切/透明处理、中文、连线、版式和导出；
+5. QA 和 manifest 记录证据状态、来源许可、文件哈希、产物与耗时。
 
 这个设计的核心是：**AI 负责语义和创意，确定性渲染器负责精确内容。**
 
@@ -34,8 +35,11 @@ FigureFlow 适合于“语义判断很重要，但输出又必须精确可改”
 flowchart LR
     A["业务描述"] --> B["GPT-5.6-sol<br/>结构化 FigurePlan"]
     B --> C["受控布局<br/>ribbon / bowtie / dual-rail"]
-    C --> D["无文字局部 Icon"]
-    D --> E["Chroma key<br/>软遮罩与去色边"]
+    R["Commons 真实参考搜索"] --> S["固定主机 + 开放许可<br/>内容/体积/尺寸校验"]
+    S --> D["本地正规化真实图片"]
+    C --> I["无文字局部 Icon"]
+    I --> E["本地裁切/软遮罩"]
+    D --> E
     E --> F["确定性矢量排版"]
     F --> G["QA + Manifest"]
     G --> H["SVG / PDF / PNG"]
@@ -66,13 +70,15 @@ flowchart LR
 - `standard`：保持原有兼容版式；
 - `presentation-spacious`：stage 标题、副标题、正文和 gate 字号相对标准档提高约 25%，每个 stage 最多两条正文，并在三种布局上记录可机读的 `layout_qa`。
 
-参考图入口是 metadata-only：检索结果可在页面中查看标题、来源页、作者和许可证，然后作为 `reference_assets` 写入计划与清单，但不会自动下载或放进画布。
+真实参考链已经接通：检索结果可在页面中查看标题、来源页、作者和许可证；勾选“安全导入上方已检索的第 1 条候选”后，后端会绑定这一条已检索记录，不会在运行时重新搜索换图。它从内置允许列表中的 Commons 媒体主机下载该候选，拒绝重定向，校验响应类型、字节上限、图片解码、像素尺寸、来源页和开放许可后，才将去除嵌入元数据的 PNG 保存到本次 run 目录。选定的图片可直接进入第 1 个节点排版，无需人工下载再上传。
+
+导入图片全程只在本地处理，不会被发送给规划模型或远程抠图服务。对边界近似单色的图片，程序会使用本地 soft matte 完成保守抠图；对复杂照片则保留原背景并只做方向、缩放和透明外边距，不会伪装成已完成语义分割。
 
 | Provider | 默认联网 | 行为与边界 |
 |---|---:|---|
-| `offline-example` | 否 | 返回仓库内的可移植合成示例 URI，适合复现与录屏 |
+| `offline-example` | 否 | 可安全复制仓库内的合成示例，适合复现与录屏 |
 | `user-url` | 否 | 只校验和记录用户 URL；查询串与片段会被丢弃，服务端绝不抓取、预览或跟随该 URL |
-| `wikimedia-commons` | 是 | 只调用固定的 Commons MediaWiki API；仅保留 JPEG/PNG/WebP 且同时具有来源页与许可证的结果 |
+| `wikimedia-commons` | 是 | 检索只调用固定 MediaWiki API；选定后只从内置允许列表中的 `upload.wikimedia.org` / `thumb.wikimedia.org` 导入 JPEG/PNG/WebP，且必须具有来源页、作者/署名与允许的 CC/Public Domain 记录 |
 
 命令行可独立验证 provider：
 
@@ -94,10 +100,13 @@ result = run_pipeline(
     theme_override="gpu-green-tech",
     layout_preset_override="presentation-spacious",
     reference_assets=references,
+    reference_import_ids=[references[0].id],
+    reference_visual_id=references[0].id,
 )
 ```
 
-这里的“搜索”只提供构图参考与溯源，不证明素材可直接商用。交付前仍需人工确认许可证、署名、商标与组织内部合规要求。
+程序校验的是“来源与开放许可元数据齐全且在允许列表内”，不是法律意见。对外发布前仍应遵守相应署名方式，并核对商标、肖像、地区法规和组织内部要求。
+凡是进入画布的真实参考图，渲染器会在 SVG、PDF 和 PNG 底部自动写入图片标题、作者/署名、许可名、来源平台与“已缩放/裁切”变更说明；完整 URL 同时保留在 SVG metadata 和 provenance manifest 中，单独分享终图不会丢掉基本引用。
 
 ## 快速开始
 
@@ -150,6 +159,8 @@ docker run --rm -p 7860:7860 \
 每次运行在独立目录中保存中间产物和最终交付，典型包括：
 
 - 结构化 `FigurePlan` 与规划元数据；
+- 经安全校验的本地真实参考 PNG，以及来源、许可、字节数、尺寸和哈希 provenance；
+- 随终图可见交付的真实参考图署名、许可和变更说明；
 - 原始图标、透明抠图与处理参数；
 - 可继续编辑的 SVG、矢量 PDF 和预览 PNG；
 - QA 结果、阶段耗时、文件哈希和证据状态；
@@ -186,7 +197,8 @@ docker run --rm -p 7860:7860 \
 FigureFlow/
 ├── app.py                         # Gradio 体验界面
 ├── demo_core/                    # 规划、素材处理、渲染与 QA 编排
-│   └── reference_search.py       # 可插拔参考检索（默认离线 / 用户 URL 不抓取）
+│   ├── reference_search.py       # 可插拔参考检索（默认离线 / 用户 URL 不抓取）
+│   └── reference_import.py       # Commons 固定主机安全导入、解码校验与溯源
 ├── presets/                      # 离线回放的结构化预设
 ├── prompts/                      # 受约束规划提示词
 ├── assets/icons/                 # 原始和处理后的无文字素材
@@ -204,7 +216,8 @@ FigureFlow/
 - 离线回放不发起语义规划 API 请求；运行前仍应检查所在环境的网络和日志配置。
 - 产物中可能包含用户提交的文字；分享 ZIP、manifest 或录屏前请做脱敏检查。
 - 不要把 API Key 放入前端、URL、日志、manifest 或截图。
-- `user-url` provider 不发起请求；如果实现新的联网 provider，应固定允许的 API endpoint、限制响应体，并只返回经过 schema 校验的 metadata。
+- `user-url` provider 不发起请求，不会因为勾选“安全导入”而变成任意 URL 抓取器。
+- 真实图片导入只允许仓库示例和经内置 Commons provider 返回的记录；网络请求固定到 Commons 媒体主机允许列表、禁止重定向且受字节/像素上限约束。
 
 更完整的部署边界和漏洞报告方式见 [SECURITY.md](SECURITY.md)。
 
@@ -229,4 +242,4 @@ python -m unittest discover -s tests -v
 
 ---
 
-**English summary:** FigureFlow is a hybrid AI/deterministic pipeline for editable workflow, SOP, paper, and patent figures. GPT-5.6-sol produces a validated semantic plan; generated imagery is limited to text-free local assets; deterministic code owns text, connectors, layout, QA, and SVG/PDF/PNG delivery. Offline replay is visibly distinguished from a live API run, and no efficiency claim is made without a controlled benchmark.
+**English summary:** FigureFlow is a hybrid AI/deterministic pipeline for editable workflow, SOP, paper, and patent figures. GPT-5.6-sol produces a validated semantic plan; generated imagery is limited to text-free local assets. Selected Wikimedia Commons results can be imported through a fixed-host, no-redirect, size/content/license validation boundary, stripped of embedded metadata, and used locally without sending their pixels to a model. Deterministic code owns text, connectors, layout, QA, provenance, and SVG/PDF/PNG delivery. Offline replay is visibly distinguished from a live API run, and no efficiency claim is made without a controlled benchmark.

@@ -6,10 +6,12 @@ import html
 import logging
 import os
 from pathlib import Path
+from typing import Mapping
 
 import gradio as gr
 
 from demo_core.pipeline import OUTPUT_ROOT, RunResult, run_pipeline
+from demo_core.reference_import import ReferenceImportError
 from demo_core.reference_search import search_references
 from demo_core.schemas import ReferenceAsset
 
@@ -46,15 +48,16 @@ THEME_MAP = {
 }
 REFERENCE_PROVIDER_MAP = {
     "离线示例（默认，不联网）": "offline-example",
-    "Wikimedia Commons（固定接口，仅元数据）": "wikimedia-commons",
-    "用户 URL（只记录，不抓取）": "user-url",
+    "Wikimedia Commons（固定接口，可安全导入）": "wikimedia-commons",
+    "用户 URL（安全边界：只记录）": "user-url",
 }
 
 
-def _reference_summary(assets: list[ReferenceAsset]) -> str:
+def _reference_summary(assets: list[ReferenceAsset], imported_ids: set[str] | None = None) -> str:
     if not assets:
-        return "**参考来源：** 未选择结果。渲染器不会自动下载第三方素材。"
-    rows = ["**参考来源（metadata-only；不会自动下载图片）**", ""]
+        return "**参考来源：** 未选择结果。"
+    imported = imported_ids or set()
+    rows = ["**参考候选（来源与许可可追溯）**", ""]
     for index, asset in enumerate(assets, start=1):
         title = html.escape(asset.title)
         source_url = asset.source_url if asset.source_url and asset.source_url.startswith(("http://", "https://")) else None
@@ -71,8 +74,21 @@ def _reference_summary(assets: list[ReferenceAsset]) -> str:
             if license_url
             else license_name
         )
-        rows.append(f"{index}. {title_html} · {author} · {license_html} · `{asset.provider}`")
-    rows.extend(["", "> 这些条目只作为构图参考和溯源 metadata 写入 FigurePlan / Manifest；当前 Demo 不下载或合成第三方图片。"])
+        if asset.id in imported:
+            import_state = "已经安全导入"
+        elif asset.provider in {"wikimedia-commons", "offline-example"}:
+            import_state = "可选安全导入"
+        else:
+            import_state = "只记录，不发起网络请求"
+        rows.append(
+            f"{index}. {title_html} · {author} · {license_html} · `{asset.provider}` · **{import_state}**"
+        )
+    rows.extend(
+        [
+            "",
+            "> 运行时可选将第 1 张 Commons 候选经固定主机、禁止重定向、体积、解码、尺寸和开放许可检查后保存到本次运行目录；排版器只读本地正规化 PNG。",
+        ]
+    )
     return "\n".join(rows)
 
 
@@ -92,8 +108,18 @@ def _preview_references(provider_label: str, query: str, user_urls_text: str):
         assets = _resolve_references(provider_label, query, user_urls_text)
     except Exception as exc:
         LOGGER.warning("Reference preview failed: %s", type(exc).__name__)
-        return "**参考检索失败。** 请检查查询词、URL 或网络后重试。", []
-    return _reference_summary(assets), [asset.model_dump() for asset in assets]
+        return "**参考检索失败。** 请检查查询词、URL 或网络后重试。", [], {}
+    serialized = [asset.model_dump() for asset in assets]
+    state = {
+        "request": {
+            "provider_label": provider_label,
+            "query": query.strip(),
+            "user_urls": [line.strip() for line in user_urls_text.splitlines() if line.strip()],
+        },
+        "selected_id": assets[0].id if assets else None,
+        "assets": serialized,
+    }
+    return _reference_summary(assets), serialized, state
 
 
 def _metrics_markdown(result: RunResult) -> str:
@@ -102,6 +128,7 @@ def _metrics_markdown(result: RunResult) -> str:
 | 本次运行阶段 | 耗时 |
 |---|---:|
 | 语义规划 | {metrics['planning_ms'] / 1000:.2f} s |
+| 参考图安全导入 | {metrics.get('reference_import_ms', 0) / 1000:.2f} s |
 | 实时 Icon 生成 | {metrics['icon_generation_ms'] / 1000:.2f} s |
 | 抠图与素材处理 | {metrics['cutout_ms'] / 1000:.2f} s |
 | 三套布局渲染 | {metrics['render_3_layouts_ms'] / 1000:.2f} s |
@@ -123,13 +150,35 @@ def _run_demo(
     reference_provider_label: str,
     reference_query: str,
     user_urls_text: str,
+    import_first_reference: bool = False,
+    previewed_reference_state: Mapping[str, object] | None = None,
 ):
     if PUBLIC_DEMO:
         brief = DEFAULT_BRIEF
         mode_label = "离线：稳定复演预设"
         live_icon = False
+        import_first_reference = False
     try:
-        references = _resolve_references(reference_provider_label, reference_query, user_urls_text)
+        if import_first_reference:
+            state = dict(previewed_reference_state or {})
+            expected_request = {
+                "provider_label": reference_provider_label,
+                "query": reference_query.strip(),
+                "user_urls": [line.strip() for line in user_urls_text.splitlines() if line.strip()],
+            }
+            if state.get("request") != expected_request:
+                raise ReferenceImportError("请在导入前重新预览当前检索条件")
+            raw_assets = state.get("assets", [])
+            if not isinstance(raw_assets, list):
+                raise ReferenceImportError("参考预览状态无效")
+            references = [ReferenceAsset.model_validate(asset) for asset in raw_assets]
+            selected_id = state.get("selected_id")
+            if not isinstance(selected_id, str) or selected_id not in {asset.id for asset in references}:
+                raise ReferenceImportError("请先预览并选定可导入的参考图")
+            reference_import_ids = [selected_id]
+        else:
+            references = _resolve_references(reference_provider_label, reference_query, user_urls_text)
+            reference_import_ids = []
         result = run_pipeline(
             brief,
             mode=MODE_MAP[mode_label],
@@ -138,12 +187,18 @@ def _run_demo(
             theme_override=THEME_MAP[theme_label],
             live_icon=live_icon,
             reference_assets=references,
+            reference_import_ids=reference_import_ids,
+            reference_visual_id=reference_import_ids[0] if reference_import_ids else None,
         )
     except Exception as exc:
         # Keep public logs useful without persisting SDK exception text, which may
         # contain request identifiers or a deployment-specific service URL.
         LOGGER.error("FigureFlow run failed: %s", type(exc).__name__)
-        message = "运行失败（PIPELINE_FAILED）。请检查服务端日志、字体与 API 配置。"
+        message = (
+            "参考图未通过安全导入检查。请改用具有完整来源、作者和开放许可的 Wikimedia Commons 候选。"
+            if isinstance(exc, ReferenceImportError)
+            else "运行失败（PIPELINE_FAILED）。请检查服务端日志、字体与 API 配置。"
+        )
         return (
             f"### 运行失败\n\n{message}",
             "",
@@ -157,6 +212,7 @@ def _run_demo(
             None,
             "**参考来源：** 运行失败，未写入交付。",
             [],
+            [],
         )
     public_notice = "公开安全模式：固定合成示例 · " if PUBLIC_DEMO else ""
     status = (
@@ -164,6 +220,11 @@ def _run_demo(
         f" · 主题：`{THEME_MAP[theme_label]}` · 字号版式：`{LAYOUT_PRESET_MAP[layout_preset_label]}`"
     )
     downloads = [result.final_svg, result.final_pdf, result.bundle_zip, result.manifest]
+    imported_ids = {str(item.get("id")) for item in result.reference_imports}
+    imported_gallery = [
+        (path, str(record.get("title") or record.get("id") or "导入参考图"))
+        for path, record in zip(result.reference_previews, result.reference_imports)
+    ]
     return (
         status,
         _metrics_markdown(result),
@@ -175,8 +236,9 @@ def _run_demo(
         result.final_png,
         downloads,
         result.qa,
-        _reference_summary(references),
+        _reference_summary(references, imported_ids),
         [asset.model_dump() for asset in references],
+        imported_gallery,
     )
 
 
@@ -241,12 +303,17 @@ def build_demo() -> gr.Blocks:
                         interactive=not PUBLIC_DEMO,
                     )
                     user_urls = gr.Textbox(
-                        label="用户参考 URL（每行一个；只记录、不抓取）",
+                        label="用户参考 URL（每行一个；安全边界下只记录）",
                         lines=2,
                         placeholder="https://example.org/reference.png",
                         interactive=not PUBLIC_DEMO,
                     )
-                    preview_references = gr.Button("预览来源 metadata", size="sm")
+                    import_first_reference = gr.Checkbox(
+                        label="安全导入上方已检索的第 1 条候选，用于第 1 个流程节点",
+                        value=False,
+                        interactive=not PUBLIC_DEMO,
+                    )
+                    preview_references = gr.Button("检索参考候选", size="sm")
                 run_button = gr.Button("生成可编辑技术图", variant="primary", size="lg")
                 gr.Markdown(
                     "密钥只从服务端环境变量读取，不会进入浏览器或运行清单。GPU Systems Green 是通用加速器技术配色，不使用第三方 Logo，也不暗示背书或关联。"
@@ -258,13 +325,20 @@ def build_demo() -> gr.Blocks:
                 reference_summary = gr.Markdown("**参考来源：** 等待预览。")
                 with gr.Accordion("参考 metadata（将写入 FigurePlan / Manifest）", open=False):
                     reference_metadata = gr.JSON()
+                reference_state = gr.State(value={})
+                imported_references = gr.Gallery(
+                    label="已验证并导入的本地参考素材",
+                    columns=3,
+                    height=260,
+                    object_fit="contain",
+                )
 
         gr.Markdown("## ③ 布局候选")
         gallery = gr.Gallery(label="相同语义、三种确定性布局", columns=3, height=350, object_fit="contain")
-        gr.Markdown("## ④ 素材生成与透明抠图")
+        gr.Markdown("## ④ 素材生成、真实参考导入与本地处理")
         with gr.Row():
-            raw = gr.Image(label="原始 Chroma 素材", type="filepath", height=300)
-            processed = gr.Image(label="Soft matte + despill", type="filepath", height=300)
+            raw = gr.Image(label="输入素材（生成色键 / 真实参考）", type="filepath", height=300)
+            processed = gr.Image(label="本地处理结果（保守抠图 / 保留原背景）", type="filepath", height=300)
             contact_sheet = gr.Image(label="全部素材处理记录", type="filepath", height=300)
         gr.Markdown("## ⑤ 精确文字排版、质量门禁与交付")
         final = gr.Image(label="最终图（PNG 预览；SVG/PDF 可继续编辑）", type="filepath")
@@ -275,7 +349,7 @@ def build_demo() -> gr.Blocks:
         preview_references.click(
             _preview_references,
             inputs=[reference_provider, reference_query, user_urls],
-            outputs=[reference_summary, reference_metadata],
+            outputs=[reference_summary, reference_metadata, reference_state],
         )
 
         run_button.click(
@@ -290,6 +364,8 @@ def build_demo() -> gr.Blocks:
                 reference_provider,
                 reference_query,
                 user_urls,
+                import_first_reference,
+                reference_state,
             ],
             outputs=[
                 status,
@@ -304,6 +380,7 @@ def build_demo() -> gr.Blocks:
                 qa,
                 reference_summary,
                 reference_metadata,
+                imported_references,
             ],
         )
     return demo

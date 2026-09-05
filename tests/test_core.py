@@ -20,7 +20,7 @@ from pydantic import ValidationError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from demo_core import asset_pipeline, pipeline, planner, reference_search  # noqa: E402
+from demo_core import asset_pipeline, pipeline, planner, reference_search, renderer_adapter  # noqa: E402
 from demo_core.schemas import FigurePlan, StagePlan, display_units  # noqa: E402
 
 
@@ -166,12 +166,15 @@ class PipelineTests(unittest.TestCase):
                 layout_preset_override="presentation-spacious",
                 theme_override="gpu-green-tech",
                 reference_assets=references,
+                reference_import_ids=[references[0].id],
+                reference_visual_id=references[0].id,
             )
             run_dir = Path(result.run_dir)
             self.assertTrue(result.qa["ok"])
             self.assertTrue(all(item["ok"] for item in result.qa["by_layout"].values()))
             self.assertIn("当前输入未参与语义规划", result.notice)
             self.assertGreater(result.metrics["packaging_ms"], 0)
+            self.assertGreaterEqual(result.metrics["reference_import_ms"], 0)
             self.assertGreaterEqual(result.metrics["total_ms"], result.metrics["qa_ms"])
             self.assertLess(Path(result.bundle_zip).stat().st_size, 25 * 1024 * 1024)
             forbidden = str(ROOT.parent)
@@ -188,6 +191,19 @@ class PipelineTests(unittest.TestCase):
             self.assertIn('data-layout-preset="presentation-spacious"', svg)
             self.assertIn("#63B246", svg)
             self.assertEqual(result.plan["reference_assets"][0]["provider"], "offline-example")
+            self.assertEqual(result.reference_imports[0]["id"], "offline-figureflow-workflow")
+            self.assertTrue(Path(result.reference_previews[0]).is_file())
+            self.assertEqual(result.qa["reference_imports"][0]["provider"], "offline-example")
+            self.assertEqual(result.qa["reference_imports"][0]["source_path"], "references/offline-figureflow-workflow/source.png")
+            first_asset_manifest = json.loads(
+                (run_dir / "assets" / "manifests" / "layout_planner.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(first_asset_manifest["source_type"], "validated-public-reference")
+            self.assertEqual(first_asset_manifest["source_reference_id"], "offline-figureflow-workflow")
+            self.assertIn(
+                first_asset_manifest["processing"]["background_removal_mode"],
+                {"local-uniform-border-soft-matte", "none-complex-background-preserved"},
+            )
             self.assertTrue(
                 all(item["layout_qa"]["presentation_scale_ok"] for item in result.qa["by_layout"].values())
             )
@@ -202,6 +218,66 @@ class PipelineTests(unittest.TestCase):
             with Image.open(processed) as image:
                 alpha = image.convert("RGBA").getchannel("A")
                 self.assertEqual(alpha.getpixel((0, 0)), 0)
+
+    def test_local_reference_cutout_uses_uniform_border_and_never_calls_a_model(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            raw = Path(temporary) / "reference.png"
+            processed = Path(temporary) / "processed.png"
+            manifest = Path(temporary) / "manifest.json"
+            image = Image.new("RGB", (256, 180), "white")
+            for x in range(72, 184):
+                for y in range(38, 142):
+                    image.putpixel((x, y), (34, 95, 174))
+            image.save(raw)
+            asset_pipeline.process_reference_asset(raw, processed, manifest)
+            record = json.loads(manifest.read_text(encoding="utf-8"))
+            self.assertTrue(record["processing"]["background_removed"])
+            self.assertEqual(record["processing"]["background_removal_mode"], "local-uniform-border-soft-matte")
+            with Image.open(processed) as result:
+                alpha = result.convert("RGBA").getchannel("A")
+                self.assertEqual(alpha.getpixel((0, 0)), 0)
+                self.assertEqual(alpha.getpixel((result.width // 2, result.height // 2)), 255)
+
+    def test_reference_used_in_layout_is_credited_in_every_rendered_format(self) -> None:
+        plan_payload = planner.load_preset().model_dump()
+        plan_payload["reference_assets"] = [
+            {
+                "id": "wm-credits",
+                "title": "GPU facility",
+                "uri": "https://upload.wikimedia.org/wikipedia/commons/a/ab/GPU_facility.png",
+                "source_url": "https://commons.wikimedia.org/wiki/File:GPU_facility.png",
+                "source_type": "provider-search",
+                "provider": "wikimedia-commons",
+                "media_type": "image",
+                "author": "Example Author",
+                "license_name": "CC BY-SA 4.0",
+                "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+                "attribution": "Example Author / CC BY-SA 4.0",
+                "used_in_layout": True,
+            }
+        ]
+        plan = FigurePlan.model_validate(plan_payload)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            plan_path = root / "plan.json"
+            plan_path.write_text(plan.model_dump_json(indent=2) + "\n", encoding="utf-8")
+            asset_pipeline.prepare_assets(plan.stages, root)
+            outputs = renderer_adapter.render_plan(
+                plan_path,
+                root / "assets" / "processed",
+                root / "rendered",
+                "credited_reference",
+            )
+            svg = Path(outputs["svg"]).read_text(encoding="utf-8")
+            self.assertIn("CC BY-SA 4.0", svg)
+            self.assertIn("Example Author", svg)
+            self.assertIn("Wikimedia Commons", svg)
+            self.assertIn("已缩放/裁切", svg)
+            self.assertIn('id="reference-attribution"', svg)
+            self.assertTrue(Path(outputs["pdf"]).is_file())
+            self.assertTrue(Path(outputs["png"]).is_file())
+            manifest = json.loads(Path(outputs["manifest"]).read_text(encoding="utf-8"))
+            self.assertIn("CC BY-SA 4.0", manifest["visible_reference_attribution"][0])
 
     def test_bundled_gpu_and_robot_cases_run_through_chroma_cutout(self) -> None:
         stages = [

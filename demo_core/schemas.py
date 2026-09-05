@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import unicodedata
 from typing import Literal
 from urllib.parse import urlsplit, urlunsplit
@@ -24,6 +25,11 @@ ThemeName = Literal["academic-audit", "gpu-green-tech"]
 AccentName = Literal["blue", "teal", "orange", "violet", "navy"]
 ReferenceSource = Literal["offline-example", "user-url", "provider-search"]
 ReferenceMediaType = Literal["image", "webpage", "document"]
+RasterMimeType = Literal["image/jpeg", "image/png", "image/webp"]
+OPEN_REFERENCE_LICENSE = re.compile(
+    r"^(?:CC0(?: 1\.0)?|Public domain|CC BY(?:-SA)? [1-9](?:\.\d)?)$",
+    re.IGNORECASE,
+)
 AssetKey = Literal[
     "layout_planner",
     "icon_factory",
@@ -38,6 +44,11 @@ AssetKey = Literal[
     "store",
     "output",
 ]
+
+
+def supports_reference_import_license(value: str | None) -> bool:
+    """Return whether a provider license is on the automatic-import allowlist."""
+    return bool(value and OPEN_REFERENCE_LICENSE.fullmatch(value.strip()))
 
 
 def validate_reference_uri(value: str) -> str:
@@ -62,13 +73,19 @@ def validate_reference_uri(value: str) -> str:
 
 
 class ReferenceAsset(BaseModel):
-    """Portable metadata for a visual reference; renderers never fetch the URI."""
+    """Portable metadata for a visual reference.
+
+    The deterministic renderer never fetches these URLs.  A separate allowlisted
+    importer may materialize an explicitly selected Commons record into the run
+    directory after validating its host, license metadata, bytes, and dimensions.
+    """
 
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     id: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9][a-z0-9._-]*$")
     title: str = Field(min_length=2, max_length=180)
     uri: str = Field(min_length=8, max_length=2048)
+    original_uri: str | None = Field(default=None, max_length=2048)
     source_type: ReferenceSource
     provider: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9][a-z0-9._-]*$")
     media_type: ReferenceMediaType = "image"
@@ -77,8 +94,12 @@ class ReferenceAsset(BaseModel):
     license_name: str | None = Field(default=None, max_length=120)
     license_url: str | None = Field(default=None, max_length=2048)
     attribution: str | None = Field(default=None, max_length=500)
+    declared_mime_type: RasterMimeType | None = None
+    declared_width_px: int | None = Field(default=None, ge=1, le=100_000)
+    declared_height_px: int | None = Field(default=None, ge=1, le=100_000)
+    used_in_layout: bool = False
 
-    @field_validator("uri", "source_url", "license_url")
+    @field_validator("uri", "original_uri", "source_url", "license_url")
     @classmethod
     def validate_uri_fields(cls, value: str | None) -> str | None:
         return validate_reference_uri(value) if value is not None else None

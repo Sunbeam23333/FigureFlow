@@ -1,8 +1,9 @@
-"""Pluggable, metadata-only visual-reference search for FigureFlow.
+"""Pluggable, provenance-first visual-reference search for FigureFlow.
 
-The built-in user-URL provider records links without fetching them. The optional
-Wikimedia Commons provider calls one fixed public API endpoint and returns source,
-author, and license metadata; it never downloads image bytes into the renderer.
+The built-in user-URL provider records links without fetching them.  Wikimedia
+Commons search calls one fixed public API and returns licensed raster metadata.
+An explicitly selected Commons result can later cross the separate safe-import
+boundary; the deterministic renderer itself never fetches a URL.
 """
 
 from __future__ import annotations
@@ -17,7 +18,7 @@ from typing import Any, Callable, Mapping, Protocol, Sequence
 from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
-from .schemas import ReferenceAsset
+from .schemas import ReferenceAsset, supports_reference_import_license
 
 
 WIKIMEDIA_COMMONS_API = "https://commons.wikimedia.org/w/api.php"
@@ -48,7 +49,7 @@ class ReferenceSearchRequest:
 
 
 class ReferenceProvider(Protocol):
-    """Provider contract; implementations return metadata, never renderer code."""
+    """Provider contract; implementations return validated metadata, never code."""
 
     name: str
 
@@ -84,7 +85,13 @@ def _absolute_https(value: str | None) -> str | None:
 
 
 def _fetch_json(url: str, timeout: float) -> Mapping[str, Any]:
-    request = Request(url, headers={"User-Agent": "FigureFlow/0.1 reference-metadata"})
+    request = Request(
+        url,
+        headers={
+            "User-Agent": "FigureFlow/0.2 (https://github.com/Sunbeam23333/FigureFlow; reference search)",
+            "Accept": "application/json",
+        },
+    )
     with urlopen(request, timeout=timeout) as response:  # nosec B310 - the endpoint is fixed by the provider
         payload = response.read(MAX_RESPONSE_BYTES + 1)
     if len(payload) > MAX_RESPONSE_BYTES:
@@ -172,7 +179,8 @@ class WikimediaCommonsProvider:
             "gsrsearch": query,
             "gsrlimit": str(request.limit),
             "prop": "imageinfo",
-            "iiprop": "url|mime|extmetadata",
+            "iiprop": "url|mime|size|extmetadata",
+            "iiurlwidth": "1600",
         }
         endpoint = WIKIMEDIA_COMMONS_API + "?" + urlencode(params)
         try:
@@ -196,9 +204,11 @@ class WikimediaCommonsProvider:
             if not isinstance(image_info, list) or not image_info or not isinstance(image_info[0], Mapping):
                 continue
             info = image_info[0]
-            uri = info.get("url")
-            if not isinstance(uri, str):
+            original_uri = info.get("url")
+            if not isinstance(original_uri, str):
                 continue
+            thumbnail_uri = info.get("thumburl")
+            uri = thumbnail_uri if isinstance(thumbnail_uri, str) else original_uri
             if info.get("mime") not in ALLOWED_RASTER_MIME_TYPES:
                 continue
             metadata = info.get("extmetadata", {})
@@ -210,14 +220,15 @@ class WikimediaCommonsProvider:
             license_name = _clean_markup(_metadata_value(metadata, "LicenseShortName"))
             license_url = _absolute_https(_metadata_value(metadata, "LicenseUrl"))
             credit = _clean_markup(_metadata_value(metadata, "Credit"))
-            attribution = credit or " · ".join(value for value in (author, license_name) if value) or None
-            if not source_url or not license_name:
+            attribution = credit or author
+            if not source_url or not supports_reference_import_license(license_name) or not (author or credit):
                 continue
             try:
                 asset = ReferenceAsset(
                     id=f"wm-{re.sub(r'[^a-z0-9._-]+', '-', page_id.lower()).strip('-')}",
                     title=title[:180],
                     uri=uri,
+                    original_uri=original_uri if original_uri != uri else None,
                     source_url=source_url,
                     source_type="provider-search",
                     provider=self.name,
@@ -226,6 +237,17 @@ class WikimediaCommonsProvider:
                     license_name=license_name[:120] if license_name else None,
                     license_url=license_url,
                     attribution=attribution[:500] if attribution else None,
+                    declared_mime_type=info.get("mime"),
+                    declared_width_px=(
+                        info.get("thumbwidth")
+                        if isinstance(info.get("thumbwidth"), int)
+                        else info.get("width") if isinstance(info.get("width"), int) else None
+                    ),
+                    declared_height_px=(
+                        info.get("thumbheight")
+                        if isinstance(info.get("thumbheight"), int)
+                        else info.get("height") if isinstance(info.get("height"), int) else None
+                    ),
                 )
             except ValueError:
                 continue
@@ -263,7 +285,7 @@ def search_references(
     limit: int = 4,
     user_urls: Sequence[str] = (),
 ) -> list[ReferenceAsset]:
-    """Run one explicit provider; no provider performs implicit image downloads."""
+    """Run one explicit provider; importing a chosen image remains a separate step."""
     try:
         implementation = _PROVIDERS[provider]()
     except KeyError as exc:

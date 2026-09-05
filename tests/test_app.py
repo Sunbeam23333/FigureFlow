@@ -28,12 +28,12 @@ class DemoControlTests(unittest.TestCase):
             license_url="https://creativecommons.org/licenses/by/3.0/",
         )
 
-    def test_reference_summary_is_clickable_and_explicitly_metadata_only(self) -> None:
+    def test_reference_summary_is_clickable_and_explains_safe_import(self) -> None:
         summary = app._reference_summary([self._reference()])
-        self.assertIn("metadata-only", summary)
         self.assertIn("https://commons.wikimedia.org/wiki/File:GPU_cluster.jpg", summary)
         self.assertIn("CC BY 3.0", summary)
-        self.assertIn("不会自动下载图片", summary)
+        self.assertIn("可选安全导入", summary)
+        self.assertIn("排版器只读本地正规化 PNG", summary)
 
     def test_demo_routes_theme_layout_and_reference_metadata_into_pipeline(self) -> None:
         reference = self._reference()
@@ -64,8 +64,21 @@ class DemoControlTests(unittest.TestCase):
             },
             qa={"ok": True},
             notice="离线复演 · QA 通过",
+            reference_previews=("imported-reference.png",),
+            reference_imports=({"id": "wm-11", "title": "GPU cluster"},),
         )
-        with patch.object(app, "_resolve_references", return_value=[reference]), patch.object(
+        preview_state = {
+            "request": {
+                "provider_label": "Wikimedia Commons（固定接口，可安全导入）",
+                "query": "GPU cluster",
+                "user_urls": [],
+            },
+            "selected_id": reference.id,
+            "assets": [reference.model_dump()],
+        }
+        with patch.object(
+            app, "_resolve_references", side_effect=AssertionError("导入必须绑定预览结果，不得二次搜索")
+        ) as resolve, patch.object(
             app, "run_pipeline", return_value=result
         ) as run:
             outputs = app._run_demo(
@@ -75,15 +88,22 @@ class DemoControlTests(unittest.TestCase):
                 "投屏大字 · presentation-spacious",
                 "GPU Systems Green（通用非官方）",
                 False,
-                "Wikimedia Commons（固定接口，仅元数据）",
+                "Wikimedia Commons（固定接口，可安全导入）",
                 "GPU cluster",
                 "",
+                True,
+                preview_state,
             )
+        resolve.assert_not_called()
         kwargs = run.call_args.kwargs
         self.assertEqual(kwargs["theme_override"], "gpu-green-tech")
         self.assertEqual(kwargs["layout_preset_override"], "presentation-spacious")
         self.assertEqual(kwargs["reference_assets"], [reference])
+        self.assertEqual(kwargs["reference_import_ids"], ["wm-11"])
+        self.assertEqual(kwargs["reference_visual_id"], "wm-11")
         self.assertIn("GPU cluster", outputs[10])
+        self.assertIn("已经安全导入", outputs[10])
+        self.assertEqual(outputs[12][0][0], "imported-reference.png")
 
 
 if __name__ == "__main__":

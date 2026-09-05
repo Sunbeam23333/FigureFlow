@@ -12,9 +12,11 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from time import perf_counter
+from typing import Mapping
 
+import numpy as np
 from openai import OpenAI
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 from .schemas import StagePlan
 
@@ -233,14 +235,94 @@ def process_asset(
     return round((perf_counter() - started) * 1000)
 
 
+def process_reference_asset(raw_path: Path, output_path: Path, manifest_path: Path) -> int:
+    """Prepare a previously validated local reference without pretending to segment it.
+
+    The safe importer has already decoded the remote bytes and stripped metadata.
+    This step only applies orientation, size limits, and a transparent outer margin.
+    A conservative local matte is applied only when the outer border is nearly a
+    single color. Complex photographs remain opaque rectangles; no generative or
+    remote background-removal service receives the image.
+    """
+    started = perf_counter()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(raw_path) as source:
+        oriented = ImageOps.exif_transpose(source)
+        image = oriented.convert("RGBA")
+        original_size = image.size
+        image.thumbnail((664, 664), Image.Resampling.LANCZOS)
+        resized_size = image.size
+        had_transparency = image.getchannel("A").getextrema()[0] < 255
+    background_removed = False
+    matte_key: list[int] | None = None
+    border_spread = 0.0
+    if not had_transparency and min(image.size) >= 64:
+        pixels = np.asarray(image, dtype=np.uint8).copy()
+        rgb = pixels[:, :, :3].astype(np.float32)
+        edge = max(2, min(image.size) // 40)
+        border = np.concatenate(
+            (
+                rgb[:edge, :, :].reshape(-1, 3),
+                rgb[-edge:, :, :].reshape(-1, 3),
+                rgb[:, :edge, :].reshape(-1, 3),
+                rgb[:, -edge:, :].reshape(-1, 3),
+            ),
+            axis=0,
+        )
+        key = np.median(border, axis=0)
+        border_distance = np.linalg.norm(border - key, axis=1)
+        border_spread = float(np.percentile(border_distance, 90))
+        if border_spread <= 14.0:
+            distance = np.linalg.norm(rgb - key, axis=2)
+            matte = np.clip((distance - 10.0) / 80.0, 0.0, 1.0)
+            transparent_fraction = float(np.mean(matte < 0.08))
+            foreground_fraction = float(np.mean(matte > 0.92))
+            if transparent_fraction >= 0.02 and foreground_fraction >= 0.04:
+                alpha = np.rint(matte * 255.0).astype(np.uint8)
+                pixels[:, :, 3] = np.minimum(pixels[:, :, 3], alpha)
+                image = Image.fromarray(pixels)
+                background_removed = True
+                matte_key = [int(round(value)) for value in key]
+    padding = 28
+    canvas = Image.new("RGBA", (image.width + padding * 2, image.height + padding * 2), (0, 0, 0, 0))
+    canvas.alpha_composite(image, (padding, padding))
+    canvas.save(output_path, format="PNG", optimize=True)
+    manifest = {
+        "schema_version": 1,
+        "source_file": raw_path.name,
+        "output_file": output_path.name,
+        "processing": {
+            "mode": "validated-reference-local-normalize",
+            "orientation_applied": True,
+            "resize_mode": "contain",
+            "transparent_padding_px": padding,
+            "background_removed": background_removed,
+            "background_removal_mode": (
+                "local-uniform-border-soft-matte" if background_removed else "none-complex-background-preserved"
+            ),
+            "matte_key_rgb": matte_key,
+            "border_color_spread_p90": round(border_spread, 3),
+            "source_had_transparency": had_transparency,
+            "original_size": list(original_size),
+            "resized_size": list(resized_size),
+        },
+        "stats": {"mean_edge_key_excess": 0.0},
+    }
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return round((perf_counter() - started) * 1000)
+
+
 def prepare_assets(
     stages: list[StagePlan],
     run_dir: Path,
     *,
     live_icon: bool = False,
     model: str = DEFAULT_MODEL,
+    asset_overrides: Mapping[str, Path] | None = None,
+    asset_override_reference_ids: Mapping[str, str] | None = None,
 ) -> tuple[list[AssetResult], dict[str, object] | None]:
-    """Process whitelisted stage assets and optionally replace the first one live."""
+    """Process stage assets, with optional validated local-reference overrides."""
     raw_run = run_dir / "assets" / "raw"
     processed_run = run_dir / "assets" / "processed"
     manifest_run = run_dir / "assets" / "manifests"
@@ -248,15 +330,28 @@ def prepare_assets(
     for stage in stages:
         unique.setdefault(stage.asset_key, stage)
 
+    overrides = dict(asset_overrides or {})
+    override_reference_ids = dict(asset_override_reference_ids or {})
+    unknown_overrides = set(overrides).difference(unique)
+    if unknown_overrides:
+        raise AssetPipelineError("reference override targeted an unknown stage asset key")
     live_metadata: dict[str, object] | None = None
-    live_key = next(iter(unique)) if live_icon and unique else None
+    live_key = next((key for key in unique if key not in overrides), None) if live_icon else None
     results: list[AssetResult] = []
     for key, stage in unique.items():
         source = "bundled-generated-illustration"
         generation_ms = 0
         bundled_path = RAW_ASSET_DIR / f"{key}.png"
         raw_path = raw_run / f"{key}.png"
-        if key == live_key:
+        is_reference_override = key in overrides
+        if is_reference_override:
+            override_path = overrides[key].resolve()
+            if not override_path.is_file():
+                raise AssetPipelineError(f"本地参考素材不存在：{key}")
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(override_path, raw_path)
+            source = "validated-public-reference"
+        elif key == live_key:
             live_metadata = generate_live_icon(stage, raw_path, model=model)
             generation_ms = int(live_metadata["generation_ms"])
             source = "live-openai-image-generation"
@@ -270,12 +365,15 @@ def prepare_assets(
             raise AssetPipelineError(f"缺少白名单素材：{key}.png")
         output_path = processed_run / f"{key}.png"
         manifest_path = manifest_run / f"{key}.json"
-        cutout_ms = process_asset(
-            raw_path,
-            output_path,
-            manifest_path,
-            live_generated=key == live_key,
-        )
+        if is_reference_override:
+            cutout_ms = process_reference_asset(raw_path, output_path, manifest_path)
+        else:
+            cutout_ms = process_asset(
+                raw_path,
+                output_path,
+                manifest_path,
+                live_generated=key == live_key,
+            )
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         edge_excess = float(manifest.get("stats", {}).get("mean_edge_key_excess", 0.0))
         if edge_excess > 25.0:
@@ -293,6 +391,8 @@ def prepare_assets(
         manifest["asset_key"] = key
         manifest["source_type"] = source
         manifest["generation_ms"] = generation_ms
+        if is_reference_override:
+            manifest["source_reference_id"] = override_reference_ids.get(key)
         if key == live_key and live_metadata:
             manifest["generation"] = live_metadata
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -328,8 +428,8 @@ def create_contact_sheet(results: list[AssetResult], output_path: Path) -> Path:
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default(size=18)
     small = ImageFont.load_default(size=14)
-    draw.text((16, 13), "RAW / CHROMA", fill="#142B4A", font=font)
-    draw.text((cell_w + 16, 13), "SOFT MATTE / RGBA", fill="#142B4A", font=font)
+    draw.text((16, 13), "INPUT ASSET", fill="#142B4A", font=font)
+    draw.text((cell_w + 16, 13), "LOCAL NORMALIZED / RGBA", fill="#142B4A", font=font)
     for row, result in enumerate(results):
         top = header_h + row * cell_h
         for column, path_text in enumerate((result.raw_path, result.processed_path)):

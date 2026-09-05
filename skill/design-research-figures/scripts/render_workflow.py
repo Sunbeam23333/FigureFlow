@@ -65,6 +65,7 @@ REFERENCE_FIELDS = {
     "id",
     "title",
     "uri",
+    "original_uri",
     "source_type",
     "provider",
     "media_type",
@@ -73,6 +74,10 @@ REFERENCE_FIELDS = {
     "license_name",
     "license_url",
     "attribution",
+    "declared_mime_type",
+    "declared_width_px",
+    "declared_height_px",
+    "used_in_layout",
 }
 HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
@@ -343,6 +348,13 @@ def validate_plan(plan: dict[str, Any]) -> None:
             f"reference asset {index} uri",
             allowed_schemes=uri_schemes,
         )
+        original_uri = asset.get("original_uri")
+        if original_uri is not None:
+            validate_reference_uri(
+                original_uri,
+                f"reference asset {index} original_uri",
+                allowed_schemes={"http", "https"},
+            )
         source_url = asset.get("source_url")
         if source_url is not None:
             validate_reference_uri(
@@ -363,6 +375,29 @@ def validate_plan(plan: dict[str, Any]) -> None:
             require_text(
                 asset.get("license_name"),
                 f"reference asset {index} license_name",
+                max_units=240,
+            )
+        declared_mime_type = asset.get("declared_mime_type")
+        if declared_mime_type is not None and declared_mime_type not in {
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+        }:
+            raise ValueError(f"reference asset {index} has an unsupported declared_mime_type")
+        for dimension_field in ("declared_width_px", "declared_height_px"):
+            dimension = asset.get(dimension_field)
+            if dimension is not None and (
+                isinstance(dimension, bool) or not isinstance(dimension, int) or not 1 <= dimension <= 100_000
+            ):
+                raise ValueError(f"reference asset {index} has an invalid {dimension_field}")
+        if not isinstance(asset.get("used_in_layout", False), bool):
+            raise ValueError(f"reference asset {index} has an invalid used_in_layout flag")
+        if asset.get("used_in_layout", False) and source_type == "provider-search":
+            if not (asset.get("author") or asset.get("attribution")):
+                raise ValueError("a reference used in layout requires creator or attribution metadata")
+            require_text(
+                asset.get("license_name"),
+                f"reference asset {index} visible license",
                 max_units=240,
             )
         if asset_id in reference_ids or uri in reference_uris:
@@ -865,6 +900,37 @@ def render(plan_path: Path, asset_dir: Path, output_dir: Path, output_name: str)
             )
         )
 
+    used_references = [
+        asset for asset in plan.get("reference_assets", []) if asset.get("used_in_layout", False)
+    ]
+    if len(used_references) > 1:
+        raise ValueError("the workflow renderer supports one visible imported reference per plan")
+    visible_reference_credits: list[str] = []
+    for asset in used_references:
+        creator = wrap_text(str(asset.get("author") or asset.get("attribution") or "作者未标注"), 18, 1)[0]
+        title = wrap_text(str(asset.get("title", "未命名")), 22, 1)[0]
+        license_name = asset.get("license_name") or "仓库内置示例"
+        provider_name = "Wikimedia Commons" if asset.get("provider") == "wikimedia-commons" else "FigureFlow"
+        visible_reference_credits.append(
+            f"图源：{license_name} ｜ {creator} ｜ {title} ｜ {provider_name} ｜ 已缩放/裁切"
+        )
+    if visible_reference_credits:
+        credit_line = " · ".join(visible_reference_credits)
+        credit_line = wrap_text(credit_line, 118, 1)[0]
+        parts.append(
+            text(
+                1738,
+                gate_y + 136,
+                credit_line,
+                11.5,
+                fill=theme.palette["gray"],
+                anchor="end",
+                theme=theme,
+            )
+        )
+        attribution_metadata = json.dumps(used_references, ensure_ascii=False, separators=(",", ":"))
+        parts.append(f'<metadata id="reference-attribution">{escape(attribution_metadata)}</metadata>')
+
     parts.append(
         multiline(
             54,
@@ -950,6 +1016,7 @@ def render(plan_path: Path, asset_dir: Path, output_dir: Path, output_name: str)
         "plan": plan_path.name,
         "plan_sha256": sha256(plan_path),
         "reference_assets": plan.get("reference_assets", []),
+        "visible_reference_attribution": visible_reference_credits,
         "assets": [
             {"file": f"{stage.get('asset_key')}.png", "sha256": sha256(asset_dir / f"{stage.get('asset_key')}.png")}
             for stage in stages

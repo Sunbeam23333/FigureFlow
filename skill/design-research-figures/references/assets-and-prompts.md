@@ -18,9 +18,11 @@ When the repository-level FigureFlow app is available, select one provider expli
 
 - `offline-example`: deterministic and network-free;
 - `user-url`: validate and store the URL only; never fetch, proxy, thumbnail, or follow redirects;
-- `wikimedia-commons`: query only the fixed Commons MediaWiki API and retain raster results with a source page and license metadata.
+- `wikimedia-commons`: query only the fixed Commons MediaWiki API and retain raster results with a source page and license metadata; an explicitly selected result can then be safely imported.
 
-Store title, original asset URI, source page, author, license name/URL, provider, and attribution in `FigurePlan.reference_assets`. A search result is a reference candidate, not automatic permission to reuse. Do not send arbitrary provider URLs to the renderer or background-removal tools.
+Store title, original asset URI, source page, author, license name/URL, provider, and attribution in `FigurePlan.reference_assets`. A search result is a reference candidate, not automatic permission to reuse.
+
+For a selected Commons result, bind the run to the exact previewed result ID and use `demo_core.reference_import` rather than a generic URL client. The importer permits only its fixed `upload.wikimedia.org` / `thumb.wikimedia.org` host allowlist, refuses redirects, caps response bytes and decoded pixels, verifies JPEG/PNG/WebP bytes against both HTTP and search metadata, requires an allowlisted CC/Public Domain record with source and attribution, strips embedded metadata, and writes a local PNG plus provenance manifest. Only the local PNG may enter crop/matte/layout processing; never send its pixels to a model. `user-url` stays record-only. A local uniform-border matte is allowed when its measurable gate passes; otherwise keep the photographic background and disclose that no semantic cutout was performed. If the imported image enters the canvas, keep its visible title/creator/license/source/modification credit on every rendered SVG/PDF/PNG and retain the full source/license URLs in SVG metadata and the manifest.
 
 ## Real rollout cases
 

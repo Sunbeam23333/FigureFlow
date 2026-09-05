@@ -17,6 +17,7 @@ from typing import Literal, Sequence
 
 from .asset_pipeline import create_contact_sheet, prepare_assets, public_asset_records
 from .planner import DEFAULT_MODEL, plan_figure
+from .reference_import import materialize_reference_assets, public_reference_import_records
 from .renderer_adapter import audit_outputs, render_plan
 from .schemas import FigurePlan, LayoutPreset, ReferenceAsset, ThemeName, display_units
 
@@ -48,6 +49,8 @@ class RunResult:
     metrics: dict[str, int]
     qa: dict[str, object]
     notice: str
+    reference_previews: tuple[str, ...] = ()
+    reference_imports: tuple[dict[str, object], ...] = ()
 
 
 def _sha256(path: Path) -> str:
@@ -195,6 +198,8 @@ def run_pipeline(
     live_icon: bool = False,
     model: str = DEFAULT_MODEL,
     reference_assets: Sequence[ReferenceAsset] = (),
+    reference_import_ids: Sequence[str] = (),
+    reference_visual_id: str | None = None,
 ) -> RunResult:
     started_total = perf_counter()
     _prune_outputs()
@@ -211,12 +216,46 @@ def run_pipeline(
         layout_preset_override=layout_preset_override,
         theme_override=theme_override,
     )
+    if reference_visual_id:
+        plan_payload = plan.model_dump()
+        for asset in plan_payload["reference_assets"]:
+            asset["used_in_layout"] = asset["id"] == reference_visual_id
+        plan = FigurePlan.model_validate(plan_payload)
     plan_path = run_dir / "figure_plan.json"
     plan_path.write_text(plan.model_dump_json(indent=2) + "\n", encoding="utf-8")
 
+    selected_reference_ids = list(dict.fromkeys(reference_import_ids))
+    if reference_visual_id and reference_visual_id not in selected_reference_ids:
+        selected_reference_ids.append(reference_visual_id)
+    reference_started = perf_counter()
+    imported_references = materialize_reference_assets(
+        plan.reference_assets,
+        run_dir,
+        selected_ids=selected_reference_ids,
+    )
+    reference_import_ms = round((perf_counter() - reference_started) * 1000)
+    imported_by_id = {item.id: item for item in imported_references}
+    asset_overrides: dict[str, Path] = {}
+    asset_override_reference_ids: dict[str, str] = {}
+    if reference_visual_id:
+        try:
+            visual_reference = imported_by_id[reference_visual_id]
+        except KeyError as exc:
+            raise ValueError("reference_visual_id must identify an imported reference") from exc
+        first_stage_key = plan.stages[0].asset_key
+        asset_overrides[first_stage_key] = Path(visual_reference.source_path)
+        asset_override_reference_ids[first_stage_key] = visual_reference.id
+
     asset_started = perf_counter()
     use_live_icon = live_icon and planning.mode == "online"
-    assets, live_metadata = prepare_assets(plan.stages, run_dir, live_icon=use_live_icon, model=model)
+    assets, live_metadata = prepare_assets(
+        plan.stages,
+        run_dir,
+        live_icon=use_live_icon,
+        model=model,
+        asset_overrides=asset_overrides,
+        asset_override_reference_ids=asset_override_reference_ids,
+    )
     asset_ms = round((perf_counter() - asset_started) * 1000)
     generation_ms = sum(asset.generation_ms for asset in assets)
     cutout_ms = sum(asset.cutout_ms for asset in assets)
@@ -260,6 +299,7 @@ def run_pipeline(
         "ok": all(report.get("ok") for report in qa_by_layout.values()),
         "selected_layout": selected_layout,
         "reference_assets": [asset.model_dump() for asset in plan.reference_assets],
+        "reference_imports": public_reference_import_records(imported_references, run_dir),
         "selected": qa_by_layout[selected_layout],
         "by_layout": qa_by_layout,
     }
@@ -272,6 +312,7 @@ def run_pipeline(
 
     metrics = {
         "planning_ms": planning_ms,
+        "reference_import_ms": reference_import_ms,
         "icon_generation_ms": generation_ms,
         "cutout_ms": cutout_ms,
         "asset_pipeline_ms": asset_ms,
@@ -280,7 +321,13 @@ def run_pipeline(
     }
 
     selected_paths = {key: Path(value) for key, value in selected.items()}
-    artifacts = [plan_path, contact_sheet, *selected_paths.values()]
+    reference_artifacts = [
+        path
+        for imported in imported_references
+        for path in (Path(imported.source_path), Path(imported.manifest_path))
+    ]
+    artifacts = [plan_path, contact_sheet, *reference_artifacts, *selected_paths.values()]
+    reference_import_records = public_reference_import_records(imported_references, run_dir)
     manifest_data: dict[str, object] = {
         "schema_version": 1,
         "run_id": run_id,
@@ -291,6 +338,8 @@ def run_pipeline(
         "selected_layout": selected_layout,
         "metrics_ms": metrics,
         "assets": public_asset_records(assets, run_dir),
+        "reference_imports": reference_import_records,
+        "reference_visual_id": reference_visual_id,
         "live_icon": live_metadata,
         "qa": qa,
         "artifacts": {
@@ -318,7 +367,13 @@ def run_pipeline(
         mode_notice = "在线尝试失败，最终使用固定离线预设；未换用其他模型"
     else:
         mode_notice = "固定离线预设复演；当前输入未参与语义规划，也未调用 GPT-5.6-sol"
-    live_notice = " · 实时生成 1 个 Icon" if use_live_icon else (" · 未执行实时 Icon" if live_icon else "")
+    live_notice = " · 实时生成 1 个 Icon" if live_metadata else (" · 未执行实时 Icon" if live_icon else "")
+    if imported_references:
+        reference_notice = f" · 已安全导入 {len(imported_references)} 张参考图"
+        if reference_visual_id:
+            reference_notice += "，所选参考图已进入排版"
+    else:
+        reference_notice = ""
     qa_notice = "QA 通过" if qa.get("ok") else "QA 未通过，请查看交付包中的报告"
     return RunResult(
         run_id=run_id,
@@ -337,5 +392,7 @@ def run_pipeline(
         manifest=str(manifest_path),
         metrics=metrics,
         qa=qa,
-        notice=f"{mode_notice}{live_notice} · {qa_notice}",
+        notice=f"{mode_notice}{live_notice}{reference_notice} · {qa_notice}",
+        reference_previews=tuple(item.source_path for item in imported_references),
+        reference_imports=tuple(dict(item) for item in reference_import_records),
     )
