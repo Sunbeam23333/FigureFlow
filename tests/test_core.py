@@ -59,6 +59,7 @@ class SchemaAndApiTests(unittest.TestCase):
         ]
         response = SimpleNamespace(
             id="resp_test",
+            model="gpt-5.6-sol-2026-07-09",
             output_parsed=FigurePlan.model_validate(model_plan_payload),
             usage=SimpleNamespace(input_tokens=12, output_tokens=34),
         )
@@ -68,10 +69,31 @@ class SchemaAndApiTests(unittest.TestCase):
         ):
             planned, metadata = planner.plan_figure("测试输入", mode="online")
         self.assertEqual(metadata.model, "gpt-5.6-sol")
+        self.assertEqual(metadata.requested_model, "gpt-5.6-sol")
+        self.assertEqual(metadata.reported_model, "gpt-5.6-sol-2026-07-09")
+        self.assertEqual(metadata.identity_status, "reported_snapshot")
         self.assertEqual(calls[0]["model"], "gpt-5.6-sol")
         self.assertEqual(calls[0]["reasoning"], {"effort": "medium"})
         self.assertIs(calls[0]["store"], False)
         self.assertEqual(planned.reference_assets, [])
+
+    def test_online_planner_rejects_request_or_reported_model_mismatch(self) -> None:
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}, clear=True):
+            with self.assertRaises(planner.PlanningError):
+                planner.plan_figure("test", mode="online", model="gpt-5.6-terra")
+
+        response = SimpleNamespace(
+            id="resp_wrong",
+            model="gpt-5.6-terra",
+            output_parsed=planner.load_preset(),
+            usage=None,
+        )
+        fake = SimpleNamespace(responses=SimpleNamespace(parse=lambda **kwargs: response))
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "test-only"}, clear=True), patch.object(
+            planner, "OpenAI", return_value=fake
+        ):
+            with self.assertRaises(planner.ModelIdentityError):
+                planner.plan_figure("test", mode="online")
 
     def test_live_icon_tool_call_is_mocked_and_prompt_is_hashed(self) -> None:
         buffer = io.BytesIO()
@@ -80,6 +102,7 @@ class SchemaAndApiTests(unittest.TestCase):
         calls: list[dict[str, object]] = []
         response = SimpleNamespace(
             id="resp_image",
+            model="gpt-5.6-sol-2026-07-09",
             output=[SimpleNamespace(type="image_generation_call", result=encoded)],
         )
         fake = SimpleNamespace(responses=SimpleNamespace(create=lambda **kwargs: calls.append(kwargs) or response))
@@ -94,10 +117,43 @@ class SchemaAndApiTests(unittest.TestCase):
         ), patch.object(asset_pipeline, "OpenAI", return_value=fake):
             metadata = asset_pipeline.generate_live_icon(stage, Path(temporary) / "icon.png")
         self.assertEqual(calls[0]["model"], "gpt-5.6-sol")
+        self.assertEqual(metadata["requested_model"], "gpt-5.6-sol")
+        self.assertEqual(metadata["reported_model"], "gpt-5.6-sol-2026-07-09")
+        self.assertEqual(metadata["identity_status"], "reported_snapshot")
         self.assertEqual(calls[0]["tool_choice"], {"type": "image_generation"})
         self.assertNotIn("prompt", metadata)
         self.assertEqual(len(str(metadata["prompt_sha256"])), 64)
         self.assertEqual(metadata["border_normalized_px"], 0)
+
+    def test_live_icon_rejects_snapshot_drift_from_planning(self) -> None:
+        buffer = io.BytesIO()
+        Image.new("RGB", (8, 8), "#FF00FF").save(buffer, format="PNG")
+        response = SimpleNamespace(
+            id="resp_image_drift",
+            model="gpt-5.6-sol-2026-07-10",
+            output=[
+                SimpleNamespace(
+                    type="image_generation_call",
+                    result=base64.b64encode(buffer.getvalue()).decode("ascii"),
+                )
+            ],
+        )
+        fake = SimpleNamespace(responses=SimpleNamespace(create=lambda **kwargs: response))
+        stage = StagePlan(
+            title="数据输入",
+            subtitle="读取结构化数据",
+            asset_key="data",
+            evidence_status="illustrative",
+        )
+        with tempfile.TemporaryDirectory() as temporary, patch.dict(
+            os.environ, {"OPENAI_API_KEY": "test-only"}, clear=True
+        ), patch.object(asset_pipeline, "OpenAI", return_value=fake):
+            with self.assertRaises(asset_pipeline.AssetPipelineError):
+                asset_pipeline.generate_live_icon(
+                    stage,
+                    Path(temporary) / "icon.png",
+                    expected_reported_model="gpt-5.6-sol-2026-07-09",
+                )
 
     def test_live_chroma_profile_clears_generated_canvas_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -124,6 +180,14 @@ class SchemaAndApiTests(unittest.TestCase):
 
 
 class PipelineTests(unittest.TestCase):
+    def test_online_delivery_rejects_unreported_model_identity(self) -> None:
+        from demo_core.schemas import PlanningMetadata
+        metadata = PlanningMetadata(mode="online", requested_mode="online", model="gpt-5.6-sol")
+        with tempfile.TemporaryDirectory() as temporary, patch.object(pipeline, "OUTPUT_ROOT", Path(temporary)), \
+                patch.object(pipeline, "plan_figure", return_value=(planner.load_preset(), metadata)):
+            with self.assertRaises(RuntimeError):
+                pipeline.run_pipeline("new online diagram", mode="online")
+
     def test_spacious_override_compacts_three_line_model_body_with_audit_source(self) -> None:
         source_plan, planning = planner.plan_figure("模型返回三行正文", mode="offline")
         payload = source_plan.model_dump()

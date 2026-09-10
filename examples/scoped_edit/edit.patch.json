@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "base_sha256": "3087af2f728712737a3f7851fe873e5f371466750d3ce465a02f3d36f0b29166",
+  "scope": {"editable_ids": ["source_mark", "source_label"]},
+  "rationale": "Replace the fictional source identity and retain every other element.",
+  "updates": [
+    {"id": "source_mark", "source": "assets/cedar.svg"},
+    {"id": "source_label", "text": "Cedar"}
+  ]
+}

@@ -16,6 +16,8 @@ RUN apt-get update \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
         fonts-noto-cjk \
+        fonts-dejavu-core \
+        fontconfig \
         poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 

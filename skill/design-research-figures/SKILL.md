@@ -7,6 +7,10 @@ description: Create or revise evidence-grounded, editable technical visuals for 
 
 Build the visual argument, not a decorative diagram. Keep claims, evidence status, data, geometry, typography, raster assets, and captions independently editable. For business workflows, SOPs, and patent overviews, use the same evidence discipline but prefer the safe `FigurePlan` contract and deterministic workflow renderer.
 
+For a complex paper main figure, do not force the task into the repository's 3–6-stage web demo. Use the stateful research harness described in `docs/research-harness.md` at the repository root: explicit complete extracted source text, PDF page inspection, open declarative scenes, actual-font geometry checks, and iterative same-model visual review. Its public task prompt is `prompts/research_harness.md`. This is a task-specific workflow, not a claim to replicate a platform's internal system prompt. The research UI is experimental and opt-in; its explicit upload consent allows supplied source/asset/style pixels to enter model context. The legacy Commons workflow below remains local-only for imported pixels. Do not imply those two privacy boundaries are identical.
+
+For a narrow edit to an approved figure, preserve its scene, assets and stable element IDs. Use the repository's `demo_core.scene_editor` or research `patch_scene` with a base hash and editable-ID scope; inspect the updated render, symbol registry and unchanged-object receipt. See repository `docs/layered-svg-editing.md`. Never rerun whole-image generation just to replace one label or official mark. Read the official-brand and SVG handling rules in [references/assets-and-prompts.md](references/assets-and-prompts.md) before importing or replacing assets.
+
 ## Non-negotiable rules
 
 1. Read the relevant paper passage, code path, config, data, and logs before drawing factual content.

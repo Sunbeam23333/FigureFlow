@@ -209,6 +209,8 @@ def run_pipeline(
 
     plan_started = perf_counter()
     plan, planning = plan_figure(brief, mode=mode, model=model, reference_assets=reference_assets)
+    if planning.mode == "online" and planning.identity_status not in {"reported_match", "reported_snapshot"}:
+        raise RuntimeError("Online delivery requires a service-reported Sol model identity")
     planning_ms = round((perf_counter() - plan_started) * 1000)
     plan = _apply_plan_overrides(
         plan,
@@ -253,6 +255,7 @@ def run_pipeline(
         run_dir,
         live_icon=use_live_icon,
         model=model,
+        expected_reported_model=planning.reported_model,
         asset_overrides=asset_overrides,
         asset_override_reference_ids=asset_override_reference_ids,
     )

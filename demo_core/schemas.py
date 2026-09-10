@@ -226,6 +226,9 @@ class PlanningMetadata(BaseModel):
     mode: Literal["online", "offline"]
     requested_mode: Literal["auto", "online", "offline"]
     model: str | None = None
+    requested_model: str | None = None
+    reported_model: str | None = None
+    identity_status: Literal["reported_match", "reported_snapshot", "identity_unreported"] | None = None
     response_id: str | None = None
     input_tokens: int | None = None
     output_tokens: int | None = None

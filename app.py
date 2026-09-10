@@ -13,6 +13,7 @@ import gradio as gr
 from demo_core.pipeline import OUTPUT_ROOT, RunResult, run_pipeline
 from demo_core.reference_import import ReferenceImportError
 from demo_core.reference_search import search_references
+from demo_core.research_ui import build_research_section
 from demo_core.schemas import ReferenceAsset
 
 
@@ -383,6 +384,7 @@ def build_demo() -> gr.Blocks:
                 imported_references,
             ],
         )
+        build_research_section(output_root=OUTPUT_ROOT, public_demo=PUBLIC_DEMO)
     return demo
 
 

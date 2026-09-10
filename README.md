@@ -14,6 +14,8 @@ FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅�
 
 这个设计的核心是：**AI 负责语义和创意，确定性渲染器负责精确内容。**
 
+需要完整论文主图或继续修改已有图时，使用 [研究工作流](docs/research-harness.md)；需要“只换这个 logo、保留其他布局”时，使用 [分层 SVG 与可重放局部编辑](docs/layered-svg-editing.md)。研究入口支持完整上下文、多轮看图修订、官方品牌目录自动导入、SVG 原件嵌入、概念符号一致性，以及带版本校验和非目标对象校验的局部补丁。它不是把整图交给生图模型重新画一遍。
+
 ![FigureFlow GPT-5.6-sol 在线演示输出](examples/live_gpt56/figureflow_live.png)
 
 [播放 72 秒真实在线操作 Demo（中文语音与字幕）](demo/figureflow-demo.mp4) · [查看局部替换证明](examples/live_gpt56/local_edit_proof.png) · [查看旁白与现场讲解稿](demo/video_script.md) · [查看可编辑 SVG](examples/live_gpt56/figureflow_live.svg) · [查看结构化计划](examples/live_gpt56/figure_plan.json) · [查看脱敏 Manifest](examples/live_gpt56/run_manifest.json)
@@ -30,6 +32,8 @@ FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅�
 FigureFlow 适合于“语义判断很重要，但输出又必须精确可改”的任务。当前仓库是可演示原型，不声称已替代专业制图软件，也不声称已在团队规模完成提效验证。
 
 ## 工作流
+
+**现在明确区分两个入口：**下图是原来的 3–6 节点业务流程 Demo；复杂论文主图使用新增的实验性 research harness，具备完整文本资料、PDF 页图查看、开放场景排版与多轮看图修订，不能与固定模板演示混为一谈。详见 [研究工作流、运行方法和能力边界](docs/research-harness.md)。
 
 ```mermaid
 flowchart LR

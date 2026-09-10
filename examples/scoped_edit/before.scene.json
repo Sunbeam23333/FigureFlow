@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "canvas": {"width": 1000, "height": 360, "background": "#FFFFFF", "include_width_pt": 720},
+  "metadata": {"evidence_status": "synthetic-demo", "description": "Fictional, original symbols for a local-edit example. No real brand or business data."},
+  "items": [
+    {"id": "title", "type": "text", "text": "One precise edit. The structure stays.", "font_size": 34, "bounds": [42, 26, 910, 52], "style": {"fill": "#15314D", "font_family": "Arial", "font_weight": 700}},
+    {"id": "source_panel", "type": "shape", "shape": "rect", "bounds": [42, 110, 242, 156], "style": {"fill": "#F1F6FC", "radius": 16}},
+    {"id": "source_mark", "type": "image", "source": "assets/north.svg", "bounds": [135, 127, 56, 56], "fit": "contain"},
+    {"id": "source_label", "type": "text", "text": "North Star", "font_size": 27, "bounds": [64, 206, 198, 38], "style": {"fill": "#15314D", "font_family": "Arial", "text_anchor": "middle"}},
+    {"id": "source_to_review", "type": "edge", "points": [[290, 188], [365, 188]], "arrow_end": true, "style": {"stroke": "#6D839C", "stroke_width": 3}},
+    {"id": "review_panel", "type": "shape", "shape": "rect", "bounds": [378, 110, 242, 156], "style": {"fill": "#EEF7F5", "radius": 16}},
+    {"id": "review_label", "type": "text", "text": "Review", "font_size": 29, "bounds": [402, 161, 194, 42], "style": {"fill": "#196B60", "font_family": "Arial", "text_anchor": "middle"}},
+    {"id": "review_to_output", "type": "edge", "points": [[626, 188], [701, 188]], "arrow_end": true, "style": {"stroke": "#6D839C", "stroke_width": 3}},
+    {"id": "output_panel", "type": "shape", "shape": "rect", "bounds": [714, 110, 242, 156], "style": {"fill": "#F5F1FA", "radius": 16}},
+    {"id": "output_label", "type": "text", "text": "Publish", "font_size": 29, "bounds": [738, 161, 194, 42], "style": {"fill": "#75559A", "font_family": "Arial", "text_anchor": "middle"}},
+    {"id": "status", "type": "text", "text": "Synthetic example · editable text, asset, shapes and connectors", "font_size": 21, "bounds": [42, 304, 910, 34], "style": {"fill": "#617386", "font_family": "Arial"}}
+  ]
+}

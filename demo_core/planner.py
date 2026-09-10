@@ -8,17 +8,22 @@ from typing import Literal, Sequence
 
 from openai import OpenAI
 
+from .model_policy import SOL_MODEL, _reported_identity_kind
 from .schemas import FigurePlan, PlanningMetadata, ReferenceAsset
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PRESET = ROOT / "presets" / "tencent_figureflow_demo.json"
 DEFAULT_PROMPT = ROOT / "prompts" / "figure_planner.md"
-DEFAULT_MODEL = "gpt-5.6-sol"
+DEFAULT_MODEL = SOL_MODEL
 
 
 class PlanningError(RuntimeError):
     """A user-actionable planning failure."""
+
+
+class ModelIdentityError(PlanningError):
+    """The service response did not report the required Sol family."""
 
 
 def load_preset(path: Path = DEFAULT_PRESET) -> FigurePlan:
@@ -53,10 +58,23 @@ def _online_plan(brief: str, model: str) -> tuple[FigurePlan, PlanningMetadata]:
     plan = response.output_parsed
     if plan is None:
         raise PlanningError("GPT-5.6-sol did not return a valid FigurePlan.")
+    reported_model = getattr(response, "model", None)
+    identity_kind = _reported_identity_kind(reported_model)
+    if reported_model is not None and identity_kind is None:
+        raise ModelIdentityError("The response reported a model outside the required GPT-5.6-sol family.")
     metadata = PlanningMetadata(
         mode="online",
         requested_mode="online",
         model=model,
+        requested_model=model,
+        reported_model=reported_model,
+        identity_status=(
+            "identity_unreported"
+            if reported_model is None
+            else "reported_match"
+            if identity_kind == "bare"
+            else "reported_snapshot"
+        ),
         response_id=getattr(response, "id", None),
         input_tokens=_usage_value(response, "input_tokens"),
         output_tokens=_usage_value(response, "output_tokens"),
@@ -97,10 +115,15 @@ def plan_figure(
             "Online mode requires OPENAI_API_KEY in the server environment; the key is never entered in the browser."
         )
 
+    if target_model != SOL_MODEL:
+        raise PlanningError("Online planning only permits the exact gpt-5.6-sol request model.")
+
     try:
         plan, metadata = _online_plan(brief, target_model)
         metadata.requested_mode = mode
         return _attach_references(plan, reference_assets), metadata
+    except ModelIdentityError:
+        raise
     except Exception as exc:  # the UI maps this to a concise, non-secret message
         if mode == "online":
             raise PlanningError(
@@ -110,6 +133,8 @@ def plan_figure(
             mode="offline",
             requested_mode=mode,
             model=target_model,
+            requested_model=target_model,
+            identity_status="identity_unreported",
             fallback_reason=f"online planning failed: {type(exc).__name__}",
         )
         preset = load_preset()

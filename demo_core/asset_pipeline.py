@@ -18,13 +18,14 @@ import numpy as np
 from openai import OpenAI
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from .model_policy import SOL_MODEL, _reported_identity_kind
 from .schemas import StagePlan
 
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_ASSET_DIR = ROOT / "assets" / "icons" / "raw"
 CHROMA_SCRIPT = ROOT / "skill" / "design-research-figures" / "scripts" / "remove_chroma.py"
-DEFAULT_MODEL = "gpt-5.6-sol"
+DEFAULT_MODEL = SOL_MODEL
 DEFAULT_IMAGE_MODEL = "gpt-image-2"
 GENERIC_ASSET_KEYS = {"data", "process", "decision", "store", "output"}
 
@@ -121,10 +122,18 @@ def normalize_chroma_border(path: Path, *, border: int = 12) -> int:
     return border
 
 
-def generate_live_icon(stage: StagePlan, output_path: Path, *, model: str = DEFAULT_MODEL) -> dict[str, object]:
+def generate_live_icon(
+    stage: StagePlan,
+    output_path: Path,
+    *,
+    model: str = DEFAULT_MODEL,
+    expected_reported_model: str | None = None,
+) -> dict[str, object]:
     """Generate one text-free component through the GPT-5.6-sol Responses API."""
     if not os.getenv("OPENAI_API_KEY"):
         raise AssetPipelineError("实时 Icon 生成需要服务端 OPENAI_API_KEY。")
+    if model != SOL_MODEL:
+        raise AssetPipelineError("实时 Icon 仅允许请求精确的 gpt-5.6-sol 模型。")
 
     semantic_prompt = stage.asset_prompt or f"{stage.title}：{stage.subtitle}"
     prompt = f"""
@@ -171,6 +180,14 @@ Strictly no letters, words, numbers, formulas, watermarks, logos, borders, or sh
     )
     if image_call is None:
         raise AssetPipelineError("GPT-5.6-sol 未返回可用的图像生成结果。")
+    reported_model = getattr(response, "model", None)
+    identity_kind = _reported_identity_kind(reported_model)
+    if reported_model is not None and identity_kind is None:
+        raise AssetPipelineError("实时 Icon 响应报告了非 GPT-5.6-sol family 模型。")
+    if expected_reported_model is not None and reported_model != expected_reported_model:
+        raise AssetPipelineError(
+            "实时 Icon 响应模型与规划阶段已锁定的响应模型不一致。"
+        )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_bytes(base64.b64decode(image_call.result))
     generated_sha256 = hashlib.sha256(output_path.read_bytes()).hexdigest()
@@ -180,6 +197,15 @@ Strictly no letters, words, numbers, formulas, watermarks, logos, borders, or sh
     return {
         "response_id": getattr(response, "id", None),
         "model": model,
+        "requested_model": model,
+        "reported_model": reported_model,
+        "identity_status": (
+            "identity_unreported"
+            if reported_model is None
+            else "reported_match"
+            if identity_kind == "bare"
+            else "reported_snapshot"
+        ),
         "image_model": image_model,
         "prompt_template": "isolated-semantic-icon-v1",
         "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
@@ -319,6 +345,7 @@ def prepare_assets(
     *,
     live_icon: bool = False,
     model: str = DEFAULT_MODEL,
+    expected_reported_model: str | None = None,
     asset_overrides: Mapping[str, Path] | None = None,
     asset_override_reference_ids: Mapping[str, str] | None = None,
 ) -> tuple[list[AssetResult], dict[str, object] | None]:
@@ -352,7 +379,12 @@ def prepare_assets(
             shutil.copy2(override_path, raw_path)
             source = "validated-public-reference"
         elif key == live_key:
-            live_metadata = generate_live_icon(stage, raw_path, model=model)
+            live_metadata = generate_live_icon(
+                stage,
+                raw_path,
+                model=model,
+                expected_reported_model=expected_reported_model,
+            )
             generation_ms = int(live_metadata["generation_ms"])
             source = "live-openai-image-generation"
         elif bundled_path.is_file():
