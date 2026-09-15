@@ -15,8 +15,8 @@ For a narrow edit to an approved figure, preserve its scene, assets and stable e
 
 1. Read the relevant paper passage, code path, config, data, and logs before drawing factual content.
 2. Write one sentence stating what the reader should conclude from the visual.
-3. Assign exactly one primary evidence status: `measured`, `implemented`, `simulation`, `forecast`, `illustrative`, `synthetic-demo`, or `failed-gate`.
-4. Show every non-measured status in the figure or table and in its provenance manifest.
+3. Assign a primary evidence status using the selected module's contract. Legacy `FigurePlan` and YAML renderers retain `measured`, `implemented`, `simulation`, `forecast`, `illustrative`, `synthetic-demo`, or `failed-gate`. The publication-data module has additional published/user-supplied statuses; do not add them to the legacy schema implicitly.
+4. Show every non-measured status in the figure or table and in its provenance manifest. For faithful published-artwork reconstruction, preserve the original canvas and put status/attribution in the adjacent caption, SVG/PDF metadata, attachments and provenance instead of adding a watermark.
 5. Never use ImageGen for labels, formulas, plots, precise hardware topology, CUDA timing, or claimed experimental output.
 6. Typeset labels and formulas in deterministic vector layers. Compile formulas with a math engine; do not expose raw LaTeX as ordinary SVG text.
 7. Inspect the final paper-page render at its actual include width. A beautiful standalone PNG is not proof of readable paper layout.
@@ -30,6 +30,7 @@ Choose the renderer only after the claim and evidence status are fixed.
 | Need | Module | Editable source | Renderer |
 |---|---|---|---|
 | Multi-panel measurements or forecasts | quantitative data figure | YAML + CSV | `render_data_figure.py` |
+| Published-figure reproduction or replaceable annular/comparison data | publication-data route | digitized scene + CSV, or new CSV | `render_publication_data.py` + FigureFlow checkout |
 | Radar audit plus GPU strong scaling | advanced audit figure | YAML or CSV | `render_audit_figure.py` |
 | Paper-level framework or method overview | semantic overview | YAML + SVG | `render_overview.py` |
 | Report, SOP, or patent workflow | Chinese-friendly workflow | validated JSON + optional PNG alpha | `render_workflow.py` |
@@ -40,6 +41,8 @@ Choose the renderer only after the claim and evidence status are fixed.
 | Missing semantic bitmap | text-free asset only | prompt + PNG alpha | use the `imagegen` skill |
 
 Read [references/module-router.md](references/module-router.md) for the YAML contracts and module-specific checks. Read [references/style-system.md](references/style-system.md) when adapting the theme, typography, or final size.
+
+For AlphaEdit Figure 2 or a request to reproduce/analyze a published data chart, read [references/publication-data-reproduction.md](references/publication-data-reproduction.md). Choose faithful source-artwork reconstruction or data-driven replotted values explicitly. This wrapper requires a FigureFlow checkout via `--figureflow-root`; the installed skill folder does not contain that module's full runtime and case assets.
 
 For a workflow intended for slides, select the allowlisted `presentation-spacious` layout preset rather than inventing font-size floats. For GPU systems visuals, `gpu-green-tech` is available as a generic accelerator-systems palette only: do not use a third-party logo or imply endorsement or affiliation.
 
@@ -57,6 +60,8 @@ Record:
 - caption boundary: what the visual does **not** establish.
 
 Resolve conflicts in this order: runnable implementation and measured traces, current paper text, experiment registry/config, design notes, then explicitly labeled assumptions. Report mismatches instead of silently selecting one.
+
+For faithful reproduction of a published figure, use that version's official figure as the visual reference and retain figure/table conflicts in a separate audit; do not silently replace its numbers from a newer table.
 
 ### 2. Select a visual grammar
 
@@ -150,6 +155,8 @@ The gate rejects credentials, custom API endpoints, local machine paths, unsafe 
 
 Reject clipping, node/label overlap, arrows through text, stale page renders, accidental second pages, Type 3 or unembedded fonts, `Overfull` boxes, unexplained encodings, and text below the target readable size. Re-render final pages from the current PDF rather than reusing old contact sheets. Read [references/qa.md](references/qa.md).
 
+For faithful source-artwork reconstruction, distinguish inherited source defects from new rendering errors: preserve and disclose original small type/contrast when requested, compare equal-size reference pixels and foreground error, and do not claim pixel identity when glyph or antialiasing differences remain.
+
 ## Complete demo
 
 Build the self-contained demo to verify the entire module suite:
@@ -167,6 +174,7 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 
 - [references/workflow.md](references/workflow.md): evidence extraction and provenance
 - [references/module-router.md](references/module-router.md): renderer selection and YAML contracts
+- [references/publication-data-reproduction.md](references/publication-data-reproduction.md): faithful AlphaEdit reconstruction, replaceable CSV charts, evidence scopes and offline replay
 - [references/paper-writing.md](references/paper-writing.md): paper narrative, formulas, captions, and negative results
 - [references/style-system.md](references/style-system.md): palette, typography, sizing, and visual encodings
 - [references/layouts-and-shapes.md](references/layouts-and-shapes.md): candidate layout and shape library

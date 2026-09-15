@@ -11,6 +11,7 @@ from typing import Mapping
 import gradio as gr
 
 from demo_core.pipeline import OUTPUT_ROOT, RunResult, run_pipeline
+from demo_core.data_ui import build_data_section
 from demo_core.reference_import import ReferenceImportError
 from demo_core.reference_search import search_references
 from demo_core.research_ui import build_research_section
@@ -258,7 +259,7 @@ CSS = """
 
 
 def build_demo() -> gr.Blocks:
-    with gr.Blocks(title="FigureFlow") as demo:
+    with gr.Blocks(title="FigureFlow", analytics_enabled=False) as demo:
         gr.HTML(
             """<div class="hero"><div class="badge">Tencent conversion defense · AI automation demo</div>
             <h1>FigureFlow：让 AI 规划，让程序把图画对</h1>
@@ -384,6 +385,7 @@ def build_demo() -> gr.Blocks:
                 imported_references,
             ],
         )
+        build_data_section(output_root=OUTPUT_ROOT, public_demo=PUBLIC_DEMO)
         build_research_section(output_root=OUTPUT_ROOT, public_demo=PUBLIC_DEMO)
     return demo
 

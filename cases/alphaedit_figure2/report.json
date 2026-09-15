@@ -1,0 +1,56 @@
+{
+  "mode": "faithful-vector-reconstruction",
+  "evidence_status": "published-figure",
+  "model_experiments_rerun": false,
+  "model_calls": 0,
+  "counts": {
+    "bars": 55,
+    "paths": 71,
+    "glyphs": 555,
+    "numeric_labels": 55,
+    "numeric_glyphs": 198,
+    "annotation_glyphs": 357
+  },
+  "rasterizer": "Poppler pdftoppm",
+  "dpi": 240,
+  "fidelity": {
+    "size_px": [
+      1476,
+      1695
+    ],
+    "mean_absolute_channel_error_0_255": 0.9706521652237171,
+    "foreground_mean_absolute_channel_error_0_255": 4.5485241067906,
+    "channel_error_threshold_0_255": 8,
+    "pixels_all_channel_error_le_threshold_percent": 98.16857327865314,
+    "exact_pixel_match_percent": 97.68412595630382,
+    "note": "No resizing, alignment, or blank-margin padding. Rasterization/font-hinting differences remain."
+  },
+  "source_discrepancies": [
+    {
+      "method": "ROME",
+      "metric": "Fluency",
+      "figure_label": "499.1",
+      "table1_mean": 449.06
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Efficacy*",
+      "figure_label": "0.17",
+      "table1_mean": 24.77
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Generalization*",
+      "figure_label": "0.24",
+      "table1_mean": 23.87
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Specificity*",
+      "figure_label": "0.89",
+      "table1_mean": 20.69
+    }
+  ],
+  "boundary": "Source-specific geometry replay is separate from data-driven plotting. Artist-adjusted lengths and tiny original labels are preserved, not endorsed.",
+  "attribution": "Adapted from Fang et al., AlphaEdit, ICLR 2025, Fig. 2; arXiv:2410.02355v4; CC BY 4.0. FigureFlow vector reconstruction, not a rerun of model experiments."
+}

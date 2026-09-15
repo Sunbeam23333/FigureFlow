@@ -7,12 +7,15 @@
 | What is the paper's end-to-end logic? | semantic overview | dense axes or exact result values |
 | How does a report, SOP, or patent process move from input to checked output? | FigureFlow workflow | free-form AI coordinates or whole-image text generation |
 | What changed, by how much, and with what uncertainty? | quantitative figure | icon-driven framework art |
+| Can this published data figure be reproduced, or replotted with new values? | publication-data route | relabeling fixed geometry as if it were recalculated |
 | Which entities transfer, depend, or explicitly do not transfer? | link graph | a generic box-and-arrow pipeline |
 | What are the exact values and statuses? | result table | encoding every number as a bar |
 | How do streams, kernels, memory tiers, or blocks interact? | TikZ/SVG mechanism | AI-generated hardware architecture |
 | What did the model actually produce through time? | real case panel | generated illustration presented as output |
 
 Do not combine modules merely to fill space. Combine them only when the paper claim genuinely needs both structure and evidence, such as a mechanism beside a real rollout strip.
+
+For faithful AlphaEdit Figure 2 reconstruction or replaceable annular/small-multiple CSV charts, read [publication-data-reproduction.md](publication-data-reproduction.md) and use `render_publication_data.py` with a FigureFlow checkout. Its published/user-supplied evidence codes are scoped to the new data module; the shared legacy YAML and `FigurePlan` statuses below are unchanged.
 
 ## Shared source fields
 

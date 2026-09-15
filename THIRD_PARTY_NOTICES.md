@@ -15,6 +15,9 @@ FigureFlow is distributed under the MIT License, but it uses third-party softwar
 | Pillow | Image loading and export | HPND License |
 | CairoSVG | SVG to PDF/PNG conversion | GNU LGPL v3 or later |
 | PyYAML | YAML configuration | MIT License |
+| pypdf | Reconstructed PDF metadata and source attachments | BSD 3-Clause License; [upstream license](https://github.com/py-pdf/pypdf/blob/main/LICENSE) |
+
+The optional `digitize` extra installs PyMuPDF for regenerating the AlphaEdit vector scene from the official PDF (and it can serve as an alternative rasterizer). PyMuPDF/MuPDF are available under open-source AGPL or a commercial license, as documented in the [upstream licensing notice](https://pymupdf.readthedocs.io/en/latest/about.html#license-and-copyright). This optional dependency is not covered by FigureFlow's MIT license. The regular reproduction path uses the committed scene, CairoSVG and Poppler and does not require installing PyMuPDF.
 
 The exact version resolved during installation is authoritative. Review the installed distribution metadata and bundled license files before redistribution, especially when packaging a closed-source service.
 
@@ -33,6 +36,14 @@ The extended research-figure skill can optionally use XeLaTeX/TeX Live. TeX Live
 FigureFlow does not bundle proprietary fonts such as Arial, Comic Sans, PingFang, or Microsoft YaHei. CairoSVG is given one concrete host CJK family because its fallback behavior is not reliable; the default container installs Noto CJK, while local macOS/Windows runs use an available system family. PDF QA rejects output when no recognized embedded CJK font is found.
 
 Files under `assets/icons/raw/` are generated demonstration assets. Their inclusion under this repository's license does not grant rights in third-party trademarks, characters, logos, training data, or source references that a user may introduce in later generations. Keep prompt and provenance records, and review generated output before commercial or public use.
+
+## AlphaEdit published-figure case
+
+The case in `cases/alphaedit_figure2/` derives from Figure 2 of *AlphaEdit: Null-Space Constrained Knowledge Editing for Language Models*, by Junfeng Fang, Houcheng Jiang, Kun Wang, Yunshan Ma, Shi Jie, Xiang Wang, Xiangnan He, and Tat-seng Chua, ICLR 2025, [arXiv:2410.02355v4](https://arxiv.org/abs/2410.02355v4). The official `figures/intro_part2.pdf` is distributed in the [arXiv source archive](https://arxiv.org/src/2410.02355v4) under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+
+The reference PDF, its digitized vector artwork in `scene.json`, `preview.png`, `comparison.png`, and generated artwork reconstructions retain that CC BY 4.0 attribution. They are not relicensed under the repository's MIT code license. FigureFlow's changes are programmatic vector/glyph reconstruction, data binding, source auditing and comparison rendering; the original authors do not endorse or participate in this implementation. Preserve the author/title/source/license and modification notice when redistributing these artworks. The case's `SOURCES.md` and `source_audit.json` record exact versions, checksums and the published figure/table discrepancies.
+
+Glyph paths in the digitized scene reproduce already-typeset artwork; they do not contain a reusable font program or grant rights to font software. The source PDF is retained as the officially published reference, not offered as a font distribution. FigureFlow's independently written extraction, rendering and analysis code is MIT, subject to the separately licensed dependencies used to run it.
 
 ## Online services
 

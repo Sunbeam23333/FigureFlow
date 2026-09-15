@@ -1,0 +1,256 @@
+{
+  "paper": {
+    "title": "AlphaEdit: Null-Space Constrained Knowledge Editing for Language Models",
+    "arxiv_version": "2410.02355v4",
+    "landing_url": "https://arxiv.org/abs/2410.02355v4",
+    "source_url": "https://arxiv.org/src/2410.02355v4",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "figure_path_in_archive": "figures/intro_part2.pdf",
+    "figure_include_location": "chapters/1_intro.tex:29",
+    "figure_creator": "Adobe Illustrator 26.0 (Windows)",
+    "figure_page_size_pt": [
+      442.754,
+      508.5
+    ],
+    "figure_creation_date": "2024-09-23",
+    "experiment_description": "LLaMA3 (8B), 2000 sequential edited samples; asterisk denotes ZsRE; SST, RTE, CoLA are post-editing general capability evaluations.",
+    "source_archive_sha256": "55e3f23b097f52498edad8bf8fe294caf828741a4c2b1e1a892d2e5a9d428aaf",
+    "figure_pdf_sha256": "a3f9f7293ecd91dc35d04d47ee17693ae87bfa0334cea169f06c990d2fd62921"
+  },
+  "official_repository": {
+    "url": "https://github.com/jianghoucheng/AlphaEdit",
+    "commit": "b84624f44dfe8fc6cd9e41df916c44124a0c46dc",
+    "license": "MIT",
+    "found_figure2_plotting_code": false,
+    "found_published_figure2_raw_results": false,
+    "available": [
+      "model editing implementation",
+      "evaluation scripts",
+      "GLUE evaluation datasets",
+      "per-run result summarizer",
+      "hyperparameter files"
+    ],
+    "scope_note": "Inspected current tracked file tree and searched Python sources for radar, polar, matplotlib and Figure 2 metric names. No Figure 2 generator or result CSV/JSON was found in this current snapshot."
+  },
+  "figure": {
+    "chart_type": "single circular grouped bar chart",
+    "method_order_in_each_group": [
+      "ROME",
+      "MEMIT",
+      "PRUNE",
+      "RECT",
+      "AlphaEdit"
+    ],
+    "metric_labels_clockwise_from_top": [
+      "Efficacy",
+      "SST",
+      "CoLA",
+      "RTE",
+      "Specificity*",
+      "Generalization*",
+      "Efficacy*",
+      "Consistency",
+      "Fluency",
+      "Specificity",
+      "Generalization"
+    ],
+    "displayed_values": {
+      "Efficacy": [
+        "64.4",
+        "65.7",
+        "68.3",
+        "66.0",
+        "98.9"
+      ],
+      "Generalization": [
+        "61.4",
+        "64.7",
+        "64.8",
+        "63.6",
+        "94.2"
+      ],
+      "Specificity": [
+        "49.4",
+        "51.6",
+        "49.8",
+        "61.4",
+        "67.9"
+      ],
+      "Fluency": [
+        "499.1",
+        "437.4",
+        "418.0",
+        "526.6",
+        "622.5"
+      ],
+      "Consistency": [
+        "3.31",
+        "6.58",
+        "5.90",
+        "20.5",
+        "32.4"
+      ],
+      "Efficacy*": [
+        "2.01",
+        "34.6",
+        "0.17",
+        "86.1",
+        "94.5"
+      ],
+      "Generalization*": [
+        "1.80",
+        "31.3",
+        "0.24",
+        "80.5",
+        "91.1"
+      ],
+      "Specificity*": [
+        "0.69",
+        "18.5",
+        "0.89",
+        "31.7",
+        "32.6"
+      ],
+      "SST": [
+        "0",
+        "0",
+        "0",
+        "0.55",
+        "0.90"
+      ],
+      "RTE": [
+        "0",
+        "0",
+        "0",
+        "0.21",
+        "0.32"
+      ],
+      "CoLA": [
+        "0",
+        "0",
+        "0",
+        "0.56",
+        "0.76"
+      ]
+    },
+    "center_text_pdf_extraction": [
+      "AlphaEdit",
+      "One Line of Code，",
+      "Transformative Performance",
+      "Improvements！"
+    ],
+    "data_status": "transcribed_display_labels_from_official_vector_figure",
+    "not_raw_experiment_results": true,
+    "cross_metric_comparability": "The chart mixes scales and metric units. Reconstructing the published bar geometry does not establish a common radial normalization or justify comparing bar lengths across different metrics.",
+    "numeric_precision": "Values are transcribed from the figure's displayed labels. Their precision is limited by those labels and does not recover unrounded experimental measurements."
+  },
+  "table1_llama3_means": {
+    "source": "chapters/5_exp.tex:20-31",
+    "column_order": [
+      "Counterfact Efficacy",
+      "Counterfact Generalization",
+      "Counterfact Specificity",
+      "Counterfact Fluency",
+      "Counterfact Consistency",
+      "ZsRE Efficacy",
+      "ZsRE Generalization",
+      "ZsRE Specificity"
+    ],
+    "ROME": [
+      64.4,
+      61.42,
+      49.44,
+      449.06,
+      3.31,
+      2.01,
+      1.8,
+      0.69
+    ],
+    "MEMIT": [
+      65.65,
+      64.65,
+      51.56,
+      437.43,
+      6.58,
+      34.62,
+      31.28,
+      18.49
+    ],
+    "PRUNE": [
+      68.25,
+      64.75,
+      49.82,
+      418.03,
+      5.9,
+      24.77,
+      23.87,
+      20.69
+    ],
+    "RECT": [
+      66.05,
+      63.62,
+      61.41,
+      526.62,
+      20.54,
+      86.05,
+      80.54,
+      31.67
+    ],
+    "AlphaEdit": [
+      98.9,
+      94.22,
+      67.88,
+      622.49,
+      32.4,
+      94.47,
+      91.13,
+      32.55
+    ]
+  },
+  "substantive_discrepancies": [
+    {
+      "method": "ROME",
+      "metric": "Fluency",
+      "figure_label": "499.1",
+      "table1_mean": 449.06
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Efficacy*",
+      "figure_label": "0.17",
+      "table1_mean": 24.77
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Generalization*",
+      "figure_label": "0.24",
+      "table1_mean": 23.87
+    },
+    {
+      "method": "PRUNE",
+      "metric": "Specificity*",
+      "figure_label": "0.89",
+      "table1_mean": 20.69
+    }
+  ],
+  "reproduction_policy": "Preserve the Figure 2 labels and geometry for visual reproduction. Keep Table 1 numbers as separate source evidence; do not silently replace discrepant labels or claim figure transcription is an experimental rerun.",
+  "audit_date": "2026-09-15",
+  "data_file": {
+    "path": "data.csv",
+    "row_count": 55,
+    "format": "long-form CSV",
+    "columns": [
+      "metric",
+      "method",
+      "value",
+      "label",
+      "source",
+      "evidence_status"
+    ],
+    "source_identifier": "arxiv:2410.02355v4/figures/intro_part2.pdf",
+    "source_identifier_note": "Identifies the figures/intro_part2.pdf member in the official arXiv v4 source archive.",
+    "evidence_status": "published-figure",
+    "label_policy": "Keep the published display string, including trailing zeros; do not reformat label from the numeric value."
+  }
+}

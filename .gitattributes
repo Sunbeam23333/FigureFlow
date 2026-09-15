@@ -1,0 +1,2 @@
+# Preserve official source checksums and treat vector documents as binary assets.
+*.pdf binary

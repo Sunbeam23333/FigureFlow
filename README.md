@@ -22,6 +22,27 @@ FigureFlow 是一个面向技术汇报、SOP、论文与专利配图的 AI 辅�
 
 上图来自一次真实 `gpt-5.6-sol` 语义规划与一次 `gpt-image-2` 无文字 Icon 生成，随后执行透明抠图、三布局渲染和自动 QA。公开样例不保留实际服务路由、响应标识、token 数、原始提示词或绝对路径。运行耗时只是该机器上的单次流水线记录，不是团队提效结论；可复现的固定离线样例仍保留在 [`examples/`](examples/README.md)。
 
+## 数据分析与论文图复现
+
+[AlphaEdit Figure 2 完整案例](cases/alphaedit_figure2/README.md)提供两种离线路径：忠实重建官方 Illustrator 图的布局与字形，以及读取可替换 CSV、重新计算柱长的环形柱图/分面图。两者均输出数据、来源审计、SVG/PDF/PNG 和可检查报告，无需 API Key。案例还公开了[任务提示词与执行记录](cases/alphaedit_figure2/PROMPTS.md)。
+
+![AlphaEdit Figure 2 的 FigureFlow 矢量重建](cases/alphaedit_figure2/preview.png)
+
+原图：Fang 等，AlphaEdit，ICLR 2025，Figure 2，CC BY 4.0；上图为 FigureFlow 源图矢量重建，证据状态为 `published-figure`，没有重新运行模型实验。原图的小字号与部分低对比文字被保留，像素比较及原图与 Table 1 的四处差异见[来源审计](cases/alphaedit_figure2/SOURCES.md)、[对照图](cases/alphaedit_figure2/comparison.png)与[误差报告](cases/alphaedit_figure2/report.json)。
+
+在仓库根目录安装 `requirements-reproduction.txt` 和系统 Cairo/Poppler 后运行：
+
+```bash
+python -m pip install -r requirements-reproduction.txt
+python -m demo_core.alphaedit_reproduction --output-dir demo/output/alphaedit_figure2
+python -m demo_core.data_analysis cases/alphaedit_figure2/data.csv \
+  --chart annular --title AlphaEdit --focus-method AlphaEdit \
+  --output-dir demo/output/alphaedit_data
+python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
+```
+
+忠实模式从官方 PDF 数字化的 71 个路径和 555 个字形实例重建，不是作者的原始绘图代码，也不从 CSV 重新推导手工几何；55 个数值标签与原图白字字形独立绑定核验。数据驱动模式可换数据重算，逐指标独立缩放和排名，零值为基线刻度，不做跨指标平均或统计显著性推断。完整运行方法、最小复演 ZIP 和 skill 入口见[案例说明](cases/alphaedit_figure2/README.md)。
+
 ## 要解决的问题
 
 团队日常绘图常见两条路径：
@@ -33,7 +54,7 @@ FigureFlow 适合于“语义判断很重要，但输出又必须精确可改”
 
 ## 工作流
 
-**现在明确区分两个入口：**下图是原来的 3–6 节点业务流程 Demo；复杂论文主图使用新增的实验性 research harness，具备完整文本资料、PDF 页图查看、开放场景排版与多轮看图修订，不能与固定模板演示混为一谈。详见 [研究工作流、运行方法和能力边界](docs/research-harness.md)。
+**流程与主图绘制有两个入口：**下图是原来的 3–6 节点业务流程 Demo；复杂论文主图使用实验性 research harness，具备完整文本资料、PDF 页图查看、开放场景排版与多轮看图修订，不能与固定模板演示混为一谈。数据分析与论文图复现使用上面的独立入口。详见 [研究工作流、运行方法和能力边界](docs/research-harness.md)。
 
 ```mermaid
 flowchart LR
@@ -209,7 +230,8 @@ FigureFlow/
 ├── benchmark/                    # 三种方法的实测任务、量表与统计脚本
 ├── demo/                         # 操作录屏、字幕、答辩讲解稿与本地产物
 ├── examples/                     # 已脱敏的示例图、计划与单次运行记录
-├── skill/design-research-figures # 可独立使用的 Codex skill
+├── cases/alphaedit_figure2/      # 已发表图、55 行数据、数字化场景、来源与提示词
+├── skill/design-research-figures # Codex skill；新 publication-data 路由需 checkout
 ├── tests/                        # 回归与隐私检查
 └── demo/output/                  # 本地运行产物（默认不提交）
 ```
@@ -227,7 +249,7 @@ FigureFlow/
 
 ## Skill 的独立使用
 
-`skill/design-research-figures/` 保留了研究图表的完整方法、渲染器和 QA 工具。它覆盖数据图、框架图、关系图、结果表和 TikZ 机制图；顶层 Demo 另外提供了面向中文业务流程的窄接口。请从 [skill/design-research-figures/SKILL.md](skill/design-research-figures/SKILL.md) 开始阅读。
+`skill/design-research-figures/` 保留了研究图表方法、原有渲染器和 QA 工具。它覆盖数据图、框架图、关系图、结果表和 TikZ 机制图；顶层 Demo 另外提供了面向中文业务流程的窄接口。新增的论文数据复现入口 `render_publication_data.py` 调用本仓库的 `demo_core` 和案例素材，安装版 skill 需要用 `--figureflow-root` 指向 FigureFlow checkout，不能只复制 skill 文件夹运行这一模块。请从 [skill/design-research-figures/SKILL.md](skill/design-research-figures/SKILL.md) 和[数据复现模块说明](skill/design-research-figures/references/publication-data-reproduction.md)开始阅读。
 
 ## 开发与验证
 
@@ -242,7 +264,7 @@ python -m unittest discover -s tests -v
 
 ## 许可证
 
-本项目代码使用 [MIT License](LICENSE)。直接依赖和容器组件保留各自许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。使用模型或生成资产时，还应遵守相应服务条款与所在组织的数据规范。
+本项目代码使用 [MIT License](LICENSE)。AlphaEdit 的官方源 PDF、数字化场景和图形衍生预览保留 CC BY 4.0 归属，不适用本项目的代码 MIT 许可。直接依赖和容器组件保留各自许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。使用模型或生成资产时，还应遵守相应服务条款与所在组织的数据规范。
 
 ---
 
