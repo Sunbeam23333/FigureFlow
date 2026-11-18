@@ -1,0 +1,75 @@
+{
+  "support": {
+    "partial": [
+      2,
+      null,
+      5,
+      null
+    ],
+    "catalog": [
+      [
+        "A",
+        [
+          2,
+          1,
+          5,
+          7
+        ],
+        true
+      ],
+      [
+        "B",
+        [
+          2,
+          4,
+          5,
+          3
+        ],
+        true
+      ],
+      [
+        "C",
+        [
+          2,
+          1,
+          6,
+          7
+        ],
+        false
+      ],
+      [
+        "D",
+        [
+          4,
+          1,
+          5,
+          7
+        ],
+        false
+      ]
+    ]
+  },
+  "reported_scores": {
+    "source": "https://arxiv.org/abs/2406.11781v1",
+    "source_table": 1,
+    "source_page": 6,
+    "datasets": [
+      "TikTok",
+      "Amazon-Baby",
+      "Amazon-Sports"
+    ],
+    "series": {
+      "BM3": [
+        0.0404,
+        0.0361,
+        0.0442
+      ],
+      "DiffMM": [
+        0.0456,
+        0.0411,
+        0.0458
+      ]
+    },
+    "source_reported_not_local": true
+  }
+}

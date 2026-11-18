@@ -21,7 +21,7 @@ EvidenceStatus = Literal[
 ]
 LayoutFamily = Literal["ribbon", "bowtie", "dual-rail"]
 LayoutPreset = Literal["standard", "presentation-spacious"]
-ThemeName = Literal["academic-audit", "gpu-green-tech"]
+ThemeName = Literal["academic-audit", "gpu-green-tech", "welm-image-green", "concord-rec"]
 AccentName = Literal["blue", "teal", "orange", "violet", "navy"]
 ReferenceSource = Literal["offline-example", "user-url", "provider-search"]
 ReferenceMediaType = Literal["image", "webpage", "document"]

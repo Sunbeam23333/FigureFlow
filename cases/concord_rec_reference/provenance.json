@@ -1,0 +1,41 @@
+{
+  "case": "concord_rec_reference",
+  "source_type": "user-approved local research artifact",
+  "figures": {
+    "figure1": {
+      "paper": "CONCORD-Rec",
+      "figure_number": 1,
+      "source_file": "sources/figure1_style_refinement_revise.py",
+      "source_sha256": "fff1d8a9247e0e4674378b79f16b929fe8ffdaacf366c21ccd524a3bf3826862",
+      "base_source_file": "sources/figure1_architecture_render_v8.py",
+      "status": "illustrative",
+      "claim": "Observed behavior and content feed tokenwise bounded residual allocation; detached out-of-fold utility targets supervise the gate.",
+      "reference_pdf": "reference/architecture.pdf",
+      "reference_pdf_sha256": "b72800fe3fe166501e4910ea1d77021540a9147cf21a50fe99c49933c66f47c5"
+    },
+    "figure2": {
+      "paper": "CONCORD-Rec",
+      "figure_number": 2,
+      "source_file": "sources/figure2_network_render_v4.py",
+      "source_sha256": "870372d509a8315bbf1a39ec7caaf544ba1c38aa41440865889389d310c264a1",
+      "status": "illustrative",
+      "claim": "A position-level output gate receives paired catalog-partition utility supervision prepared offline.",
+      "reference_pdf": "reference/network_structure.pdf",
+      "reference_pdf_sha256": "2dbaf4c0c4e535cc87f8e656c63c76e07dfcc5379ba33e59dc880b0fd0c81843"
+    }
+  },
+  "palette": {
+    "navy_backbone": "#183B60",
+    "teal_conditioning": "#087F87",
+    "violet_context": "#8060AB",
+    "amber_supervision": "#BC8320",
+    "muted": "#64778B",
+    "line": "#D5E0E9",
+    "navy_background": "#F0F5FA",
+    "teal_background": "#EBF7F4",
+    "violet_background": "#F3EFF8",
+    "amber_background": "#FFF6E5"
+  },
+  "status_boundary": "The diagrams are architectural/explanatory; no benchmark metric is inferred from their geometry or schematic bars.",
+  "cloud_source_record": "The original source path is recorded in the local task log, but is intentionally omitted here so the case remains portable and public-release safe."
+}

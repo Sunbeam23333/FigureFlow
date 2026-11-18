@@ -1,0 +1,76 @@
+\documentclass[tikz,border=3mm]{standalone}
+\input{base_style.tex}
+\input{palette_concord_rec.tex}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % CONCORD-Rec grammar: color = computational role; shape = object type.
+  \node[figure title,text=ink] at (7.5,6.45) {Tokenwise multimodal conditioning};
+  \node[figure subtitle,text=graphite] at (7.5,6.08)
+    {Replace labels and equations only after checking the paper and implementation.};
+
+  \begin{scope}[on background layer]
+    \fill[rounded corners=2.2mm,fill=paper,draw=divider,line width=.55pt]
+      (.25,.35) rectangle (14.75,5.78);
+    \fill[rounded corners=2mm,fill=navybg,draw=navy!35,line width=.5pt]
+      (.55,1.08) rectangle (4.35,5.35);
+    \fill[rounded corners=2mm,fill=tealbg,draw=teal!35,line width=.5pt]
+      (4.65,1.08) rectangle (10.55,5.35);
+    \fill[rounded corners=2mm,fill=amberbg,draw=amber!40,line width=.5pt]
+      (10.85,1.08) rectangle (14.45,5.35);
+  \end{scope}
+
+  \node[figure label,text=navy,anchor=west] at (.78,5.05) {A\quad Behavioral denoiser};
+  \node[figure label,text=teal,anchor=west] at (4.88,5.05) {B\quad Modality conditioning};
+  \node[figure label,text=amber,anchor=west,font=\fontsize{7}{8}\selectfont] at (11.08,5.05) {C\quad Offline utility};
+
+  \node[compute,concord backbone] (history) at (2.35,4.45)
+    {history tokens\\$z(i_1),\ldots,z(i_n)$};
+  \node[compute,concord context] (target) at (2.35,3.62)
+    {masked target state};
+  \node[concord projection] (embed) at (2.35,2.82)
+    {code + level + position};
+  \node[compute,concord backbone] (denoiser) at (2.35,2.00)
+    {pre-LN Transformer $\times D$};
+  \node[compute,concord backbone] (logits) at (2.35,1.26)
+    {behavior logits $b_j$};
+  \draw[concord data,draw=navy] (history) -- (embed);
+  \draw[concord data,draw=violet] (target) -- (embed);
+  \draw[concord data,draw=navy] (embed) -- (denoiser);
+  \draw[concord data,draw=navy] (denoiser) -- (logits);
+
+  \node[compute,concord context] (encoders) at (7.55,4.45)
+    {frozen modality encoders};
+  \node[concord projection] (projection) at (7.55,3.82)
+    {projection $P_m$};
+  \node[concord fusion] (pool) at (7.55,2.58)
+    {masked pool};
+  \node[compute,concord conditioning] (gate) at (7.55,1.38)
+    {gate $w_{j,m}$};
+  \draw[concord data,draw=violet] (encoders) -- (projection);
+  \draw[concord data,draw=violet] (projection) -- (pool);
+  \draw[concord data,draw=teal] (pool) -- (gate);
+
+  \node[concord store] (support) at (12.65,4.45)
+    {feasible catalog};
+  \node[concord projection] (loss) at (12.65,3.78)
+    {partition loss};
+  \node[concord fusion] (utility) at (12.65,2.58)
+    {utility};
+  \node[compute,concord supervision] (targetw) at (12.65,1.24)
+    {detached target\\$w_j^*$};
+  \draw[concord data,draw=amber] (support) -- (loss);
+  \draw[concord data,draw=amber] (loss) -- (utility);
+  \draw[concord data,draw=amber] (utility) -- (targetw);
+  \draw[concord detached] (targetw.west) -- ++(-1.15,0) |- (gate.east)
+    node[pos=.2,above,figure tiny,text=amber]{supervises};
+
+  \node[concord fusion] (fuse) at (6.05,.55) {fusion};
+  \node[compute,concord conditioning] (guided) at (8.95,.55) {guided logits\\$\ell_j$};
+  \draw[concord data,draw=navy] (logits.south) |- (fuse.west);
+  \draw[concord data,draw=teal] (gate.south) |- (fuse.north);
+  \draw[concord data,draw=teal] (fuse) -- (guided);
+  \draw[concord shared] (history.east) .. controls (4.2,4.9) and (5.2,4.9) .. (encoders.west);
+
+\end{tikzpicture}
+\end{document}

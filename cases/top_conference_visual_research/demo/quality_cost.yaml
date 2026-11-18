@@ -1,0 +1,34 @@
+title: "Top-conference visual grammar · synthetic demo"
+subtitle: "The registry's quality–cost bubble and learning-dynamics routes; values are synthetic."
+evidence_status: "synthetic-demo"
+status: "SYNTHETIC DEMO · NOT A PAPER RESULT"
+status_kind: "synthetic-demo"
+footer: "Source: bundled synthetic CSV · use measured seed intervals only for real claims"
+output_name: "top_conference_data_demo"
+figsize: [11.2, 3.9]
+left: 0.06
+right: 0.99
+bottom: 0.20
+top: 0.72
+wspace: 0.38
+panels:
+  - title: "Quality–cost"
+    csv: "quality_cost.csv"
+    x_label: "inference time (s)"
+    y_label: "FID ↓"
+    x_scale: "log"
+    x_lim: [0.08, 4.0]
+    y_lim: [5.0, 20.0]
+    series:
+      - {kind: "bubble", x: "time_s", y: "fid", size_field: "params_b", size_scale: 90, color: "#3478C9", label: "baseline", where: {series: "baseline"}}
+      - {kind: "bubble", x: "time_s", y: "fid", size_field: "params_b", size_scale: 90, color: "#0E9F6E", label: "Ours", where: {series: "ours"}, direct_label: "Ours", label_dy: 8}
+    gates:
+      - {value: 10.0, label: "quality target", color: "#667085", linestyle: "--"}
+  - title: "Learning dynamics"
+    csv: "quality_cost.csv"
+    x_label: "training epoch"
+    y_label: "held-out score ↑"
+    x_lim: [0.5, 6.5]
+    y_lim: [0.45, 0.92]
+    series:
+      - {kind: "line", x: "epoch", y: "score", low: "low", high: "high", color: "#0E9F6E", label: "Ours", where: {series: "ours"}, marker: "o", direct_label: "Ours", label_dy: 8}

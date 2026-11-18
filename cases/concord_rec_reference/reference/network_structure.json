@@ -1,0 +1,50 @@
+{
+  "revision": "v4",
+  "status": "illustrative",
+  "evidence_status": "illustrative",
+  "claim": "A position-level output gate receives paired catalog-partition utility supervision prepared offline.",
+  "editable_source": "novelty_v4/render_network.py",
+  "paper_evidence": [
+    "sections/02_method.tex: catalog-conditioned loss and utility equations",
+    "sections/02_network.tex: network architecture and parameterization"
+  ],
+  "main_gate": "position-only; code-conditional architecture remains a registered comparison, not the displayed default",
+  "invariants": [
+    "same feasible support and masked state for paired coalition teacher calls",
+    "historical modality content only",
+    "frozen tokenizer and content encoders",
+    "cross-fitted teacher detached during label preparation",
+    "base residual is zero",
+    "utility loss supervises gate; no teacher at inference"
+  ],
+  "generated_asset": {
+    "path": "novelty_v4/assets/network_semantic_assets.png",
+    "sha256": "fb5754c3862e2b246a69a86be9ac7006447f48287827ad0403bde6b4bf716125",
+    "origin": "Parent-generated built-in ImageGen no-text semantic asset board, inspected 2026-11-08",
+    "generation_brief": "novelty_v4/assets/generation_provenance.json; reconstructed brief, not verbatim original prompt",
+    "model_identifier": "Not exposed by tool; no specific image-model version verified",
+    "used_regions": "text, image, audio, and video icons only",
+    "role": "illustrative semantic input icons; no model result or logo",
+    "text_arrows_topology": "native Matplotlib vector geometry"
+  },
+  "diagram_bars": "illustrative posterior glyphs with no quantitative scale",
+  "palette": {
+    "navy": "#183B60",
+    "ink": "#16324D",
+    "teal": "#087F87",
+    "violet": "#8060AB",
+    "amber": "#BC8320",
+    "muted": "#64778B",
+    "line": "#D5E0E9",
+    "navybg": "#F0F5FA",
+    "tealbg": "#EBF7F4",
+    "violetbg": "#F3EFF8",
+    "amberbg": "#FFF6E5",
+    "white": "#FFFFFF"
+  },
+  "outputs": {
+    "pdf": "2dbaf4c0c4e535cc87f8e656c63c76e07dfcc5379ba33e59dc880b0fd0c81843",
+    "svg": "b042708b1b1a4583099bec6366e76107328b1b3eb79a839aa41d665463117752",
+    "png": "72d4bfc326a005fcc61c7f77ae2cfec81d6bd6c19e1fd6241c5a35bf23b5fdae"
+  }
+}

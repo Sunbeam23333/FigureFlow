@@ -41,11 +41,17 @@ def _draw_standard(ax, frame: pd.DataFrame, panel: dict[str, Any]) -> None:
         series_color = color(series.get("color"), "blue")
         kind = series.get("kind", "line")
         label = series.get("label")
-        if kind == "scatter":
+        low_column = series.get("low")
+        high_column = series.get("high")
+        if kind in {"scatter", "bubble"}:
+            size = series.get("size", 28)
+            if kind == "bubble" and series.get("size_field"):
+                values = subset[series["size_field"]].astype(float).to_numpy()
+                size = values * float(series.get("size_scale", 1.0))
             ax.scatter(
                 x,
                 y,
-                s=series.get("size", 28),
+                s=size,
                 color=series_color,
                 edgecolor="white",
                 linewidth=0.55,
@@ -53,6 +59,19 @@ def _draw_standard(ax, frame: pd.DataFrame, panel: dict[str, Any]) -> None:
                 label=label,
                 zorder=3,
             )
+            if low_column and high_column:
+                yerr = np.vstack([y.to_numpy() - subset[low_column].to_numpy(), subset[high_column].to_numpy() - y.to_numpy()])
+                ax.errorbar(
+                    x,
+                    y,
+                    yerr=yerr,
+                    fmt="none",
+                    ecolor=series_color,
+                    elinewidth=0.9,
+                    capsize=2.2,
+                    alpha=series.get("error_alpha", 0.75),
+                    zorder=2,
+                )
         else:
             ax.plot(
                 x,
@@ -66,15 +85,29 @@ def _draw_standard(ax, frame: pd.DataFrame, panel: dict[str, Any]) -> None:
                 alpha=series.get("alpha", 1.0),
                 zorder=3,
             )
-        if series.get("low") and series.get("high"):
+        if low_column and high_column and kind not in {"scatter", "bubble"}:
             ax.fill_between(
                 x,
-                subset[series["low"]],
-                subset[series["high"]],
+                subset[low_column],
+                subset[high_column],
                 color=series_color,
                 alpha=series.get("band_alpha", 0.12),
                 linewidth=0,
                 zorder=1,
+            )
+        if series.get("direct_label") and len(subset):
+            last_x = x.iloc[-1]
+            last_y = y.iloc[-1]
+            ax.annotate(
+                series["direct_label"],
+                xy=(last_x, last_y),
+                xytext=(series.get("label_dx", 4), series.get("label_dy", 0)),
+                textcoords="offset points",
+                color=series_color,
+                fontsize=series.get("label_size", 7.0),
+                fontweight="bold",
+                va="center",
+                zorder=4,
             )
 
 

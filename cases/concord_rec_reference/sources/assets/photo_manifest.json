@@ -1,0 +1,40 @@
+[
+  {
+    "id": "tent",
+    "title": "Tent_(Unsplash).jpg",
+    "source_page": "https://commons.wikimedia.org/wiki/File:Tent_(Unsplash).jpg",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/00/Tent_%28Unsplash%29.jpg",
+    "author": "adore chang",
+    "license": "CC0 1.0 (pre-5 June 2017 Unsplash release)",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source_type": "real photograph",
+    "original_sha256": "5b02fe4a6a9f802823e874a106d3c8ea09d6c7d0b483859f0be6e5a019afdc8e",
+    "original_path": "redesign_v8/assets/originals/tent.jpg",
+    "original_dimensions": [
+      4945,
+      3296
+    ],
+    "prepared_path": "redesign_v8/assets/tent.jpg",
+    "operations": [
+      "EXIF orientation normalization if present",
+      "proportional downsample <=640 px",
+      "JPEG quality 90, optimized"
+    ],
+    "case_status": "Illustrative application input; not a project benchmark sample or learned model output",
+    "caption_status": "author-written descriptive captions to be checked against pixels",
+    "retrieved": "2026-11-09",
+    "author_descriptive_caption": "A white tent below snow-capped mountains.",
+    "caption_verification": "Visually checked against original photograph on 2026-11-09; written for this illustrative case, not a dataset annotation.",
+    "prepared_sha256": "16ba29288f2ee3dd9a4d224f1294c99299cb784732b8ee46978733678443c6ff",
+    "v8_operations": [
+      "SVG viewport crop to panel aspect",
+      "intervention only: same viewport crop then deterministic 18x10 downsample",
+      "all final photo data embedded in standalone SVG"
+    ],
+    "prepared_dimensions": [
+      640,
+      427
+    ],
+    "display_resolution_note": "640-pixel long edge; smallest effective print resolution exceeds 450 dpi in current panels."
+  }
+]

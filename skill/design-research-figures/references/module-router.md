@@ -36,7 +36,7 @@ Quote LaTeX carefully in YAML: prefer single-quoted scalar values such as `'Reco
 
 ## Quantitative data figure
 
-Use `render_data_figure.py`. The source lists one to four panels, each backed by a CSV. Supported panel forms are standard line/scatter and grouped bar; line series may include `low` and `high` columns for a real interval or seed-derived band.
+Use `render_data_figure.py`. The source lists one to four panels, each backed by a CSV. Supported panel forms are standard line/scatter, `kind: bubble`, and grouped bar. Line series may include `low` and `high` columns for a real interval or seed-derived band; scatter/bubble series render those columns as capped error bars. A series may set `direct_label` to annotate its last point without a legend lookup.
 
 ```yaml
 panels:
@@ -50,6 +50,19 @@ panels:
     gates:
       - {value: 0, label: "base-law residual = 0", color: "gray", linestyle: "--"}
 ```
+
+For quality–cost plots distilled from recent top-conference figures:
+
+```yaml
+series:
+  - {kind: "bubble", label: "methods", x: "time_s", y: "fid", size_field: "params_b", size_scale: 34, color: "#0E9F6E", direct_label: "Ours"}
+x_scale: "log"
+```
+
+Keep the fitted/reference line separate from measured points, state the
+hardware and seed count in the caption or footer, and do not use bubble area as
+the only method identifier. The derived grammar and official paper links for
+these choices are in [`cases/top_conference_visual_research/`](../../cases/top_conference_visual_research/).
 
 Requirements:
 
@@ -130,7 +143,7 @@ Contract limits:
 - provide 3–6 stages with unique titles and unique `asset_key` values;
 - choose `ribbon`, `bowtie`, or `dual-rail`; use `ribbon` when the process is simply sequential;
 - choose `standard` or `presentation-spacious`; the presentation preset uses approximately 25% larger stage/gate typography and permits at most two body lines per stage;
-- choose `academic-audit` or the generic `gpu-green-tech` token theme; the latter uses no third-party logo and must not imply endorsement or affiliation;
+- choose `academic-audit`, the generic `gpu-green-tech`, `welm-image-green`, or `concord-rec`; these technical palettes use no third-party logo and must not imply endorsement or affiliation;
 - choose assets only from `layout_planner`, `icon_factory`, `chroma_matte`, `vector_typeset`, `qa_export`, `gpu_server`, `robot_inspection`, `data`, `process`, `decision`, `store`, and `output`;
 - choose accents only from `navy`, `blue`, `teal`, `orange`, and `violet`;
 - keep each body to at most three short lines, gates to five labels, and warnings to six items;
@@ -189,6 +202,31 @@ For CUDA timelines:
 - kernels, transfers, events, and waits use distinct shapes;
 - dependencies have explicit arrows or event markers;
 - overlapping rectangles must represent actual overlap, not decoration.
+
+## CONCORD-Rec multimodal recommendation mechanisms
+
+Use the retained case at `cases/concord_rec_reference/` when the reader needs a
+paper-level architecture or network diagram with modality evidence, a masked
+SID denoiser, tokenwise allocation, and detached utility supervision. Figure 1
+is the asymmetric overview route; Figure 2 is the connected A/B/C network route.
+Both are native vector examples, not bitmap templates.
+
+The default semantic mapping is:
+
+| Role | Color | Typical shape |
+|---|---|---|
+| inherited behavioral backbone | navy | stacked tensor/block cards |
+| trainable conditioning/fusion | teal | rounded compute cards, hexagonal fusion |
+| observed modality context | violet | encoder cards and projection trapezoids |
+| detached offline supervision | amber | catalog cylinders, loss/fusion badges |
+
+Use solid arrows for data, dotted lines for shared parameters/paths, and dashed
+arrows for detached supervision or a gradient boundary. Keep the feasible
+catalog/support invariant explicit and label schematic posterior bars as
+illustrative. Preserve the source evidence status: Figure 1's base topology is
+implemented and its final style layer is illustrative, while Figure 2 is an
+illustrative architecture specification. Do not copy GridSlate or Omni-SID as the default palette; they are
+comparative references only.
 
 ## Real rollout panel
 

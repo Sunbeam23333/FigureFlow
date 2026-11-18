@@ -38,8 +38,34 @@ python -m demo_core.alphaedit_reproduction --output-dir demo/output/alphaedit_fi
 python -m demo_core.data_analysis cases/alphaedit_figure2/data.csv \
   --chart annular --title AlphaEdit --focus-method AlphaEdit \
   --output-dir demo/output/alphaedit_data
+python -m demo_core.data_analysis cases/alphaedit_figure2/data.csv \
+  --chart annular --palette welm-image --title "AlphaEdit · WeLM green" \
+  --focus-method AlphaEdit --output-dir demo/output/welm_image_palette
 python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
 ```
+
+### 顶会构图研究与可复用模板
+
+[`cases/top_conference_visual_research/`](cases/top_conference_visual_research/)
+保存了一轮基于官方奖项页和论文 PDF 的 CVPR、ICML、NeurIPS、ICLR 视觉
+调研：它包含 14 个代表性条目、主图/定性图/数据图的布局语法、白底与
+emerald/action/score 调色 token、colorblind-safe 系列，以及一个可编辑的
+`input → representation → evidence` TikZ 模板。仓库不复制第三方论文整图，
+只保留来源链接、图号级观察和派生规则；每个论文条目都明确了可复用的
+证据编码与状态边界。
+
+渲染器现在也支持质量–成本 bubble（`size_field`）、散点误差条、折线误差带
+和端点直接标注。可运行合成演示（数值明确不是论文结果）：
+
+```bash
+python3 skill/design-research-figures/scripts/render_data_figure.py \
+  cases/top_conference_visual_research/demo/quality_cost.yaml \
+  --output-dir demo/output/top_conference_data
+```
+
+新主图候选应先从 registry 选择 `hero_evidence`、`action_rollout`、
+`qualitative_matrix`、`multiscale_ladder`、`quality_cost_bubble` 或
+`small_multiples`，再把真实帧、公式和测量值接入确定性渲染器。
 
 忠实模式从官方 PDF 数字化的 71 个路径和 555 个字形实例重建，不是作者的原始绘图代码，也不从 CSV 重新推导手工几何；55 个数值标签与原图白字字形独立绑定核验。数据驱动模式可换数据重算，逐指标独立缩放和排名，零值为基线刻度，不做跨指标平均或统计显著性推断。完整运行方法、最小复演 ZIP 和 skill 入口见[案例说明](cases/alphaedit_figure2/README.md)。
 
@@ -88,10 +114,12 @@ flowchart LR
 
 ## 可体验的主题、投屏字号与真实参考
 
-界面现在把三个原先隐含的设计选择显式化，并将其写入 `FigurePlan`、renderer manifest 与 QA：
+界面现在把主题、版式和真实参考这几类设计选择显式化，并将其写入 `FigurePlan`、renderer manifest 与 QA：
 
 - `academic-audit`：默认论文/汇报配色；
 - `gpu-green-tech`：以高对比绿色为主强调色的通用 GPU Systems 技术配色，不使用第三方 Logo，也不暗示背书、授权或关联；
+- `welm-image-green`：参考 WeLM-Image Figure 1 的环形数据图配色，包含六档浅到深绿色柱色、分段外圈弧线和公开技术报告中的基础绿色，来源信息保存在主题文件中；
+- `concord-rec`：复用用户认可的 CONCORD-Rec Figure 1/2 jade–iris 论文机制语法：navy 表示行为主干、teal 表示条件/融合、violet 表示观测模态、amber 表示 detached offline supervision；Figure 1/2 的原始绘图代码、矢量参考图和 provenance 保存在 [`cases/concord_rec_reference/`](cases/concord_rec_reference/)；
 - `standard`：保持原有兼容版式；
 - `presentation-spacious`：stage 标题、副标题、正文和 gate 字号相对标准档提高约 25%，每个 stage 最多两条正文，并在三种布局上记录可机读的 `layout_qa`。
 

@@ -99,6 +99,14 @@ class WorkflowRendererTests(unittest.TestCase):
                 self.assertGreaterEqual(min(report["title_font_size"] for report in reports), 27.5)
                 self.assertGreaterEqual(min(report["subtitle_font_size"] for report in reports), 18.75)
 
+    def test_concord_rec_theme_loads(self) -> None:
+        theme = load_theme("concord-rec")
+        self.assertEqual(theme.name, "concord-rec")
+        self.assertEqual(theme.palette["navy"], "#183B60")
+        self.assertEqual(theme.palette["teal"], "#087F87")
+        self.assertEqual(theme.palette["violet"], "#8060AB")
+        self.assertEqual(theme.palette["orange"], "#BC8320")
+
     def test_provider_search_requires_source_page_and_license(self) -> None:
         plan = self._valid_plan()
         plan["reference_assets"] = [

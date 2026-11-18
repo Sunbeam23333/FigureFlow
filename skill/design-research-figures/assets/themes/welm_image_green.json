@@ -1,0 +1,68 @@
+{
+  "id": "welm-image-green",
+  "description": "WeLM-Image Figure 1 inspired green palette for publication data figures; the palette is a visual reference and does not imply affiliation or endorsement.",
+  "source": {
+    "paper": "WeLM-Image: A Unified Image Generation Model towards Visual Intelligence",
+    "arxiv": "https://arxiv.org/abs/2611.07392",
+    "license": "CC BY 4.0",
+    "assets": [
+      "https://arxiv.org/html/2611.07392v1/assets/gen_radial.png",
+      "https://arxiv.org/html/2611.07392v1/assets/edit_radial.png",
+      "https://arxiv.org/html/2611.07392v1/assets/infer_qpm.png"
+    ],
+    "notes": "Chart series colors were sampled from the published radial assets. Brand tokens were read from the public technical-report style file and are kept separate from chart-series tokens."
+  },
+  "palette": {
+    "navy": "#191919",
+    "blue": "#3BBB74",
+    "teal": "#057A3E",
+    "orange": "#FA9D3B",
+    "violet": "#7ABE96",
+    "rose": "#D64545",
+    "red": "#D64545",
+    "gray": "#7A7E83",
+    "line": "#D9D9D9",
+    "paper": "#F7F7F7",
+    "offwhite": "#FFFFFF",
+    "light_blue": "#EAF8F0",
+    "light_teal": "#EAF8F0",
+    "light_orange": "#FFF0DC",
+    "light_violet": "#ECF7F0",
+    "light_red": "#FBE9E6",
+    "predgray": "#F0F1F1",
+    "brand_green": "#07C160",
+    "deep_green": "#057A3E",
+    "bubble_green": "#95EC69",
+    "ring_green": "#3BBB74",
+    "series_1": "#60AB88",
+    "series_2": "#7ABE96",
+    "series_3": "#93CDA7",
+    "series_4": "#ACDCBB",
+    "series_5": "#C3E7CD",
+    "series_6": "#DBF3E2",
+    "ink": "#191919",
+    "grid": "#D9D9D9"
+  },
+  "typography": {
+    "display": ["DejaVu Sans", "Arial", "sans-serif"],
+    "quantitative": "DejaVu Sans",
+    "formula": "STIX Sans",
+    "paper": ["TeX Gyre Heros", "Arial"]
+  },
+  "workflow": {
+    "background_start": "#FFFFFF",
+    "background_mid": "#F7F7F7",
+    "background_end": "#EAF8F0",
+    "decoration_primary": "#C3E7CD",
+    "decoration_secondary": "#EAF8F0",
+    "card": "#FFFFFF",
+    "card_border": "#D9D9D9",
+    "rail": "#C3E7CD",
+    "shadow": "#191919"
+  },
+  "render": {
+    "review_png_dpi": 240,
+    "pdf_fonttype": 42,
+    "minimum_final_body_pt": 6.5
+  }
+}

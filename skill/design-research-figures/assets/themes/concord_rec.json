@@ -1,0 +1,63 @@
+{
+  "id": "concord-rec",
+  "description": "CONCORD-Rec-inspired jade–iris research-network grammar: color encodes computational role and shape encodes object type.",
+  "source": {
+    "paper": "CONCORD-Rec Figure 1 and Figure 2",
+    "case": "cases/concord_rec_reference",
+    "notes": "User-approved local reference. This theme carries visual semantics only; it does not imply affiliation or reproduce experimental results."
+  },
+  "palette": {
+    "navy": "#183B60",
+    "blue": "#2877B8",
+    "teal": "#087F87",
+    "orange": "#BC8320",
+    "violet": "#8060AB",
+    "rose": "#C46786",
+    "red": "#C46786",
+    "gray": "#64778B",
+    "line": "#D5E0E9",
+    "paper": "#FFFFFF",
+    "offwhite": "#FAFCFD",
+    "light_blue": "#F0F5FA",
+    "light_teal": "#EBF7F4",
+    "light_orange": "#FFF6E5",
+    "light_violet": "#F3EFF8",
+    "light_red": "#FBECEF",
+    "predgray": "#F3F5F7",
+    "ink": "#16324D",
+    "navybg": "#F0F5FA",
+    "tealbg": "#EBF7F4",
+    "violetbg": "#F3EFF8",
+    "amberbg": "#FFF6E5"
+  },
+  "semantics": {
+    "navy": "inherited behavioral backbone",
+    "teal": "trainable conditioning and fusion",
+    "violet": "observed modality context and projections",
+    "orange": "detached offline supervision",
+    "shape": "object type: stack, projection, fusion, store, loss",
+    "dashed_arrow": "detached supervision or gradient boundary"
+  },
+  "typography": {
+    "display": ["Comic Sans MS", "Comic Neue", "Chalkboard SE", "cursive"],
+    "quantitative": "DejaVu Sans",
+    "formula": "STIX Sans",
+    "paper": ["TeX Gyre Heros", "Arial"]
+  },
+  "workflow": {
+    "background_start": "#FFFFFF",
+    "background_mid": "#F8FBFC",
+    "background_end": "#EEF5F7",
+    "decoration_primary": "#D4ECE8",
+    "decoration_secondary": "#E7E1F6",
+    "card": "#FFFFFF",
+    "card_border": "#D5E0E9",
+    "rail": "#D5E0E9",
+    "shadow": "#17334D"
+  },
+  "render": {
+    "review_png_dpi": 240,
+    "pdf_fonttype": 42,
+    "minimum_final_body_pt": 6.5
+  }
+}

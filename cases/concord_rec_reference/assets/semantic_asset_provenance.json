@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-08",
+  "operation": "text-free component sheet generation",
+  "tool": "image_gen__imagegen",
+  "model_id": "not exposed by the tool; no exact model-version assertion",
+  "image_path": "redesign_v4/assets/component_sheet.png",
+  "source_type": "generated illustration",
+  "prompt_brief": "White research component sheet, watercolor and navy ink; slate backbone, turquoise fusion, amber training supervision and violet conditioning. Isolated tensor stack, encoder trapezoid, teal fusion hexagon, blue/teal codebook cylinders, attention layers, loss badge, catalog drawer, frozen locked block, and document/image/audio/video icons. No letters, numbers, logos, people, arrows, or data.",
+  "prompt_record_note": "Brief of the generation instruction; original tool invocation remains in this chat.",
+  "accepted_assets": [
+    "frozen block",
+    "catalog drawer",
+    "modality icons"
+  ],
+  "rejected_assets": [
+    {
+      "asset": "trophy badge",
+      "reason": "Generated trophy does not represent a scientific loss and could imply an unsupported achievement."
+    }
+  ],
+  "scientific_layers": "All labels, equations, topology, plots and result tables are deterministic vector/LaTeX layers.",
+  "reference_role": "Previously approved CONCORD and GROUND illustrations used as style references only"
+}

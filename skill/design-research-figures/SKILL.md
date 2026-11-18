@@ -44,7 +44,18 @@ Read [references/module-router.md](references/module-router.md) for the YAML con
 
 For AlphaEdit Figure 2 or a request to reproduce/analyze a published data chart, read [references/publication-data-reproduction.md](references/publication-data-reproduction.md). Choose faithful source-artwork reconstruction or data-driven replotted values explicitly. This wrapper requires a FigureFlow checkout via `--figureflow-root`; the installed skill folder does not contain that module's full runtime and case assets.
 
-For a workflow intended for slides, select the allowlisted `presentation-spacious` layout preset rather than inventing font-size floats. For GPU systems visuals, `gpu-green-tech` is available as a generic accelerator-systems palette only: do not use a third-party logo or imply endorsement or affiliation.
+For broad visual benchmarking against recent CVPR, ICML, NeurIPS, or ICLR
+Best/Outstanding/official honorable-mention figures, read the retained
+registry at [`cases/top_conference_visual_research/`](../../cases/top_conference_visual_research/).
+It contains only official source links, figure-level observations, derived
+layout rules, semantic palette tokens, and an editable white-paper TikZ
+overview. Use it to choose a grammar (`hero_evidence`, `action_rollout`,
+`qualitative_matrix`, `multiscale_ladder`, `quality_cost_bubble`, or
+`small_multiples`) before drawing a new paper figure. Do not copy a paper
+screenshot into the repository or present a derived style observation as an
+experimental result.
+
+For a workflow intended for slides, select the allowlisted `presentation-spacious` layout preset rather than inventing font-size floats. For GPU systems visuals, `gpu-green-tech` is available as a generic accelerator-systems palette only. For annular publication-data charts, `welm-image-green` records the WeLM-Image Figure 1 inspired green radial grammar and source metadata. For multimodal recommendation mechanism diagrams, `concord-rec` records the user-approved CONCORD-Rec Figure 1/2 jade–iris grammar, with navy backbone, teal conditioning, violet context, amber detached supervision, and shape semantics for stacks/projections/fusion/stores. Neither theme uses a third-party logo or implies endorsement or affiliation.
 
 ## Authoring workflow
 
@@ -180,8 +191,13 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - [references/layouts-and-shapes.md](references/layouts-and-shapes.md): candidate layout and shape library
 - [references/assets-and-prompts.md](references/assets-and-prompts.md): real cases, ImageGen, crops, and provenance
 - [references/qa.md](references/qa.md): semantic, geometric, PDF, and paper-page QA
+- [../../cases/top_conference_visual_research/README.md](../../cases/top_conference_visual_research/README.md): official top-conference visual registry, derived grammar, and reusable tokens
 - `assets/themes/academic_audit.json`: shared Python/SVG/LaTeX design tokens
 - `assets/themes/gpu_green_tech.json`: generic GPU-systems workflow tokens; no third-party logo or endorsement
-- `assets/tikz/`: GPU Green, Emerald, Warm Editorial, and mechanism templates
+- `assets/themes/welm_image_green.json`: WeLM-Image Figure 1 inspired radial-chart tokens with source metadata
+- `assets/themes/concord_rec.json`: user-approved CONCORD-Rec Figure 1/2 jade–iris network tokens and semantic role map
+- `assets/tikz/`: GPU Green, Emerald, Warm Editorial, CONCORD-Rec, and mechanism templates
+- `assets/tikz/conference_overview_template.tex`: white-paper input → representation → evidence template distilled from the registry
+- `cases/concord_rec_reference/`: retained Figure 1/2 source code, vector references, asset provenance, and reuse map
 - `demo/source/`: working YAML examples for every deterministic module
 - `demo/README.md`: rebuild instructions and the expected gallery filename (generated locally, not committed)
