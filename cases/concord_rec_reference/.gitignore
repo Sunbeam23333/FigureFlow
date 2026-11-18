@@ -1,0 +1,5 @@
+# Re-render scratch outputs; the approved copies live in reference/.
+/figures/
+/sources/rendered/
+/sources/figure_manifest.json
+/novelty_v4/figure_manifest.json

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "name": "top-conference-paper-visuals",
+  "description": "Derived, paper-friendly tokens from the reviewed CVPR/ICML/NeurIPS/ICLR figure families.",
+  "base": {
+    "paper": "#FFFFFF",
+    "paper_warm": "#FCFCFA",
+    "ink": "#1F2933",
+    "ink_muted": "#667085",
+    "grid": "#D9E1E8",
+    "rule": "#AAB7C4",
+    "ours_emerald": "#0E9F6E",
+    "ours_nvidia_green": "#76B900",
+    "method_blue": "#3478C9",
+    "method_sky": "#56B4E9",
+    "method_orange": "#E69F00",
+    "method_coral": "#D55E00",
+    "method_violet": "#8064A2",
+    "method_rose": "#CC79A7",
+    "good": "#2E9B68",
+    "bad": "#D9655D",
+    "action": "#F2B84B",
+    "attention": "#2D6CDF",
+    "latent": "#087F87",
+    "reference": "#3F4B59",
+    "highlight_pale": "#FFF7D6",
+    "band_emerald": "#DDF4EA",
+    "band_blue": "#E6F0FB",
+    "band_violet": "#F1ECF7"
+  },
+  "colorblind_safe_series": [
+    "#0072B2",
+    "#D55E00",
+    "#009E73",
+    "#CC79A7",
+    "#F0E442",
+    "#56B4E9",
+    "#000000"
+  ],
+  "semantic_roles": {
+    "input_or_observation": "reference",
+    "representation_or_latent": "latent",
+    "attention_or_compute": "attention",
+    "action_or_control": "action",
+    "positive_score_or_ours": "good",
+    "negative_score_or_failure": "bad",
+    "measured_method": "method_blue",
+    "reference_baseline": "reference",
+    "detached_supervision": "method_orange"
+  },
+  "rules": [
+    "Use two to four semantic colors per panel; keep the paper and grid neutral.",
+    "Duplicate color with marker, line style, hatching, or direct text.",
+    "Reserve pale highlight_pale for the selected method or Pareto region, not for an extra series.",
+    "Action arrows use action; good/bad score frames use good/bad; do not make the full qualitative grid a rainbow."
+  ]
+}

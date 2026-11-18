@@ -47,6 +47,8 @@ LAYOUT_PRESET_MAP = {
 THEME_MAP = {
     "Academic Audit": "academic-audit",
     "GPU Systems Green（通用非官方）": "gpu-green-tech",
+    "WeLM-Image Green（Figure 1 参考）": "welm-image-green",
+    "CONCORD-Rec Jade–Iris（Figure 1/2 参考）": "concord-rec",
 }
 REFERENCE_PROVIDER_MAP = {
     "离线示例（默认，不联网）": "offline-example",

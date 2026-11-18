@@ -1,0 +1,56 @@
+\documentclass[tikz,border=3mm]{standalone}
+\input{base_style.tex}
+\input{palette_conference.tex}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % A generic, editable overview distilled from hero-evidence and semantic-band
+  % figures. Replace labels and evidence with paper-grounded content.
+  \node[figure title,text=cfink] at (8.0,7.0)
+    {Input $\rightarrow$ representation $\rightarrow$ evidence};
+  \node[figure subtitle,text=cfmuted] at (8.0,6.58)
+    {A white-paper overview template for a real case, compact core, and measured output.};
+
+  \begin{scope}[on background layer]
+    \fill[conference panel] (.25,.35) rectangle (15.75,6.18);
+    \fill[rounded corners=2mm,fill=cfbluebg,draw=cfnavy!40,line width=.5pt]
+      (.55,1.05) rectangle (4.45,5.95);
+    \fill[rounded corners=2mm,fill=cftealbg,draw=cfteal!40,line width=.5pt]
+      (4.80,1.05) rectangle (11.20,5.95);
+    \fill[rounded corners=2mm,fill=cfvioletbg,draw=cfviolet!40,line width=.5pt]
+      (11.55,1.05) rectangle (15.45,5.95);
+  \end{scope}
+
+  \node[figure label,anchor=west,text=cfnavy] at (.82,5.62) {A\quad Real input / condition};
+  \node[figure label,anchor=west,text=cfteal] at (5.08,5.62) {B\quad Compact representation};
+  \node[figure label,anchor=west,text=cfviolet] at (11.83,5.62) {C\quad Evidence / outputs};
+
+  \node[conference input] (frame) at (2.50,4.55) {real frame strip\\or observed input};
+  \node[conference input] (action) at (2.50,3.18) {action / context\\$a_t,\;\Delta t$};
+  \node[conference note] at (2.50,1.72) {Keep crop, timestamp, and\\source status in the manifest.};
+
+  \node[conference latent] (encoder) at (7.98,4.70) {encoder / backbone\\$h_t = f(x_{\le t})$};
+  \node[conference latent] (core) at (7.98,3.35) {core computation\\attention / diffusion / dynamics};
+  \node[conference latent] (repeat) at (7.98,2.00) {one repeated block $\times L$};
+  \draw[conference data] (frame.east) -- (encoder.west);
+  \draw[conference data] (action.east) -- (core.west);
+  \draw[conference data] (encoder) -- (core);
+  \draw[conference link] (core) -- (repeat);
+
+  \node[conference output] (prediction) at (13.48,4.72) {prediction / rollout\\$\hat{x}_{t+1:t+k}$};
+  \node[conference evidence] (metric) at (13.48,3.42) {metric, goal, or\\aligned ground truth};
+  \node[conference evidence] (qual) at (13.48,2.24) {qualitative panel\\fixed scale / crop};
+  \draw[conference data] (repeat.east) -- (prediction.west);
+  \draw[conference semantic] (prediction) -- (metric);
+  \draw[conference link] (metric) -- (qual);
+
+  % The lower rail is intentionally sparse: it encodes provenance/measurement,
+  % not decorative marketing claims.
+  \draw[draw=cfdivider,line width=1.0pt] (.85,.80) -- (15.15,.80);
+  \node[conference note,anchor=west] at (1.0,.80) {Evidence rail};
+  \node[conference evidence,minimum width=2.6cm] at (4.40,.80) {measured / implemented};
+  \node[conference evidence,minimum width=2.5cm] at (7.70,.80) {seed + hardware};
+  \node[conference evidence,minimum width=2.5cm] at (10.95,.80) {source + caption};
+  \node[conference note,anchor=east] at (14.98,.80) {status in manifest};
+\end{tikzpicture}
+\end{document}

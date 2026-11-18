@@ -1,0 +1,33 @@
+\definecolor{ink}{HTML}{16324D}
+\definecolor{navy}{HTML}{183B60}
+\definecolor{teal}{HTML}{087F87}
+\definecolor{violet}{HTML}{8060AB}
+\definecolor{amber}{HTML}{BC8320}
+\definecolor{coral}{HTML}{C46786}
+\definecolor{graphite}{HTML}{64778B}
+\definecolor{divider}{HTML}{D5E0E9}
+\definecolor{paper}{HTML}{FFFFFF}
+\definecolor{navybg}{HTML}{F0F5FA}
+\definecolor{tealbg}{HTML}{EBF7F4}
+\definecolor{violetbg}{HTML}{F3EFF8}
+\definecolor{amberbg}{HTML}{FFF6E5}
+\definecolor{pale}{HTML}{F8FBFC}
+
+\tikzset{
+  concord backbone/.style={draw=navy,fill=navybg,line width=.9pt},
+  concord conditioning/.style={draw=teal,fill=tealbg,line width=.9pt},
+  concord context/.style={draw=violet,fill=violetbg,line width=.9pt},
+  concord supervision/.style={draw=amber,fill=amberbg,line width=.9pt},
+  concord projection/.style={trapezium,trapezium left angle=70,trapezium right angle=110,
+    concord context,minimum width=2.8cm,minimum height=.62cm,text width=2.35cm,
+    inner sep=1.5pt,font=\fontsize{6.6}{7.8}\selectfont,align=center},
+  concord fusion/.style={regular polygon,regular polygon sides=6,concord conditioning,
+    minimum size=.75cm,text width=1.15cm,inner sep=.6pt,
+    font=\fontsize{6.3}{7.4}\selectfont,align=center},
+  concord store/.style={cylinder,shape border rotate=90,aspect=.28,concord supervision,
+    minimum width=3.0cm,minimum height=.7cm,text width=2.4cm,inner sep=1.5pt,
+    font=\fontsize{6.6}{7.8}\selectfont,align=center},
+  concord detached/.style={-Stealth,dashed,line width=.85pt,draw=amber},
+  concord data/.style={-Stealth,line width=1.0pt},
+  concord shared/.style={densely dotted,line width=.8pt,draw=graphite}
+}

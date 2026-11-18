@@ -137,6 +137,17 @@ class DataAnalysisTests(unittest.TestCase):
             self.assertEqual(len(archive.namelist()), 7)
             self.assertNotIn("private-unrelated.txt", archive.namelist())
 
+    def test_welm_image_palette_adds_radial_style_tokens(self):
+        path = self.write([
+            ["Accuracy", "Baseline", 60], ["Accuracy", "AlphaEdit", 90],
+            ["SST", "Baseline", 0], ["SST", "AlphaEdit", 0.9],
+        ])
+        outputs = render_annular_chart(path, self.root / "welm", palette_name="welm-image")
+        manifest = json.loads(Path(outputs["manifest"]).read_text())
+        self.assertEqual(manifest["chart"]["palette"], "welm-image")
+        self.assertEqual(manifest["chart"]["colors"]["AlphaEdit"], "#60AB88")
+        self.assertIn("#3bbb74", Path(outputs["svg"]).read_text().lower())
+
     def test_small_multiples_support_signed_values_and_mixed_evidence(self):
         path = self.write([
             ["Effect", "A", -3, "published-table"], ["Effect", "B", 2, "remeasured"],

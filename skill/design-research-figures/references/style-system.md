@@ -19,6 +19,29 @@ Pastel tokens are for grouping and status, never for inventing new categories. P
 
 For CUDA/runtime figures, a generic accelerator green is available under `assets/tikz/palette_gpu_green.tex`. The deterministic workflow renderer additionally supports `assets/themes/gpu_green_tech.json`: it maps the primary accent to `#63B246` and supplies background, card, rail, shadow, and semantic-light tokens. This is a generic technical theme: never use a third-party logo or imply endorsement, authorization, or affiliation. Emerald is suited to memory systems and rollouts. Warm Editorial is an optional paper-friendly alternative. Dark profiler palettes are best reserved for blogs, posters, or appendices.
 
+The `welm-image-green` theme records a separate reference grammar from WeLM-Image Figure 1. Its radial data charts use a white/paper background, thin gray sector boundaries, pale-to-deep green method series, direct value labels, a white donut center, bold tangent metric labels, and a segmented outer accent arc. The published chart series are `#60AB88`, `#7ABE96`, `#93CDA7`, `#ACDCBB`, `#C3E7CD`, and `#DBF3E2`; the outer arc is `#3BBB74`. The public technical-report style defines the related base tokens `#07C160`, `#057A3E`, `#95EC69`, `#EAF8F0`, `#191919`, `#7A7E83`, and `#D9D9D9`. The source and license metadata are stored in `assets/themes/welm_image_green.json`. Keep the source reference in the figure manifest when reusing the palette.
+
+The `concord-rec` theme is the retained CONCORD-Rec Figure 1/2 mechanism
+grammar. Its core tokens are navy `#183B60` for the inherited behavioral
+backbone, teal `#087F87` for trainable conditioning/fusion, violet `#8060AB`
+for observed modality context and projections, and amber `#BC8320` for detached
+offline supervision. Pale fills (`#F0F5FA`, `#EBF7F4`, `#F3EFF8`, `#FFF6E5`)
+group the four semantic roles on white paper. Stacked cards denote repeated
+states, trapezoids denote projections, hexagons denote fusion/loss operations,
+and cylinders denote catalog/posterior stores. The source code and approved
+vector references are retained under `cases/concord_rec_reference/`; use its
+provenance/status manifest whenever adapting this grammar.
+
+The top-conference research registry adds a generic white-paper token set in
+`cases/top_conference_visual_research/palette_tokens.json`. Its default
+semantic colors are emerald for the selected method, blue for measured model
+families, amber for actions or controls, teal for latent/conditioning content,
+violet for auxiliary context, and coral for a negative/contrast condition. The
+registry also includes the Okabe–Ito-like series list
+`#0072B2, #D55E00, #009E73, #CC79A7, #F0E442, #56B4E9, #000000` for charts where
+color accessibility matters. Treat these as derived tokens rather than a
+claim that any conference or paper endorses a palette.
+
 ## Typography modes
 
 - **Illustrative overview:** Comic Sans MS, Comic Neue, or Chalkboard SE as a friendly display family; short technical labels only.

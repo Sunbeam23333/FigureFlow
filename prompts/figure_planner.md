@@ -7,8 +7,9 @@ Rules:
 1. Preserve exactly one takeaway. Use 3–6 stages with short, distinct titles and an obvious reading order.
 2. Choose only `ribbon`, `bowtie`, or `dual-rail`. These are visual arrangements of the same ordered stage list: prefer ribbon for a standard sequence, bowtie for a five-stage story that emphasizes the middle stage, and dual-rail for an alternating sequence. Do not imply unlisted branches, roles, or edges.
 3. Choose only the enumerated themes, layout presets, accents, evidence statuses, and asset keys.
-   Use a different semantic asset key for every stage. Supported themes are `academic-audit` and
-   `gpu-green-tech`; the latter is a generic accelerator-systems palette and must not imply third-party endorsement.
+   Use a different semantic asset key for every stage. Supported themes are `academic-audit`,
+   `gpu-green-tech`, `welm-image-green`, and `concord-rec`; these technical palettes are reusable
+   and must not imply third-party endorsement or affiliation.
    Use `presentation-spacious` for projected slides and keep each stage body to at most two lines;
    otherwise use `standard`.
 4. Never invent metrics, measured results, adoption, compliance, or business impact. If the brief contains no evidence, use `illustrative`.

@@ -37,6 +37,12 @@ python3 "$FIGURE_SKILL_ROOT/scripts/render_publication_data.py" \
   --figureflow-root /path/to/FigureFlow --csv /path/to/data.csv \
   --kind annular --title "Model comparison" --focus-method "Candidate" \
   --output-dir /path/to/output/data
+
+# Optional WeLM-Image Figure 1 inspired green radial grammar
+python3 "$FIGURE_SKILL_ROOT/scripts/render_publication_data.py" \
+  --figureflow-root /path/to/FigureFlow --csv /path/to/data.csv \
+  --kind annular --palette welm-image --title "Model comparison" \
+  --focus-method "Candidate" --output-dir /path/to/output/data_welm_green
 ```
 
 The direct repository CLI also accepts per-metric optimization directions:
@@ -68,6 +74,7 @@ Use the supplied data's actual origin. Digitizing a published chart is `publishe
 ## Data-driven geometry and analysis
 
 - Annular bars support 2–24 metrics, 1–12 methods, at most 120 bars, nonnegative values, and metric names of at most 32 characters. Switch to small multiples when those limits or readability make the ring unsuitable.
+- `--palette welm-image` applies the WeLM-Image Figure 1 inspired series colors, gray sector guides, white donut center, and segmented outer accent arcs. The source metadata and reusable TikZ tokens are in `assets/themes/welm_image_green.json` and `assets/tikz/palette_welm_image.tex`.
 - Each annular metric is scaled to its own maximum. Zero is a baseline tick with zero radial length. The figure and manifest disclose this transform. Equal bar lengths across different metrics do not mean equal performance or effect size.
 - Small multiples support signed values and keep original units with independent panel axes. They support up to 36 metrics and 20 methods; split larger inputs.
 - Analysis compares methods separately within each metric, respects higher/lower-is-better, preserves ties, and reports the focus method's difference from the best alternative. Relative advantage is undefined when that alternative is zero. No cross-metric mean or significance claim is calculated.

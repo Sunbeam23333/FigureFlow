@@ -1,0 +1,38 @@
+{
+  "revision": "v8",
+  "retained": [
+    "network_structure"
+  ],
+  "redrawn": [
+    "architecture",
+    "utility",
+    "sensitivity",
+    "support",
+    "interventions",
+    "reported_scores",
+    "targets",
+    "catalog_partition_case"
+  ],
+  "main_layout_families": {
+    "A": "asymmetric parallel branches converging on central gate",
+    "B": "magnified allocation core with case/candidate side evidence",
+    "C": "separate inference and offline supervision rails"
+  },
+  "minimum_type_points": 7.5,
+  "target_width_cm": 17.2,
+  "primary_status": {
+    "architecture": "implemented",
+    "utility": "implemented",
+    "sensitivity": "simulation",
+    "support": "illustrative",
+    "interventions": "illustrative",
+    "reported_scores": "measured, source-reported R",
+    "targets": "forecast T",
+    "catalog_partition_case": "illustrative"
+  },
+  "immutable": [
+    "network_structure.*",
+    "registered title/abstract",
+    "data/*.csv"
+  ]
+}

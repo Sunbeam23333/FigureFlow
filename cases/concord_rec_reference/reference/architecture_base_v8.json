@@ -1,0 +1,229 @@
+{
+  "revision": "v8",
+  "claim": "Observed behavior and content feed tokenwise bounded residual allocation; detached out-of-fold utility targets supervise the gate.",
+  "canonical_status": "implemented",
+  "target_width_cm": 17.2,
+  "native_text": true,
+  "formula_source": [
+    {
+      "latex": "h_j\\in\\mathbb{R}^{d}",
+      "x": 224,
+      "y": 146,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "b_j\\in\\mathbb{R}^{V_j}",
+      "x": 224,
+      "y": 171,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "h_m,\\ \\xi\\ \\longrightarrow\\ d_{j,m}",
+      "x": 224,
+      "y": 316,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "w_{1,0}",
+      "x": 521,
+      "y": 127,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{1,1}",
+      "x": 562,
+      "y": 127,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{1,2}",
+      "x": 603,
+      "y": 127,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{1,3}",
+      "x": 644,
+      "y": 127,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{2,0}",
+      "x": 521,
+      "y": 151,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{2,1}",
+      "x": 562,
+      "y": 151,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{2,2}",
+      "x": 603,
+      "y": 151,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{2,3}",
+      "x": 644,
+      "y": 151,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{3,0}",
+      "x": 521,
+      "y": 175,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{3,1}",
+      "x": 562,
+      "y": 175,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{3,2}",
+      "x": 603,
+      "y": 175,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{3,3}",
+      "x": 644,
+      "y": 175,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{4,0}",
+      "x": 521,
+      "y": 199,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{4,1}",
+      "x": 562,
+      "y": 199,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{4,2}",
+      "x": 603,
+      "y": 199,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{4,3}",
+      "x": 644,
+      "y": 199,
+      "font_size_source": 16,
+      "scale": 1
+    },
+    {
+      "latex": "w_{j,m}\\propto\\bar a_m e^{g_{j,m}},\\quad\\bar a_0=1",
+      "x": 451,
+      "y": 217,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "r_{j,m,v}=B\\tanh(d_{j,m,v}/B)",
+      "x": 451,
+      "y": 247,
+      "font_size_source": 19,
+      "scale": 1
+    },
+    {
+      "latex": "\\ell_{j,v}=b_{j,v}+\\sum_{m=1}^{M}w_{j,m}r_{j,m,v}",
+      "x": 451,
+      "y": 275,
+      "font_size_source": 19,
+      "scale": 1
+    },
+    {
+      "latex": "\\pi(i)\\propto e^{S(i)}",
+      "x": 778,
+      "y": 264,
+      "font_size_source": 19,
+      "scale": 1
+    },
+    {
+      "latex": "S",
+      "x": 282,
+      "y": 392,
+      "font_size_source": 19,
+      "scale": 1
+    },
+    {
+      "latex": "S\\cup\\{m\\}",
+      "x": 278,
+      "y": 430,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "u_{j,m}=\\mathbb{E}_S[L_j^{-f}(S)-L_j^{-f}(S\\cup\\{m\\})]",
+      "x": 488,
+      "y": 397,
+      "font_size_source": 18,
+      "scale": 1
+    },
+    {
+      "latex": "\\mathrm{sg}(w_j^*)\\ \\longrightarrow\\ \\mathrm{KL}(w_j^*\\Vert w_j)",
+      "x": 490,
+      "y": 437,
+      "font_size_source": 19,
+      "scale": 1
+    }
+  ],
+  "editable_source": "redesign_v8/render.py",
+  "ai_layout": "main_figure_revision_v8/p03/generated/layout_A2.png",
+  "sources": [
+    "sections/02_method.tex",
+    "../code/concordrec/concordrec/model.py",
+    "../code/concordrec/concordrec/objectives.py"
+  ],
+  "photo_manifest": "redesign_v8/assets/photo_manifest.json",
+  "corrections_to_ai": [
+    "base is zero residual, not a media encoder",
+    "symbolic gate cells, no invented weights",
+    "SID indices are positions, not modalities",
+    "arbitrary S coalition",
+    "tanh bound and detached utility are exact"
+  ],
+  "minimum_native_text_points": 7.8720625,
+  "minimum_formula_points": 8.126,
+  "outputs": {
+    "svg": {
+      "path": "figures/architecture.svg",
+      "sha256": "f9f649b35eb7ad8018fda4815e4583648459eaa7697123a81312f49569a9c0fd"
+    },
+    "pdf": {
+      "path": "figures/architecture.pdf",
+      "sha256": "959242636aff8324ab6354334048e71055ebaff62f8a7d5ed98a422089a57a82"
+    },
+    "png": {
+      "path": "figures/architecture.png",
+      "sha256": "5a3ce7f76b162c692ff6419d3f335b6ea85035d46519a0ada05061e2090b2c78"
+    }
+  }
+}

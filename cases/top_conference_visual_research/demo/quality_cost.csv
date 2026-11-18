@@ -1,0 +1,7 @@
+method,time_s,fid,params_b,series,epoch,score,low,high
+Baseline-A,0.12,18.4,0.3,baseline,1,0.52,0.50,0.54
+Baseline-B,0.55,13.1,0.8,baseline,2,0.61,0.59,0.63
+Baseline-C,2.4,9.9,2.0,baseline,3,0.70,0.68,0.72
+Ours,0.95,7.1,1.2,ours,4,0.78,0.75,0.81
+Ours,0.95,7.1,1.2,ours,5,0.82,0.79,0.85
+Ours,0.95,7.1,1.2,ours,6,0.86,0.83,0.89

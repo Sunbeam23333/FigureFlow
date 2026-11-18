@@ -43,6 +43,8 @@ THEME_DIR = Path(__file__).resolve().parent.parent / "assets" / "themes"
 THEME_FILES = {
     "academic-audit": THEME_DIR / "academic_audit.json",
     "gpu-green-tech": THEME_DIR / "gpu_green_tech.json",
+    "welm-image-green": THEME_DIR / "welm_image_green.json",
+    "concord-rec": THEME_DIR / "concord_rec.json",
 }
 SAFE_ASSET_KEYS = {
     "layout_planner",

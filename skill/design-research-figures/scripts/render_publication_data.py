@@ -15,6 +15,8 @@ def main() -> None:
     source.add_argument("--csv", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--kind", choices=["annular", "small-multiples"], default="annular")
+    parser.add_argument("--palette", choices=["alphaedit", "welm-image"], default="alphaedit",
+                        help="Chart palette. 'welm-image' uses the green radial-chart grammar.")
     parser.add_argument("--title", default="Model editing performance")
     parser.add_argument("--focus-method", default="AlphaEdit")
     args = parser.parse_args()
@@ -25,7 +27,8 @@ def main() -> None:
         command = [sys.executable, "-m", "demo_core.alphaedit_reproduction"]
     else:
         command = [sys.executable, "-m", "demo_core.data_analysis", str(args.csv.resolve()),
-                   "--kind", args.kind, "--title", args.title, "--focus-method", args.focus_method]
+                   "--kind", args.kind, "--palette", args.palette,
+                   "--title", args.title, "--focus-method", args.focus_method]
     command.extend(["--output-dir", str(args.output_dir.resolve())])
     subprocess.run(command, cwd=root, check=True)
 

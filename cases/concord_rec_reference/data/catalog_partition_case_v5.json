@@ -1,0 +1,85 @@
+{
+  "status": "illustrative",
+  "calculation": "exact normalization of specified toy token probabilities; not model inference",
+  "state": [
+    7,
+    null,
+    null
+  ],
+  "target": "A",
+  "catalog": {
+    "A": [
+      7,
+      2,
+      4
+    ],
+    "B": [
+      7,
+      2,
+      8
+    ],
+    "C": [
+      7,
+      5,
+      4
+    ],
+    "D": [
+      7,
+      5,
+      9
+    ]
+  },
+  "coalition_without": [
+    "text"
+  ],
+  "coalition_with": [
+    "text",
+    "image"
+  ],
+  "p2_both": {
+    "2": 0.5,
+    "5": 0.5
+  },
+  "p3_without": {
+    "4": 0.2,
+    "8": 0.1,
+    "9": 0.7
+  },
+  "p3_with": {
+    "4": 0.4,
+    "8": 0.5,
+    "9": 0.1
+  },
+  "item_prior": 0,
+  "pi_without": [
+    0.16666666666666669,
+    0.08333333333333334,
+    0.16666666666666669,
+    0.5833333333333334
+  ],
+  "pi_with": [
+    0.2857142857142857,
+    0.3571428571428571,
+    0.2857142857142857,
+    0.07142857142857142
+  ],
+  "target_code_partition": [
+    "A",
+    "B"
+  ],
+  "mass_without": 0.25,
+  "mass_with": 0.6428571428571428,
+  "raw_token_loss_difference": 0,
+  "partition_loss_without": 1.3862943611198906,
+  "partition_loss_with": 0.44183275227903934,
+  "single_coalition_loss_difference": 0.9444616088408513,
+  "photograph": "shared/case_assets_v5/prepared/tent.jpg",
+  "photograph_role": "observed historical content illustration; specified probabilities are independent of photograph",
+  "caption_origin": "author descriptive caption",
+  "numeric_verification": {
+    "raw_inputs_sum_to_one": true,
+    "posterior_sum_to_one": true,
+    "same_support": true,
+    "raw_ce_unchanged": true
+  }
+}

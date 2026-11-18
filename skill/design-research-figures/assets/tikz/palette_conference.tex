@@ -1,0 +1,35 @@
+% Derived white-paper palette for the top-conference visual research registry.
+% This is a generic FigureFlow palette, not a conference or vendor brand.
+\definecolor{cfink}{HTML}{1F2933}
+\definecolor{cfmuted}{HTML}{667085}
+\definecolor{cfdivider}{HTML}{D9E1E8}
+\definecolor{cfpaper}{HTML}{FFFFFF}
+\definecolor{cfnavy}{HTML}{244B6B}
+\definecolor{cfblue}{HTML}{3478C9}
+\definecolor{cferm}{HTML}{0E9F6E}
+\definecolor{cfteal}{HTML}{087F87}
+\definecolor{cfviolet}{HTML}{8064A2}
+\definecolor{cfamber}{HTML}{F2B84B}
+\definecolor{cfcoral}{HTML}{D9655D}
+\definecolor{cfpale}{HTML}{FFF7D6}
+\definecolor{cfbluebg}{HTML}{EAF2FB}
+\definecolor{cftealbg}{HTML}{E8F6F1}
+\definecolor{cfvioletbg}{HTML}{F1ECF7}
+\definecolor{cfamberbg}{HTML}{FFF6DF}
+
+\tikzset{
+  conference panel/.style={rounded corners=2mm,draw=cfdivider,line width=.55pt,fill=cfpaper},
+  conference input/.style={rounded corners=1.6mm,draw=cfnavy,fill=cfbluebg,line width=.8pt,
+    minimum width=2.35cm,minimum height=.72cm,inner sep=3pt,align=center,font=\fontsize{7}{8.3}\selectfont},
+  conference latent/.style={rounded corners=1.6mm,draw=cfteal,fill=cftealbg,line width=.8pt,
+    minimum width=2.65cm,minimum height=.82cm,inner sep=3pt,align=center,font=\fontsize{7}{8.3}\selectfont},
+  conference output/.style={rounded corners=1.6mm,draw=cfviolet,fill=cfvioletbg,line width=.8pt,
+    minimum width=2.35cm,minimum height=.72cm,inner sep=3pt,align=center,font=\fontsize{7}{8.3}\selectfont},
+  conference evidence/.style={rounded corners=1.2mm,draw=cfamber!80!black,fill=cfamberbg,line width=.75pt,
+    minimum width=1.85cm,minimum height=.58cm,inner sep=2.2pt,align=center,font=\fontsize{6.5}{7.6}\selectfont},
+  conference note/.style={rounded corners=1mm,draw=cfdivider,fill=cfpaper,line width=.5pt,
+    inner sep=2pt,align=center,font=\fontsize{6.2}{7.3}\selectfont,text=cfmuted},
+  conference data/.style={-Stealth,line width=1.0pt,draw=cfblue},
+  conference semantic/.style={-Stealth,dashed,line width=.8pt,draw=cfamber!80!black},
+  conference link/.style={densely dotted,line width=.75pt,draw=cfmuted}
+}

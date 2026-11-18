@@ -22,6 +22,15 @@ import zipfile
 
 PALETTE = ("#645AC6", "#C3DEC3", "#FFDCC7", "#A3B5D6", "#DEA991")
 ALPHAEDIT_METHOD_COLORS = dict(zip(("AlphaEdit", "RECT", "PRUNE", "MEMIT", "ROME"), PALETTE))
+WELM_IMAGE_RADIAL_PALETTE = (
+    "#60AB88",  # WeLM-Image
+    "#7ABE96",  # HunyuanImage-3.0-Instruct-Distil
+    "#93CDA7",  # Qwen-Image
+    "#ACDCBB",  # Qwen-Image-2512
+    "#C3E7CD",  # SenseNova-U1-8B-MoT
+    "#DBF3E2",  # Ernie-Image-Turbo
+)
+PALETTE_NAMES = ("alphaedit", "welm-image")
 EVIDENCE_CODES = {
     "published-figure": "P", "published-table": "T", "user-supplied": "U",
     "remeasured": "R", "measured": "M", "synthetic-demo": "S",
@@ -212,13 +221,15 @@ def _plot_imports():
     return matplotlib, plt
 
 
-def _method_colors(methods: tuple[str, ...], focus: str) -> dict[str, str]:
+def _method_colors(methods: tuple[str, ...], focus: str, palette_name: str = "alphaedit") -> dict[str, str]:
     from matplotlib import colormaps
     from matplotlib.colors import to_hex
+    if palette_name not in PALETTE_NAMES:
+        raise ValueError(f"Unknown chart palette: {palette_name!r}; choose one of {PALETTE_NAMES}")
     ordered = [focus, *[method for method in methods if method != focus]]
-    if set(methods).issubset(ALPHAEDIT_METHOD_COLORS):
+    if palette_name == "alphaedit" and set(methods).issubset(ALPHAEDIT_METHOD_COLORS):
         return {method: ALPHAEDIT_METHOD_COLORS[method] for method in methods}
-    colors = list(PALETTE)
+    colors = list(WELM_IMAGE_RADIAL_PALETTE if palette_name == "welm-image" else PALETTE)
     colors += [to_hex(colormaps["tab20"](index)) for index in range(20)]
     return dict(zip(ordered, colors))
 
@@ -361,7 +372,7 @@ def _save_outputs(fig, table: DataTable, analysis: dict, output_dir: str | Path,
 def render_annular_chart(
     csv_path: str | Path, output_dir: str | Path, *, title: str = "Model comparison",
     subtitle: str = "Performance across metrics", focus_method: str | None = None,
-    higher_is_better: Mapping[str, bool] | None = None,
+    higher_is_better: Mapping[str, bool] | None = None, palette_name: str = "alphaedit",
 ) -> dict[str, str]:
     """Render grouped annular bars with explicit independent per-metric scales.
 
@@ -381,7 +392,7 @@ def render_annular_chart(
     mpl, plt = _plot_imports()
     from matplotlib.patches import Arc, Patch, Wedge
     focus = analysis["focus_method"]
-    colors = _method_colors(table.methods, focus)
+    colors = _method_colors(table.methods, focus, palette_name)
     # Constant order at every group is a redundant encoding independent of color.
     methods = (focus, *[method for method in table.methods if method != focus])
     lookup = table.lookup()
@@ -405,9 +416,12 @@ def render_annular_chart(
             raise ValueError(f"Metric label {metric!r} would be smaller than 7.5 pt at this density; "
                              "shorten it, split the metrics, or use small-multiples")
     with mpl.rc_context(_RC):
-        fig = plt.figure(figsize=(size, size + 0.7), facecolor="white")
+        paper = "#F7F7F7" if palette_name == "welm-image" else "white"
+        ink = "#191919" if palette_name == "welm-image" else "#242331"
+        grid = "#D9D9D9" if palette_name == "welm-image" else "#E8E8EE"
+        fig = plt.figure(figsize=(size, size + 0.7), facecolor=paper)
         ax = fig.add_axes([0.035, 0.13, 0.93, 0.82], aspect="equal")
-        ax.set(xlim=(-2.0, 2.0), ylim=(-2.0, 2.0))
+        ax.set(xlim=(-2.08, 2.08), ylim=(-2.08, 2.08))
         ax.axis("off")
         fig.canvas.draw()
         inner, extent = 1.00, 0.76
@@ -423,7 +437,14 @@ def render_annular_chart(
             # Subtle 100% arc within each sector, not a universal quantitative axis.
             ax.add_patch(Arc((0, 0), 2 * (inner + extent), 2 * (inner + extent),
                              theta1=math.degrees(center - usable / 2),
-                             theta2=math.degrees(center + usable / 2), color="#E8E8EE", linewidth=0.6))
+                             theta2=math.degrees(center + usable / 2), color=grid, linewidth=0.6))
+            if palette_name == "welm-image":
+                # The published WeLM-Image radial charts use a segmented outer
+                # arc to make benchmark groups visible before reading the bars.
+                ax.add_patch(Arc((0, 0), 3.86, 3.86,
+                                 theta1=math.degrees(center - usable / 2),
+                                 theta2=math.degrees(center + usable / 2),
+                                 color="#3BBB74", linewidth=10, capstyle="butt"))
             for method_index, method in enumerate(methods):
                 row = lookup[metric, method]
                 theta = start - (method_index + 0.5) * bar_width
@@ -447,12 +468,12 @@ def render_annular_chart(
                 ax.text(radius * math.cos(theta), radius * math.sin(theta), label,
                         ha="left" if right_half else "right", va="center",
                         rotation=rotation, rotation_mode="anchor",
-                        fontsize=font_size, color="#25252D", parse_math=False)
+                        fontsize=font_size, color=ink, parse_math=False)
             direction = "↑" if (higher_is_better or {}).get(metric, True) else "↓"
             _curve_label(ax, metric + " " + direction, center, 0.90, fontsize=10,
                          arc=group_angle * 0.90)
         ax.text(0, 0.12, center_title, ha="center", va="center",
-                fontsize=19, weight="semibold", color="#242331", linespacing=1.35, parse_math=False)
+                fontsize=19, weight="semibold", color=ink, linespacing=1.35, parse_math=False)
         ax.text(0, -0.23, center_subtitle, ha="center", va="center",
                 fontsize=10.5, color="#676571", linespacing=1.45, parse_math=False)
         handles = [Patch(facecolor=colors[method], label=method) for method in methods]
@@ -466,7 +487,8 @@ def render_annular_chart(
                      color="#676571", parse_math=False)
         try:
             return _save_outputs(fig, table, analysis, output_dir, "annular_chart",
-                                 {"kind": "grouped-annular", "method_order": list(methods), "colors": colors,
+                                 {"kind": "grouped-annular", "palette": palette_name,
+                                  "method_order": list(methods), "colors": colors,
                                   "normalization": "per-metric maximum", "metric_maxima": scales,
                                   "zero_encoding": "baseline tick; zero radial length", "value_labels": True})
         finally:
@@ -476,6 +498,7 @@ def render_annular_chart(
 def render_small_multiples(
     csv_path: str | Path, output_dir: str | Path, *, title: str = "Model comparison",
     focus_method: str | None = None, higher_is_better: Mapping[str, bool] | None = None,
+    palette_name: str = "alphaedit",
 ) -> dict[str, str]:
     """Render conventional per-metric panels in original units, including negatives."""
     table = load_data(csv_path)
@@ -485,7 +508,7 @@ def render_small_multiples(
     analysis = analyze_data(table, focus_method=focus_method, higher_is_better=higher_is_better)
     mpl, plt = _plot_imports()
     focus = analysis["focus_method"]
-    colors = _method_colors(table.methods, focus)
+    colors = _method_colors(table.methods, focus, palette_name)
     lookup = table.lookup()
     columns = min(3, len(table.metrics))
     rows = math.ceil(len(table.metrics) / columns)
@@ -528,7 +551,8 @@ def render_small_multiples(
         fig.supxlabel(_evidence_note(table) + "\n" + _source_note(table), fontsize=8, color="#676571")
         try:
             return _save_outputs(fig, table, analysis, output_dir, "small_multiples",
-                                 {"kind": "small-multiples", "method_order": list(table.methods),
+                                 {"kind": "small-multiples", "palette": palette_name,
+                                  "method_order": list(table.methods),
                                   "colors": colors, "normalization": "none; original values",
                                   "independent_panel_axes": True, "value_labels": True})
         finally:
@@ -542,12 +566,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--chart", "--kind", choices=("annular", "small-multiples"), default="annular")
     parser.add_argument("--title", default="Model comparison")
     parser.add_argument("--focus-method")
+    parser.add_argument("--palette", choices=PALETTE_NAMES, default="alphaedit",
+                        help="Color system for the chart. 'welm-image' reuses the green radial-chart grammar.")
     parser.add_argument("--lower-is-better", action="append", default=[], metavar="METRIC")
     args = parser.parse_args(argv)
     renderer = render_annular_chart if args.chart == "annular" else render_small_multiples
     try:
         result = renderer(args.csv, args.output_dir, title=args.title, focus_method=args.focus_method,
-                          higher_is_better={metric: False for metric in args.lower_is_better})
+                          higher_is_better={metric: False for metric in args.lower_is_better},
+                          palette_name=args.palette)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, indent=2))

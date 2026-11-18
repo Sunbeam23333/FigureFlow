@@ -1,0 +1,12 @@
+{
+  "id": "CO-F-original",
+  "status": "illustrative",
+  "font": "Comic Sans MS; math retains dedicated vector math glyphs",
+  "claim": "CONCORD-Rec allocates bounded modality corrections with catalog support and offline utility supervision.",
+  "sources": [
+    "prior approved CONCORD-Rec upper architecture SVG",
+    "compact offline supervision strip"
+  ],
+  "palette_reference": "paper/画图模板/论文配色",
+  "installed": true
+}
