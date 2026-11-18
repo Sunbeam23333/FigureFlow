@@ -1,8 +1,8 @@
 # Top-conference visual research registry
 
 This case records a source-grounded visual study of representative **Best Paper,
-Outstanding Paper, and official honorable-mention** figures from CVPR, ICML,
-NeurIPS, and ICLR. It is a design reference for FigureFlow, not a collection of
+Outstanding Paper, and official honorable-mention** figures from CVPR, ICCV,
+ICML, NeurIPS, and ICLR. It is a design reference for FigureFlow, not a collection of
 paper screenshots. We keep official paper/award links, figure-level observations,
 derived design tokens, and small native-vector templates; we do **not** vendor
 third-party figure images or reuse their experimental values.
@@ -15,6 +15,8 @@ third-party figure images or reuse their experimental values.
 | [`palette_tokens.json`](palette_tokens.json) | White-paper, emerald, action, score, and colorblind-safe tokens |
 | [`derived_rules.md`](derived_rules.md) | Cross-paper layout rules for main figures, qualitative panels, and data plots |
 | [`source_links.md`](source_links.md) | Official awards, proceedings, open-access PDFs, and access date |
+| [`figureflow_top_conference_atlas.pdf`](figureflow_top_conference_atlas.pdf) | Eight-page local demonstration of integrated layouts, colors, native outputs, and QA boundary |
+| [`build_atlas.py`](build_atlas.py) | Rebuilds the PDF atlas from repository-native assets and generated demo outputs |
 | [`../../skill/design-research-figures/assets/tikz/conference_overview_template.tex`](../../skill/design-research-figures/assets/tikz/conference_overview_template.tex) | Editable generic input → representation → evidence overview |
 
 The registry deliberately separates `source_evidence` from `derived_rule`.
@@ -58,6 +60,18 @@ For data charts, `render_data_figure.py` now supports line confidence bands,
 point error bars, direct end labels, and `kind: bubble` with a numeric
 `size_field`. Error bars/bands are only valid when the source CSV contains real
 seed or interval evidence; the figure status must still be declared in YAML.
+
+## PDF atlas
+
+The checked-in `figureflow_top_conference_atlas.pdf` is a visual handoff for
+the current integration. It has eight landscape A4 pages: grammar families,
+CONCORD-Rec native examples, AlphaEdit/data-chart examples, the white-paper
+overview template, a world-model rollout rail, palette tokens, and provenance /
+QA. Rebuild it with an environment that has ReportLab, Pillow, and pypdf:
+
+```bash
+python3 build_atlas.py --output figureflow_top_conference_atlas.pdf
+```
 
 ## Scope and attribution
 

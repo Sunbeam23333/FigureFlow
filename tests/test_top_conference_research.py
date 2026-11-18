@@ -13,8 +13,8 @@ class TopConferenceResearchTests(unittest.TestCase):
     def test_catalog_covers_four_conferences_and_has_source_urls(self) -> None:
         catalog = json.loads((CASE / "catalog.json").read_text(encoding="utf-8"))
         entries = catalog["entries"]
-        self.assertGreaterEqual(len(entries), 12)
-        self.assertEqual({entry["conference"] for entry in entries}, {"CVPR", "ICML", "NeurIPS", "ICLR"})
+        self.assertGreaterEqual(len(entries), 30)
+        self.assertTrue({"CVPR", "ICML", "NeurIPS", "ICLR"}.issubset({entry["conference"] for entry in entries}))
         self.assertTrue(all(entry["source_url"].startswith("https://") for entry in entries))
         self.assertTrue(all(entry["layout_family"] and entry["reusable_rules"] for entry in entries))
 
@@ -31,6 +31,13 @@ class TopConferenceResearchTests(unittest.TestCase):
             if path.is_file() and path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}
         ]
         self.assertEqual(external_images, [])
+
+    def test_pdf_atlas_is_checked_in_and_eight_pages(self) -> None:
+        atlas = CASE / "figureflow_top_conference_atlas.pdf"
+        self.assertTrue(atlas.is_file())
+        from pypdf import PdfReader
+
+        self.assertEqual(len(PdfReader(str(atlas)).pages), 8)
 
 
 if __name__ == "__main__":

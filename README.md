@@ -48,7 +48,7 @@ python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
 
 [`cases/top_conference_visual_research/`](cases/top_conference_visual_research/)
 保存了一轮基于官方奖项页和论文 PDF 的 CVPR、ICML、NeurIPS、ICLR 视觉
-调研：它包含 15 个代表性条目、主图/定性图/数据图的布局语法、白底与
+调研：它包含 33 个代表性条目、主图/定性图/数据图的布局语法、白底与
 emerald/action/score 调色 token、colorblind-safe 系列，以及一个可编辑的
 `input → representation → evidence` TikZ 模板。仓库不复制第三方论文整图，
 只保留来源链接、图号级观察和派生规则；每个论文条目都明确了可复用的
@@ -66,6 +66,12 @@ python3 skill/design-research-figures/scripts/render_data_figure.py \
 新主图候选应先从 registry 选择 `hero_evidence`、`action_rollout`、
 `qualitative_matrix`、`multiscale_ladder`、`quality_cost_bubble` 或
 `small_multiples`，再把真实帧、公式和测量值接入确定性渲染器。
+
+当前集成的八页 PDF 图册见
+[`figureflow_top_conference_atlas.pdf`](cases/top_conference_visual_research/figureflow_top_conference_atlas.pdf)。
+它展示了主图、定性矩阵、rollout/action rail、AlphaEdit 数据图、bubble/
+learning-dynamics demo、主图模板和最终调色板；重建脚本为
+[`build_atlas.py`](cases/top_conference_visual_research/build_atlas.py)。
 
 忠实模式从官方 PDF 数字化的 71 个路径和 555 个字形实例重建，不是作者的原始绘图代码，也不从 CSV 重新推导手工几何；55 个数值标签与原图白字字形独立绑定核验。数据驱动模式可换数据重算，逐指标独立缩放和排名，零值为基线刻度，不做跨指标平均或统计显著性推断。完整运行方法、最小复演 ZIP 和 skill 入口见[案例说明](cases/alphaedit_figure2/README.md)。
 

@@ -77,6 +77,46 @@ One metric gets one local scale; do not imply that radial length across unrelate
 metrics is a common unit. Direct labels and a stable method order are preferable
 to a large legend. AlphaEdit and WeLM-Image are retained as executable examples.
 
+### Qualitative + metric triptych
+
+For video/world-model claims, use one fixed conditioning input and a matrix of
+aligned frames first, then place the consistency/quality trade-off and temporal
+metric curve beside or below it. Keep the method order identical in the grid,
+the bubble/scatter, and any metric table. A black or gray dashed real-video
+lower bound is more legible than a second saturated method color.
+
+### Ablation small multiples
+
+Use a 2×K or three-panel layout with shared y-limits. Columns should be the
+hyperparameter or intervention; rows should be metric/task. Keep one global
+legend and sparse markers. For mean curves, a translucent band is valid only
+when its construction (seeds, bootstrap, or interval) is recorded. Inline metric
+footers belong under qualitative tiles when the visual sample and its score are
+inseparable.
+
+### Evidence cascade
+
+When a data-quality choice affects a model result, show the chain as
+`distribution → filtered data → rank/coverage → downstream metric`. Dashed
+grouping boxes and directional arrows can clarify causality, but each panel keeps
+its own scale; do not place histograms, radars, and performance values on one
+shared axis.
+
+### Scaling extrapolation and phase transitions
+
+Scaling figures use log-log axes, stable colors across facets, and a visible
+observed-versus-predicted distinction. Put exponents, equations, and crossover
+or extrapolation regions inside the panel. A phase transition is not a smooth
+scaling law: use a vertical threshold guide and annotate the critical value
+instead of fitting a decorative line through the jump.
+
+### Uncertainty and robustness
+
+For estimates, use density/violin plus a median marker, ordered swarms for
+model-spec robustness, and a compact checkmark matrix for degrees of freedom.
+Place 90%/95% intervals next to the estimate or in a clearly labelled ribbon;
+never hide them in a legend or encode them as an unexplained pale band.
+
 ## Shared publication rules
 
 1. White or very light background; grid and dividers are quiet.

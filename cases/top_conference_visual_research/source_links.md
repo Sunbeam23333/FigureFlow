@@ -6,6 +6,10 @@ proceedings, CVF, PMLR, or ICLR proceedings where available.
 
 ## CVPR
 
+* [CVPR 2026 awards](https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers) — D4RT (Best Paper), O-Voxel (Best Student Paper), and NitroGen (Best Paper honorable mention).
+* [D4RT paper PDF](https://openaccess.thecvf.com/content/CVPR2026/papers/Zhang_Efficiently_Reconstructing_Dynamic_Scenes_One_D4RT_at_a_Time_CVPR_2026_paper.pdf).
+* [O-Voxel paper page](https://openaccess.thecvf.com/content/CVPR2026/html/Xiang_Native_and_Compact_Structured_Latents_for_3D_Generation_CVPR_2026_paper.html).
+* [NitroGen paper PDF](https://openaccess.thecvf.com/content/CVPR2026/papers/Magne_NitroGen_An_Open_Foundation_Model_for_Generalist_Gaming_Agents_CVPR_2026_paper.pdf).
 * [CVPR 2025 awards](https://cvpr.thecvf.com/Conferences/2025/BestPapersDemos) — VGGT (Best Paper), Navigation World Models (honorable mention), and Molmo/PixMo (honorable mention).
 * [VGGT paper PDF](https://openaccess.thecvf.com/content/CVPR2025/papers/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.pdf).
 * [Navigation World Models paper PDF](https://openaccess.thecvf.com/content/CVPR2025/papers/Bar_Navigation_World_Models_CVPR_2025_paper.pdf).
@@ -24,8 +28,16 @@ proceedings, CVF, PMLR, or ICLR proceedings where available.
 * [UniSim paper PDF](https://proceedings.iclr.cc/paper_files/paper/2024/file/c4d66eae503694424123b93ac0fbaf17-Paper-Conference.pdf).
 * [Vision Transformers Need Registers paper PDF](https://proceedings.iclr.cc/paper_files/paper/2024/file/0b408293619f725fd30162af057e531a-Paper-Conference.pdf).
 
+## ICCV
+
+* [Mixture-of-Scores paper PDF](https://openaccess.thecvf.com/content/ICCV2025/papers/Wu_Mixture-of-Scores_Robust_Image-Text_Data_Valuation_via_Three_Lines_of_Code_ICCV2025_paper.pdf) — evidence-cascade and quality–cost bubble reference.
+
 ## NeurIPS
 
+* [NeurIPS 2025 Best Paper Awards](https://blog.neurips.cc/2025/11/26/announcing-the-neurips-2025-best-paper-awards/) — the official list includes Gated Attention and Artificial Hivemind among the award recipients; the announcement notes that award papers are presented in oral sessions.
+* [Gated Attention paper PDF](https://papers.neurips.cc/paper_files/paper/2025/file/904e89bb4e632e75fb47f093b620b257-Paper-Conference.pdf).
+* [Artificial Hivemind paper PDF](https://papers.neurips.cc/paper_files/paper/2025/file/754d5a526a5ee5a47220664a0eb92751-Paper-Datasets_and_Benchmarks_Track.pdf).
+* [Superposition Yields Robust Neural Scaling paper page](https://proceedings.neurips.cc/paper_files/paper/2025/hash/e97ac22927560eb2de6b658498cbc575-Abstract-Conference.html).
 * [NeurIPS 2024 Best Paper Awards PDF](https://media.neurips.cc/Conferences/NeurIPS2024/NeurIPS2024_Best_Paper_Awards.pdf) — Visual Autoregressive Modeling (Best Paper), Guiding a Diffusion Model with a Bad Version of Itself (runner-up), Not All Tokens Are What You Need for Pretraining (runner-up), and PRISM (Best Datasets).
 * [Visual Autoregressive Modeling paper PDF](https://papers.neurips.cc/paper_files/paper/2024/file/9a24e284b187f662681440ba15c416fb-Paper-Conference.pdf).
 * [Stochastic Taylor Derivative Estimator paper PDF](https://proceedings.neurips.cc/paper_files/paper/2024/file/dd2eb5250696753ea37141bbd89bb569-Paper-Conference.pdf).
@@ -35,6 +47,8 @@ proceedings, CVF, PMLR, or ICLR proceedings where available.
 
 ## ICML
 
+* [Scaling Laws for Pre-training Agents and World Models](https://proceedings.mlr.press/v267/pearce25a.html) — a directly relevant world-model scaling-law reference.
+* [A Hitchhiker's Guide to Scaling Law Estimation](https://proceedings.mlr.press/v267/choshen25a.html) — checkpoint trajectories, fit populations, and uncertainty design.
 * [ICML 2023 awards](https://icml.cc/Conferences/2023/Awards) — D-Adaptation, A Watermark for Large Language Models, Generalization on the Unseen, and related outstanding-paper references.
 * [A Watermark for Large Language Models (PMLR)](https://proceedings.mlr.press/v202/kirchenbauer23a.html).
 * [A Watermark PDF](https://proceedings.mlr.press/v202/kirchenbauer23a/kirchenbauer23a.pdf).
