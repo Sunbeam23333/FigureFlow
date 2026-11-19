@@ -19,6 +19,8 @@ third-party figure images or reuse their experimental values.
 | [`exact_templates/manifest.json`](exact_templates/manifest.json) | Figure IDs, official source pages, panel grammar, and semantic palettes |
 | [`figureflow_exact_reproduction_atlas.pdf`](figureflow_exact_reproduction_atlas.pdf) | Exact-template contact-sheet PDF used for visual QA |
 | [`build_exact_reproduction_atlas.py`](build_exact_reproduction_atlas.py) | Rebuilds the contact-sheet PDF from the native templates |
+| [`figureflow_source_locked_atlas.pdf`](figureflow_source_locked_atlas.pdf) | Pixel-faithful crops from the cited published PDFs |
+| [`build_source_locked_atlas.py`](build_source_locked_atlas.py) | Rebuilds the source-locked atlas when the 12 cited PDFs are supplied locally |
 | [`figureflow_top_conference_atlas.pdf`](figureflow_top_conference_atlas.pdf) | Legacy eight-page style survey; not an exact-paper reproduction route |
 | [`../../skill/design-research-figures/assets/tikz/conference_overview_template.tex`](../../skill/design-research-figures/assets/tikz/conference_overview_template.tex) | Legacy generic input → representation → evidence grammar demo |
 

@@ -7,6 +7,11 @@ This directory contains two explicitly separated routes for the 12 requested vis
 
 The source-locked route does not download or vendor a paper. The source PDF is supplied by the user at render time; its SHA-256, page, and normalized crop bbox are recorded in the output manifest. The repository stores only the crop specification and the TikZ wrapper.
 
+`figureflow_source_locked_atlas.pdf` is generated from those local source PDFs;
+it is the visual reference for the 100%-identity route. The older
+`figureflow_exact_reproduction_atlas.pdf` is the native-trace atlas and should
+not be used as the pixel-identity reference.
+
 The templates intentionally do **not** reuse `conference_overview_template.tex`; that file remains a generic grammar demo and is not an exact-paper route.
 
 ## FigureFlow route
