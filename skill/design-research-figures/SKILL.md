@@ -38,6 +38,7 @@ Choose the renderer only after the claim and evidence status are fixed.
 | Exact comparison values and status-aware cells | result table | YAML + TeX fragment | `render_table.py` |
 | CUDA lanes, GPU blocks, memory, hardware projection | mechanism diagram | TikZ/LaTeX | `assets/tikz/` + `compile_figures.py` |
 | Real rollout or qualitative evidence | case panel | source frames + manifest | `extract_frames.py` plus deterministic composition |
+| Framework with a real case embedded in the flow | case-study-in-flow | source frames + typed composition spec | deterministic crop/overlay composer + `compile_figures.py` |
 | Missing semantic bitmap | text-free asset only | prompt + PNG alpha | use the `imagegen` skill |
 
 Read [references/module-router.md](references/module-router.md) for the YAML contracts and module-specific checks. Read [references/style-system.md](references/style-system.md) when adapting the theme, typography, or final size.

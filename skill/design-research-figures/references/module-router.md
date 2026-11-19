@@ -95,6 +95,16 @@ gates:
 
 Keep stage titles short. If one stage branches, use independent source/destination ports and distinct curves; do not stack coincident arrows. The lower gate belt is for preregistered stopping or falsification criteria, not feature marketing.
 
+## Case-study-in-flow composition
+
+Use the case-study route when a framework figure must carry a real qualitative
+example through the computation. Read `references/case-study-in-flow.md` first.
+Keep Figure 1 teaser semantics separate from framework semantics: a failure-only
+teaser may use a frame strip plus one diagnostic curve, while a method figure
+may use a borderless case strip, an overlapping inset, or a dual rail with
+projection links. Every case crop needs a source/frame manifest and an evidence
+status; every overlap must encode a real relationship rather than fill space.
+
 ## Report, SOP, or patent workflow
 
 Use `render_workflow.py` when the deliverable is a Chinese-friendly process figure rather than a paper method overview. Treat the language model as a planner only: it may propose semantic stages and asset prompts, but the renderer owns geometry, connectors, exact text, evidence labels, and file output. Validate the JSON before rendering; never execute model-produced code or accept model-produced file paths.
