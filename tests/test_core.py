@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from demo_core import asset_pipeline, pipeline, planner, reference_search, renderer_adapter  # noqa: E402
+from demo_core.figure_router import route_figure  # noqa: E402
 from demo_core.schemas import BBox, CaseEvidenceLayer, FigurePlan, FigureSpec, RevisionSpec, StagePlan, display_units  # noqa: E402
 
 
@@ -75,6 +76,20 @@ class SchemaAndApiTests(unittest.TestCase):
                 requested_operations=["move"],
                 rationale="This scope intentionally conflicts.",
             )
+
+    def test_role_router_keeps_data_analysis_separate_from_case_renderer(self) -> None:
+        spec = FigureSpec(
+            figure_id="loss-grid",
+            role="data-analysis",
+            claim="Measured loss curves compare methods under the same budget.",
+            reading_order=["axes", "curves", "uncertainty"],
+            evidence_status="measured",
+            layout_family="small-multiples",
+            target_width_pt=510,
+        )
+        route = route_figure(spec)
+        self.assertEqual(route["renderer"], "render_data_figure.py")
+        self.assertIsNone(route["case_renderer"])
 
     def test_preset_and_evidence_contract(self) -> None:
         preset = planner.load_preset()
