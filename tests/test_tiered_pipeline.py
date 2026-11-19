@@ -69,15 +69,20 @@ class TieredPipelineTests(unittest.TestCase):
 
     def test_renderer_rebuilds_all_three_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
-            # Run the checked-in case builder and verify it writes the same
-            # stable primary filenames that older links already use.
-            run = subprocess.run([sys.executable, str(CASE_SCRIPT)], cwd=ROOT, capture_output=True, text=True)
+            output = Path(tmp) / "rendered"
+            # Run into an isolated directory so a test never dirties the
+            # checked-in primary artifacts or their PDF metadata.
+            run = subprocess.run(
+                [sys.executable, str(CASE_SCRIPT), "--output-dir", str(output)],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
             self.assertEqual(run.returncode, 0, run.stderr)
-        out = ROOT / "cases" / "looped_comic_case_studies" / "rendered"
-        for stem in ("looped_parkour_refine", "looped_robot_active_sensing", "looped_autonomous_vehicle"):
-            self.assertTrue((out / f"{stem}.svg").is_file())
-            self.assertTrue((out / f"{stem}.pdf").is_file())
-            self.assertTrue((out / f"{stem}.png").is_file())
-        manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["layout"], LAYOUT_ID)
-        self.assertEqual(len(manifest["figures"]), 3)
+            for stem in ("looped_parkour_refine", "looped_robot_active_sensing", "looped_autonomous_vehicle"):
+                self.assertTrue((output / f"{stem}.svg").is_file())
+                self.assertTrue((output / f"{stem}.pdf").is_file())
+                self.assertTrue((output / f"{stem}.png").is_file())
+            manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["layout"], LAYOUT_ID)
+            self.assertEqual(len(manifest["figures"]), 3)

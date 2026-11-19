@@ -3,6 +3,7 @@
   "layout": {
     "id": "tiered_pipeline_reference",
     "description": "Grid-first, orthogonal-connector pipeline grammar distilled from the final FigureFlow Omni embedding case.",
+    "source_reference": "User-supplied local Omni Embedding FigureFlow scene; original business assets are not redistributed.",
     "canvas": {
       "width": 1600,
       "height": 1298,

@@ -12,6 +12,7 @@ but are intentionally omitted from this clean route.
 from __future__ import annotations
 
 import base64
+import argparse
 import html
 import json
 import sys
@@ -387,17 +388,17 @@ SPECS = [
 ]
 
 
-def main() -> int:
-    OUT.mkdir(parents=True, exist_ok=True)
+def main(output_dir: Path = OUT) -> int:
+    output_dir.mkdir(parents=True, exist_ok=True)
     load_layout()
     records = []
     for spec in SPECS:
         validate_spec(spec)
         svg = build(spec)
-        svg_path = OUT / f"{spec['id']}.svg"
-        pdf_path = OUT / f"{spec['id']}.pdf"
-        png_path = OUT / f"{spec['id']}.png"
-        review_path = OUT / f"{spec['id']}_review.png"
+        svg_path = output_dir / f"{spec['id']}.svg"
+        pdf_path = output_dir / f"{spec['id']}.pdf"
+        png_path = output_dir / f"{spec['id']}.png"
+        review_path = output_dir / f"{spec['id']}_review.png"
         write_outputs(svg, svg_path, pdf_path, png_path, width=W, height=H, review_png_path=review_path)
         entry = output_manifest_entry(spec, root=SRC)
         entry.update({
@@ -408,9 +409,9 @@ def main() -> int:
             "canvas": [W, H],
         })
         records.append(entry)
-    (OUT / "manifest.json").write_text(json.dumps({"layout": LAYOUT_ID, "figures": records}, indent=2) + "\n", encoding="utf-8")
+    (output_dir / "manifest.json").write_text(json.dumps({"layout": LAYOUT_ID, "figures": records}, indent=2) + "\n", encoding="utf-8")
     layout = load_layout()
-    (OUT / "tiered_scene.json").write_text(
+    (output_dir / "tiered_scene.json").write_text(
         json.dumps(
             {
                 "schema": "figureflow.tiered-native.v1",
@@ -423,9 +424,11 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
-    print(OUT)
+    print(output_dir)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=OUT, help="directory for SVG/PDF/PNG/manifest outputs")
+    raise SystemExit(main(parser.parse_args().output_dir))
