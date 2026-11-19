@@ -20,6 +20,7 @@ Treat this as a combinatorial library. Choose by figure role and expand it when 
 | Small multiples | ablation or mode comparison | repeated aligned mini-panels |
 | Orbit | iterative world interaction | cyclic states/actions/observations |
 | Cutaway | internal architecture with visible shell | outer system enclosing internal flow |
+| Tiered pipeline | multi-stage data/label/training workflow | equal-width semantic cards → evidence cards → shared artifact → training/application band |
 
 Avoid forcing all figures into rectangular boxes. Use paths, arcs, bands, lenses, braces, and whitespace as structural elements.
 
@@ -41,6 +42,17 @@ Assign stable meanings within a figure:
 - irregular organic field: environment/world, not computation.
 
 Use line style too: solid for data, dashed for control or optional paths, dotted for provenance/projection. Always include a tiny legend if the encoding is not obvious.
+
+### Tiered pipeline reference
+
+For workflows that combine real case evidence with a deterministic process, use the
+grid-first grammar in `assets/layouts/tiered_pipeline_reference.json`. It is a
+1600×1298 reference canvas with three top modules, three aligned evidence modules,
+a single dark convergence bar, and a full-width training/application band. The
+layout intentionally uses orthogonal elbow connectors and junction dots; do not
+replace them with freehand curves or loop arrows. Keep evidence thumbnails inside
+the module that names their source, and keep generated artwork subordinate to the
+native vector layer.
 
 ## Icon strategy
 

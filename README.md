@@ -129,6 +129,8 @@ flowchart LR
 - `standard`：保持原有兼容版式；
 - `presentation-spacious`：stage 标题、副标题、正文和 gate 字号相对标准档提高约 25%，每个 stage 最多两条正文，并在三种布局上记录可机读的 `layout_qa`。
 
+新增的 `tiered-pipeline` 版式复用了已核验的 Omni Embedding/PPT 制图语法：三列源模块、三列证据模块、深色共享产物、双轨训练带和独立应用行，所有连线采用正交折线和 junction dot。三组 Looped Transformer case demo 位于 [`cases/looped_comic_case_studies/`](cases/looped_comic_case_studies/)，其中 [PPT-native assembly 说明](skill/design-research-figures/references/ppt-native-assembly.md) 和 [固定几何/调色板](skill/design-research-figures/assets/layouts/tiered_pipeline_reference.json) 可直接复用。真实图片是独立 evidence layer；生成的漫画背景不参与 clean tiered 主图。
+
 真实参考链已经接通：检索结果可在页面中查看标题、来源页、作者和许可证；勾选“安全导入上方已检索的第 1 条候选”后，后端会绑定这一条已检索记录，不会在运行时重新搜索换图。它从内置允许列表中的 Commons 媒体主机下载该候选，拒绝重定向，校验响应类型、字节上限、图片解码、像素尺寸、来源页和开放许可后，才将去除嵌入元数据的 PNG 保存到本次 run 目录。选定的图片可直接进入第 1 个节点排版，无需人工下载再上传。
 
 导入图片全程只在本地处理，不会被发送给规划模型或远程抠图服务。对边界近似单色的图片，程序会使用本地 soft matte 完成保守抠图；对复杂照片则保留原背景并只做方向、缩放和透明外边距，不会伪装成已完成语义分割。

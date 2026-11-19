@@ -1,39 +1,73 @@
 {
-  "style_pack": "looped_transformer_comic_storyboard",
+  "layout": "tiered_pipeline_reference",
   "figures": [
     {
       "id": "looped_parkour_refine",
-      "background": "generated/parkour_storyboard_bg.png",
-      "case": "parkour_rgb.png",
-      "extra": [
-        "parkour_flow.png",
-        "parkour_residual.png"
-      ],
       "status": "illustrative",
+      "case": "parkour_rgb.png",
+      "background": "generated/parkour_storyboard_bg.png",
+      "background_used_in_layout": false,
+      "layout": "tiered_pipeline_reference",
       "native_text": true,
-      "source_label": "DAVIS parkour crop \u2022 RGB / DIS-flow / RGB residual"
+      "connectors": "orthogonal",
+      "case_caption": "project crop \u00b7 RGB / flow / residual",
+      "source_sha256": {
+        "parkour_rgb.png": "b05a1a59afd460fa9c2782807284cd7b68cee7c857193be39eedc4546fdbc16a",
+        "parkour_flow.png": "3eb0edd3b44fa2e77dd1768fb177a9f2d1ec1ada6524a974901cc1c80cb6c7ab",
+        "parkour_residual.png": "5b07d750c477c47d24f8dcfb1a277efe84ef98a4eb45cb0333ece1369e1b571b"
+      },
+      "pdf": "looped_parkour_refine.pdf",
+      "delivery_png": "looped_parkour_refine.png",
+      "review_png": "looped_parkour_refine_review.png",
+      "paper_include_width_pt": 540,
+      "canvas": [
+        1600,
+        1298
+      ]
     },
     {
       "id": "looped_robot_active_sensing",
-      "background": "generated/robot_storyboard_bg.png",
-      "case": "robot_assay_plate.jpg",
-      "extra": [
-        "robot_assay_plate.jpg"
-      ],
       "status": "illustrative",
+      "case": "robot_assay_plate.jpg",
+      "background": "generated/robot_storyboard_bg.png",
+      "background_used_in_layout": false,
+      "layout": "tiered_pipeline_reference",
       "native_text": true,
-      "source_label": "Wikimedia Commons / NIAID \u2022 public-domain assay-plate photo"
+      "connectors": "orthogonal",
+      "case_caption": "Wikimedia / NIAID \u00b7 public-domain assay plate",
+      "source_sha256": {
+        "robot_assay_plate.jpg": "10d6494340f198370b1bc8bef9e4a039ef4302c84d2c5d9d4a078f684d0bc29a"
+      },
+      "pdf": "looped_robot_active_sensing.pdf",
+      "delivery_png": "looped_robot_active_sensing.png",
+      "review_png": "looped_robot_active_sensing_review.png",
+      "paper_include_width_pt": 540,
+      "canvas": [
+        1600,
+        1298
+      ]
     },
     {
       "id": "looped_autonomous_vehicle",
-      "background": "generated/vehicle_storyboard_bg.png",
-      "case": "autonomous_vehicle.jpg",
-      "extra": [
-        "autonomous_vehicle.jpg"
-      ],
       "status": "illustrative",
+      "case": "autonomous_vehicle.jpg",
+      "background": "generated/vehicle_storyboard_bg.png",
+      "background_used_in_layout": false,
+      "layout": "tiered_pipeline_reference",
       "native_text": true,
-      "source_label": "Wikimedia Commons / Dllu \u2022 CC BY-SA vehicle image"
+      "connectors": "orthogonal",
+      "case_caption": "Wikimedia / Maxx@night \u00b7 CC BY 2.0",
+      "source_sha256": {
+        "autonomous_vehicle.jpg": "00538a6a3ef9aa9006a8d20f12f4435739073db712d853fe9e850be56eaa4221"
+      },
+      "pdf": "looped_autonomous_vehicle.pdf",
+      "delivery_png": "looped_autonomous_vehicle.png",
+      "review_png": "looped_autonomous_vehicle_review.png",
+      "paper_include_width_pt": 540,
+      "canvas": [
+        1600,
+        1298
+      ]
     }
   ]
 }

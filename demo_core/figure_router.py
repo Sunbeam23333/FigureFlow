@@ -35,6 +35,14 @@ ROLE_ROUTES: dict[str, dict[str, Any]] = {
     },
 }
 
+LAYOUT_ROUTES: dict[str, dict[str, Any]] = {
+    "tiered-pipeline": {
+        "renderer": "cases/looped_comic_case_studies/build_tiered_looped_demo.py",
+        "layout_spec": "skill/design-research-figures/assets/layouts/tiered_pipeline_reference.json",
+        "qa": ["orthogonal_connectors", "shared_artifact", "native_text", "source_manifest", "paper_width"],
+    }
+}
+
 
 def route_figure(spec: FigureSpec) -> dict[str, Any]:
     """Return a stable, non-executable routing record for a validated spec."""
@@ -49,6 +57,7 @@ def route_figure(spec: FigureSpec) -> dict[str, Any]:
             "case_share": spec.case_share,
             "requires_source_manifest": bool(spec.case_layers),
             "evidence_status": spec.evidence_status,
+            "layout_route": LAYOUT_ROUTES.get(spec.layout_family),
         }
     )
     return route

@@ -1,0 +1,165 @@
+{
+  "schema": "figureflow.tiered-native.v1",
+  "layout": {
+    "id": "tiered_pipeline_reference",
+    "description": "Grid-first, orthogonal-connector pipeline grammar distilled from the final FigureFlow Omni embedding case.",
+    "canvas": {
+      "width": 1600,
+      "height": 1298,
+      "margin": 32
+    },
+    "palette": {
+      "navy": "#16314D",
+      "blue": "#347AC4",
+      "teal": "#008C86",
+      "amber": "#C78337",
+      "violet": "#7953B4",
+      "muted": "#617386",
+      "border": "#D5E0E9",
+      "light_blue": "#F1F6FC",
+      "mint": "#EEF8F6",
+      "lavender": "#F7F2FC",
+      "cream": "#FFF6E9",
+      "white": "#FFFFFF"
+    },
+    "panel": {
+      "stroke": "#D5E0E9",
+      "stroke_width": 1.3,
+      "radius": 18,
+      "accent": {
+        "x_offset": 20,
+        "y_offset": 19,
+        "width": 5,
+        "height": 40,
+        "radius": 2
+      }
+    },
+    "tiers": {
+      "top": [
+        {
+          "id": "source",
+          "x": 32,
+          "y": 28,
+          "width": 280,
+          "height": 300
+        },
+        {
+          "id": "description",
+          "x": 354,
+          "y": 28,
+          "width": 454,
+          "height": 300
+        },
+        {
+          "id": "cleaning",
+          "x": 850,
+          "y": 28,
+          "width": 718,
+          "height": 300
+        }
+      ],
+      "middle": [
+        {
+          "id": "temporal",
+          "x": 32,
+          "y": 426,
+          "width": 480,
+          "height": 308
+        },
+        {
+          "id": "paired_evidence",
+          "x": 544,
+          "y": 426,
+          "width": 446,
+          "height": 308
+        },
+        {
+          "id": "cross_case",
+          "x": 1022,
+          "y": 426,
+          "width": 546,
+          "height": 308
+        }
+      ],
+      "convergence": {
+        "id": "shared_output",
+        "x": 341,
+        "y": 790,
+        "width": 918,
+        "height": 79,
+        "radius": 15
+      },
+      "training": {
+        "id": "training_band",
+        "x": 32,
+        "y": 916,
+        "width": 1536,
+        "height": 222
+      },
+      "application": {
+        "id": "application_row",
+        "x": 32,
+        "y": 1185,
+        "width": 1536,
+        "height": 80
+      }
+    },
+    "connectors": {
+      "style": "orthogonal",
+      "stroke_width": 3,
+      "arrow_size": 7,
+      "junction_radius": 5,
+      "label_offset": 14,
+      "avoid_curved_flow_arcs": true
+    },
+    "typography": {
+      "family": "Arial Unicode MS, Arial, sans-serif",
+      "title": {
+        "size": 40,
+        "weight": 700,
+        "color": "#16314D"
+      },
+      "section": {
+        "size": 36,
+        "weight": 700,
+        "color": "#16314D"
+      },
+      "body": {
+        "size": 32,
+        "weight": 400,
+        "color": "#16314D"
+      },
+      "caption": {
+        "size": 28,
+        "weight": 400,
+        "color": "#617386"
+      }
+    },
+    "rules": [
+      "Use one semantic color per branch; do not encode unrelated meanings with the same hue.",
+      "Keep real evidence thumbnails inside the panel that names their provenance.",
+      "Route all cross-tier edges as elbow connectors with visible junction dots.",
+      "Reserve the dark convergence bar for a single shared artifact or decision.",
+      "Keep logos and icons native vector assets; generated imagery is background/evidence only.",
+      "Do not place labels on top of arrow shafts or at panel boundaries."
+    ]
+  },
+  "evidence_status": "illustrative",
+  "figures": [
+    {
+      "id": "looped_parkour_refine",
+      "case": "parkour_rgb.png",
+      "case_caption": "project crop \u00b7 RGB / flow / residual"
+    },
+    {
+      "id": "looped_robot_active_sensing",
+      "case": "robot_assay_plate.jpg",
+      "case_caption": "Wikimedia / NIAID \u00b7 public-domain assay plate"
+    },
+    {
+      "id": "looped_autonomous_vehicle",
+      "case": "autonomous_vehicle.jpg",
+      "case_caption": "Wikimedia / Maxx@night \u00b7 CC BY 2.0"
+    }
+  ]
+}

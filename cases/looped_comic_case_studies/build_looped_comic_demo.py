@@ -18,7 +18,10 @@ import cairosvg
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "sources"
 GEN = ROOT / "generated"
-OUT = ROOT / "rendered"
+# Keep the exploratory B_cir storyboard outputs separate from the clean
+# tiered-pipeline outputs.  Running this comparison renderer must never
+# overwrite the primary files linked by the case README.
+OUT = ROOT / "rendered" / "comic_storyboard"
 W, H = 1800, 790
 
 
@@ -41,11 +44,12 @@ def rect(x: float, y: float, w: float, h: float, fill: str, stroke: str = "none"
     return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" opacity="{opacity}"/>'
 
 
-def arrow(x1: float, y1: float, x2: float, y2: float, color: str, label: str, *, bend: float = 0, dashed: bool = False) -> str:
+def arrow(x1: float, y1: float, x2: float, y2: float, color: str, label: str, *, bend: float = 0, dashed: bool = False, label_y: float | None = None, label_size: float = 22) -> str:
     dash = ' stroke-dasharray="14 10"' if dashed else ""
     path = f'M {x1} {y1} C {(x1+x2)/2} {y1+bend}, {(x1+x2)/2} {y2-bend}, {x2} {y2}'
     mx, my = (x1+x2)/2, (y1+y2)/2
-    return f'<path d="{path}" fill="none" stroke="{color}" stroke-width="7" stroke-linecap="round"{dash} marker-end="url(#{color[1:]}-arrow)"/><text x="{mx}" y="{my-12}" font-family="Comic Sans MS,Arial,sans-serif" font-size="22px" font-weight="700" fill="{color}" text-anchor="middle">{label}</text>'
+    ly = label_y if label_y is not None else my - 12
+    return f'<path d="{path}" fill="none" stroke="{color}" stroke-width="7" stroke-linecap="round"{dash} marker-end="url(#{color[1:]}-arrow)"/><text x="{mx}" y="{ly}" font-family="Comic Sans MS,Arial,sans-serif" font-size="{label_size}px" font-weight="700" fill="{color}" text-anchor="middle">{label}</text>'
 
 
 def token_row(x: float, y: float, count: int = 9, active: int = 3) -> str:
@@ -72,7 +76,10 @@ def build(spec: dict) -> str:
     bg = GEN / spec["background"]
     case = SRC / spec["case"]
     extra = [SRC / x for x in spec.get("extra", [])]
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">', defs(), rect(0, 0, W, H, "#FFFDF8"), img(bg, 0, 0, W, H, opacity=.42), rect(0, 0, W, H, "#FFFFFF", opacity=.28)]
+    # Keep the generated illustration subordinate to the native diagram.  The
+    # source storyboard is an atmosphere/evidence cue; it must not compete
+    # with the deterministic process layer at paper width.
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">', defs(), rect(0, 0, W, H, "#FFFDF8"), img(bg, 0, 0, W, H, opacity=.28), rect(0, 0, W, H, "#FFFFFF", opacity=.48)]
     parts += [text(38, 58, spec["title"], 42, weight=800), text(40, 92, spec["subtitle"], 23, weight=500, fill="#45658F")]
     # real case evidence layer
     parts += [rect(36, 150, 438, 420, "#FFFFFF", "#0D2B6B", 2.4, 28, .86), text(58, 181, "REAL CASE / evidence layer", 21, weight=800, fill="#B2174A"), img(case, 48, 190, 412, 264, clip="case-clip")]
@@ -81,27 +88,36 @@ def build(spec: dict) -> str:
             x = 58 + i * 128
             parts.append(img(asset, x, 472, 112, 68, opacity=.98))
     parts += [text(58, 558, spec["source_label"], 17, weight=500, fill="#45658F")]
-    # flow stages
+    # Flow stages occupy a single, aligned reading lane.  Earlier versions
+    # staggered the cards vertically, which made the arrows read as accidental
+    # diagonals and collided with the loop annotation.
     sx = 560
     stage_w = 250
+    stage_y = 252
     for i, stage in enumerate(spec["stages"]):
         x = sx + i * 290
-        y = 250 + (i % 2) * 40
+        y = stage_y
         parts.append(rect(x, y, stage_w, 150, "#FFFFFF", stage["color"], 3, 28, .93))
         parts.append(text(x + 22, y + 38, stage["label"], 27, weight=800, fill=stage["color"]))
         parts.append(text(x + 22, y + 76, stage["detail"], 20, weight=600, fill="#0D2B6B"))
         parts.append(token_row(x + 22, y + 102, 8, i))
         if i:
-            parts.append(arrow(x - 62, y + 76, x - 10, y + 76, "#165DCE", stage.get("link", "UPDATE"), bend=0))
+            # Short connectors stay in the gap between cards; their labels sit
+            # above the stroke so neither text nor arrow enters a node.
+            parts.append(arrow(x - 62, y + 76, x - 10, y + 76, "#165DCE", stage.get("link", "UPDATE"), bend=0, label_y=y + 30, label_size=19))
     # loop / refresh arcs
-    parts.append(arrow(1310, 445, 850, 450, "#165DCE", spec["loop_label"], bend=80))
-    parts.append(arrow(1310, 210, 1440, 188, "#E84A7A", spec["refresh_label"], bend=-55, dashed=True))
-    parts.append(rect(1460, 155, 278, 192, "#FFF8FB", "#E84A7A", 2.4, 28, .92))
-    parts.append(text(1486, 196, spec["decision"], 26, weight=800, fill="#B2174A"))
-    parts.append(text(1486, 235, "STOP → outer sampler", 22, weight=700, fill="#0D2B6B"))
-    parts.append(text(1486, 273, spec["boundary"], 18, weight=500, fill="#45658F"))
-    parts.append(rect(1410, 500, 330, 90, "#EAF3FF", "none", 0, 30, .88))
-    parts.append(text(1575, 540, spec["footer"], 23, weight=700, fill="#0D2B6B", anchor="middle"))
+    # The blue loop has its own lower lane; this avoids crossing the token row
+    # and makes “same evidence” visually distinct from the forward pass.
+    parts.append(arrow(1310, 438, 850, 438, "#165DCE", spec["loop_label"], bend=82, label_y=485, label_size=21))
+    # The rose refresh branch lives in a top lane and terminates before the
+    # decision card.  This prevents the old label clipping at the card edge.
+    parts.append(arrow(1260, 188, 1432, 170, "#E84A7A", spec["refresh_label"], bend=-42, dashed=True, label_y=145, label_size=20))
+    parts.append(rect(1460, 180, 278, 188, "#FFF8FB", "#E84A7A", 2.4, 28, .92))
+    parts.append(text(1486, 220, spec["decision"], 26, weight=800, fill="#B2174A"))
+    parts.append(text(1486, 259, "STOP → outer sampler", 22, weight=700, fill="#0D2B6B"))
+    parts.append(text(1486, 298, spec["boundary"], 18, weight=500, fill="#45658F"))
+    parts.append(rect(1410, 520, 330, 90, "#EAF3FF", "none", 0, 30, .88))
+    parts.append(text(1575, 558, spec["footer"], 23, weight=700, fill="#0D2B6B", anchor="middle"))
     parts.append(text(1740, 750, "Illustrative design study • native labels/arrows • real case sources preserved", 16, weight=500, fill="#45658F", anchor="end"))
     parts.append("</svg>")
     return "".join(parts)

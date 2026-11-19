@@ -1,0 +1,38 @@
+{
+  "schema": "figureflow.ppt-native.v1",
+  "source": {
+    "pptx": "source-deck.pptx",
+    "sha256": "",
+    "slide_count": 0
+  },
+  "target": {
+    "title": "",
+    "artifact_slide": null,
+    "physical_index": null,
+    "frame": {"left": 0, "top": 0, "width": 0, "height": 0}
+  },
+  "scene": {
+    "path": "tiered_scene.json",
+    "sha256": "",
+    "canvas": [1600, 1298],
+    "include_width_pt": 540,
+    "scale": null,
+    "actual_frame": null
+  },
+  "assets": {
+    "baseline": null,
+    "logos_manifest": null
+  },
+  "native": {
+    "shapes": 0,
+    "images": 0,
+    "source_font_min_px": 32,
+    "slide_font_min_px": null
+  },
+  "qa": {
+    "geometry": {"error": 0, "warning": 0},
+    "non_target_pixel_identical": null,
+    "published_reopen_sha256": "",
+    "published_order_verified": false
+  }
+}

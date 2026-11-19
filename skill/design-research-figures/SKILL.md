@@ -45,9 +45,17 @@ Choose the renderer only after the claim and evidence status are fixed.
 | CUDA lanes, GPU blocks, memory, hardware projection | mechanism diagram | TikZ/LaTeX | `assets/tikz/` + `compile_figures.py` |
 | Real rollout or qualitative evidence | case panel | source frames + manifest | `extract_frames.py` plus deterministic composition |
 | Framework with a real case embedded in the flow | case-study-in-flow | source frames + typed composition spec | deterministic crop/overlay composer + `compile_figures.py` |
+| PPT-like multi-tier workflow with shared artifact and training/application band | tiered-pipeline | JSON scene/spec + source manifest | `build_tiered_looped_demo.py` or a renderer using `tiered_pipeline_reference.json` |
 | Missing semantic bitmap | text-free asset only | prompt + PNG alpha | use the `imagegen` skill |
 
 Read [references/module-router.md](references/module-router.md) for the YAML contracts and module-specific checks. Read [references/style-system.md](references/style-system.md) when adapting the theme, typography, or final size.
+
+For the grid-first PPT-native grammar distilled from the approved Omni Embedding
+case, read [references/ppt-native-assembly.md](references/ppt-native-assembly.md)
+and keep the geometry in
+`assets/layouts/tiered_pipeline_reference.json`. This route uses native vector
+labels/connectors and a real evidence layer; it is not a flattened screenshot
+or a free-form comic canvas.
 
 For AlphaEdit Figure 2 or a request to reproduce/analyze a published data chart, read [references/publication-data-reproduction.md](references/publication-data-reproduction.md). Choose faithful source-artwork reconstruction or data-driven replotted values explicitly. This wrapper requires a FigureFlow checkout via `--figureflow-root`; the installed skill folder does not contain that module's full runtime and case assets.
 
@@ -196,6 +204,7 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - [references/paper-writing.md](references/paper-writing.md): paper narrative, formulas, captions, and negative results
 - [references/style-system.md](references/style-system.md): palette, typography, sizing, and visual encodings
 - [references/layouts-and-shapes.md](references/layouts-and-shapes.md): candidate layout and shape library
+- [references/ppt-native-assembly.md](references/ppt-native-assembly.md): PPT-native tiered pipeline assembly, contain scaling, logo and post-publish gates
 - [references/assets-and-prompts.md](references/assets-and-prompts.md): real cases, ImageGen, crops, and provenance
 - [references/qa.md](references/qa.md): semantic, geometric, PDF, and paper-page QA
 - [../../cases/top_conference_visual_research/README.md](../../cases/top_conference_visual_research/README.md): official top-conference visual registry, derived grammar, and reusable tokens
@@ -203,6 +212,7 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - `assets/themes/gpu_green_tech.json`: generic GPU-systems workflow tokens; no third-party logo or endorsement
 - `assets/themes/welm_image_green.json`: WeLM-Image Figure 1 inspired radial-chart tokens with source metadata
 - `assets/themes/concord_rec.json`: user-approved CONCORD-Rec Figure 1/2 jade–iris network tokens and semantic role map
+- `assets/layouts/tiered_pipeline_reference.json`: fixed grid geometry and palette for the PPT-native tiered pipeline
 - `assets/tikz/`: GPU Green, Emerald, Warm Editorial, CONCORD-Rec, and mechanism templates
 - `assets/tikz/conference_overview_template.tex`: white-paper input → representation → evidence template distilled from the registry
 - `cases/concord_rec_reference/`: retained Figure 1/2 source code, vector references, asset provenance, and reuse map

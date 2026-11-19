@@ -22,12 +22,19 @@ Select the figure role before selecting a layout or palette:
 | Role | Primary reader question | Preferred grammar | Case-study budget |
 |---|---|---|---|
 | `main-figure` | What is the paper's central phenomenon or claim? | teaser, asymmetric evidence, or case-study-in-flow | 15–25% only when the case is the claim's anchor |
-| `pipeline` | How does the method move from input to output? | left-to-right numbered stages, dual rail, or ribbon | 10–25%; case strips may overlap stage boundaries |
+| `pipeline` | How does the method move from input to output? | left-to-right numbered stages, dual rail, ribbon, or tiered pipeline | 10–25%; case strips may overlap stage boundaries |
 | `case-study` | What did the system actually observe or produce? | frame matrix, storyboard, cutaway, or zoom projection | 50–80%; real evidence dominates explanatory art |
 | `data-analysis` | What changed and with what uncertainty? | quantitative grid, small multiples, scatter/bubble, table | 0–10%; never decorate a measured plot with generated art |
 
 `FigureSpec.role` is mandatory in the typed contract. A comic storyboard is a
 `pipeline` or `main-figure` style, never a substitute for `data-analysis`.
+
+Use `layout_family: tiered-pipeline` when the visual follows the approved
+PPT-native grammar: three top modules, three evidence modules, one dark shared
+artifact, a training band, and an application row. Its fixed geometry, native
+object mapping, and post-export reopen checks are documented in
+[`ppt-native-assembly.md`](ppt-native-assembly.md) and
+[`assets/layouts/tiered_pipeline_reference.json`](../assets/layouts/tiered_pipeline_reference.json).
 
 For faithful AlphaEdit Figure 2 reconstruction or replaceable annular/small-multiple CSV charts, read [publication-data-reproduction.md](publication-data-reproduction.md) and use `render_publication_data.py` with a FigureFlow checkout. Its published/user-supplied evidence codes are scoped to the new data module; the shared legacy YAML and `FigurePlan` statuses below are unchanged.
 
