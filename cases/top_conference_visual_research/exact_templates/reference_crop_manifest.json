@@ -1,0 +1,19 @@
+{
+  "schema_version": "reference-crop-1",
+  "coordinate_system": "normalized page coordinates, origin top-left",
+  "fidelity": "pixel-faithful to the selected published-PDF crop; surrounding page content excluded",
+  "templates": {
+    "d4rt_fig1": {"page": 1, "bbox": [0.518, 0.308, 0.905, 0.563]},
+    "ovoxel_fig1": {"page": 1, "bbox": [0.095, 0.245, 0.905, 0.499]},
+    "nitrogen_fig1": {"page": 2, "bbox": [0.096, 0.068, 0.905, 0.339]},
+    "gated_attention_fig1": {"page": 2, "bbox": [0.175, 0.091, 0.822, 0.291]},
+    "artificial_hivemind_fig1": {"page": 2, "bbox": [0.16, 0.07, 0.85, 0.40]},
+    "superposition_fig1": {"page": 2, "bbox": [0.16, 0.06, 0.86, 0.49]},
+    "met3r_fig5": {"page": 6, "bbox": [0.098, 0.119, 0.902, 0.365]},
+    "see3d_fig2": {"page": 4, "bbox": [0.125, 0.091, 0.842, 0.320]},
+    "mixture_of_scores_fig1": {"page": 2, "bbox": [0.098, 0.100, 0.909, 0.402]},
+    "phase_transition_fig1": {"page": 2, "bbox": [0.233, 0.093, 0.782, 0.282]},
+    "scaling_extrapolation_fig1": {"page": 1, "bbox": [0.218, 0.598, 0.824, 0.770]},
+    "uncertainty_swarm_fig1": {"page": 5, "bbox": [0.208, 0.115, 0.802, 0.340]}
+  }
+}

@@ -1,6 +1,7 @@
 {
   "schema_version": "exact-figure-1",
-  "reproduction_status": "derived-vector-reproduction",
+  "reproduction_status": "native-trace-scaffold",
+  "source_locked_route": "render_reference_figure.py",
   "evidence_status": "published-figure",
   "fidelity_boundary": "layout-faithful; not pixel-identical (fonts, raster inputs and antialiasing may differ)",
   "templates": [

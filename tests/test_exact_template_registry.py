@@ -47,6 +47,16 @@ class ExactTemplateRegistryTests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(module.render("../main.tex", Path("/tmp/unused"), 90, "xelatex"), 2)
 
+    def test_reference_crop_manifest_covers_all_templates(self) -> None:
+        payload = json.loads((CASE / "reference_crop_manifest.json").read_text(encoding="utf-8"))
+        registry = json.loads((CASE / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(payload["templates"]), {item["template_id"] for item in registry["templates"]})
+        for spec in payload["templates"].values():
+            self.assertEqual(len(spec["bbox"]), 4)
+            self.assertTrue(all(0 <= value <= 1 for value in spec["bbox"]))
+            self.assertLess(spec["bbox"][0], spec["bbox"][2])
+            self.assertLess(spec["bbox"][1], spec["bbox"][3])
+
 
 if __name__ == "__main__":
     unittest.main()

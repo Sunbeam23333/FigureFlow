@@ -38,6 +38,12 @@ validated against the target paper before use.
 * `small_multiples`: shared axes and one legend for training dynamics, ablations, or scaling laws.
 * `text_evidence_score`: a qualitative example directly paired with its statistic or test score.
 
+For figures containing real video frames, rendered meshes, or complex artwork,
+use `exact_templates/reference_crop_manifest.json` with
+`skill/design-research-figures/scripts/render_reference_figure.py`. It takes the
+cited PDF as an explicit local input, crops the published figure region, and
+records the source hash and crop coordinates without committing the paper PDF.
+
 The existing AlphaEdit, WeLM-Image, and CONCORD-Rec cases remain the executable
 examples for data reproduction, green radial charts, and semantic mechanism
 diagrams. This registry adds the conference-level design evidence without
