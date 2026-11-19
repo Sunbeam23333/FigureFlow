@@ -1,0 +1,26 @@
+\documentclass[tikz,border=3pt]{standalone}
+\input{../_shared/exact_style.tex}
+\definecolor{nblue}{HTML}{2463A6}\definecolor{ngreen}{HTML}{2A9D8F}\definecolor{norange}{HTML}{F4A261}\definecolor{nink}{HTML}{1F2937}\definecolor{nmuted}{HTML}{E8EEF4}
+\begin{document}\begin{tikzpicture}[x=1cm,y=1cm]
+\path[use as bounding box] (-.2,-2.3) rectangle (14.2,2.3);
+\node[exact title,text=nink] at (7,2.04) {NitroGen: a generalist gaming agent from video-action data};
+\node[exact subtitle,text=black!54] at (7,1.7) {Figure 1 grammar — universal harness \(\leftrightarrow\) vision–action foundation model \(\leftrightarrow\) large-scale gameplay trajectories};
+\node[draw=nblue!45,fill=nmuted,rounded corners=2mm,minimum width=3.25cm,minimum height=2.9cm] (data) at (1.75,0) {};
+\node[exact label,text=nblue] at (1.75,1.08) {40k-hour video-action data};
+\foreach \x/\y in {.9/0,1.55/0,2.2/0}{\draw[nblue!65,fill=white,rounded corners=.6mm] (\x-.28,\y-.34) rectangle (\x+.28,\y+.34);\draw[norange!80!black,line width=.5pt] (\x-.18,\y-.05) -- (\x+.18,\y-.05);\draw[norange!80!black,line width=.5pt] (\x-.1,\y+.15) -- (\x+.1,\y+.15);}
+\node[exact tiny,text=nblue] at (1.75,-.96) {frames + actions + language};
+\draw[arrow,draw=ngreen] (3.45,0) -- (4.62,0);
+\node[draw=ngreen!80!black,fill=ngreen!9,rounded corners=2mm,minimum width=4.15cm,minimum height=2.9cm] (model) at (6.68,0) {};
+\node[exact label,text=ngreen!70!black] at (6.68,1.05) {vision–action foundation agent};
+\node[draw=nblue!70,fill=nblue!8,rounded corners=1mm,minimum width=2.75cm,minimum height=.62cm,exact label,text=nblue] at (6.68,.37) {visual encoder};
+\node[draw=norange!80!black,fill=norange!13,rounded corners=1mm,minimum width=2.75cm,minimum height=.62cm,exact label,text=norange!80!black] at (6.68,-.42) {action decoder};
+\draw[softarrow,draw=nblue] (6.68,.06) -- (6.68,-.1);\node[exact tiny,text=black!55] at (6.68,-.83) {game-agnostic policy};
+\draw[arrow,draw=norange!90!black] (8.82,.08) -- (10.0,.72);\draw[arrow,draw=nblue] (8.82,-.08) -- (10.0,-.72);
+\node[draw=norange!80!black,fill=norange!13,rounded corners=1.5mm,minimum width=2.35cm,minimum height=.78cm,exact label,text=norange!80!black] at (11.15,.78) {controller};
+\node[draw=nblue!70,fill=nblue!8,rounded corners=1.5mm,minimum width=2.35cm,minimum height=.78cm,exact label,text=nblue] at (11.15,-.78) {game screen};
+\draw[arrow,draw=norange!90!black] (12.3,.78) -- (13.15,.22);\draw[arrow,draw=nblue] (12.3,-.78) -- (13.15,-.22);
+\node[draw=nink!55,fill=white,rounded corners=2mm,minimum width=1.75cm,minimum height=1.15cm] at (13.35,0) {};
+\node[exact label,text=nink] at (13.35,.18) {gameplay};\node[exact tiny,text=black!55] at (13.35,-.25) {observe \(\cdot\) act};
+\draw[black!20,line width=.45pt] (-.05,-1.75) -- (14.05,-1.75);
+\node[exact tiny,text=black!58] at (7,-2.03) {source: CVPR 2026, NitroGen Figure 1; data/model/action hub reproduced as native vector grammar};
+\end{tikzpicture}\end{document}

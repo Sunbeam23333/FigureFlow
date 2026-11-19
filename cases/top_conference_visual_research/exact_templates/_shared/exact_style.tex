@@ -1,0 +1,25 @@
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,calc,fit,positioning,shapes.geometric,shapes.misc,patterns,plotmarks}
+\IfFontExistsTF{Arial}{\setsansfont{Arial}}{\setsansfont{TeX Gyre Heros}}
+\renewcommand{\familydefault}{\sfdefault}
+\tikzset{
+  >={Stealth[length=2.2mm,width=1.5mm]},
+  exact title/.style={font=\bfseries\fontsize{10.5}{12}\selectfont,align=center},
+  exact subtitle/.style={font=\fontsize{6.3}{7.2}\selectfont,align=center},
+  exact label/.style={font=\fontsize{6.4}{7.5}\selectfont,align=center},
+  exact tiny/.style={font=\fontsize{5.3}{6.3}\selectfont,align=center},
+  panel/.style={draw=black!14,rounded corners=1.2mm,fill=white,line width=.45pt},
+  neutral/.style={draw=black!30,fill=black!3,rounded corners=1mm,line width=.45pt},
+  arrow/.style={-Stealth,line width=.7pt},
+  softarrow/.style={-Stealth,line width=.55pt,draw=black!45},
+  dashedarrow/.style={-Stealth,dashed,line width=.55pt,draw=black!55},
+  metric/.style={font=\fontsize{5.3}{6.3}\selectfont,fill=white,inner sep=1pt},
+}
+\newcommand{\pill}[4]{\node[draw=#2!70,fill=#2!10,rounded corners=1.5mm,inner xsep=3pt,inner ysep=2pt,exact label,text=#2] (#1) at #3 {#4};}
+\newcommand{\frameboxx}[4]{\draw[draw=#2!65,fill=#2!8,rounded corners=.6mm,line width=.5pt] (#1.south west) rectangle (#1.north east);\node[exact tiny,text=#2] at #3 {#4};}
+\newcommand{\axislabel}[3]{\node[exact tiny,text=black!60] at (#1) {#2};\node[exact tiny,text=black!60,rotate=90] at (#3) {#2};}

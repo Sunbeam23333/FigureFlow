@@ -468,7 +468,7 @@
       "typography": "model-size markers; observed/predicted line-style distinction; extrapolation callout",
       "evidence_encoding": "loss vs FLOPs with mixture colors and scaling-law prediction; optimal mixture/extrapolation ribbon",
       "reusable_rules": ["model size = marker, domain mixture = color", "observed vs predicted = line style", "use a pale extrapolation ribbon"],
-      "source_url": "https://openreview.net/pdf/0c763c984dae4c3b82805d215708d4f45f9f9814.pdf"
+      "source_url": "https://papers.nips.cc/paper_files/paper/2025/file/bc1d640f841f752c689aae20b31198c1-Paper-Conference.pdf"
     },
     {
       "conference": "NeurIPS",

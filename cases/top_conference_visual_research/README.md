@@ -15,9 +15,12 @@ third-party figure images or reuse their experimental values.
 | [`palette_tokens.json`](palette_tokens.json) | White-paper, emerald, action, score, and colorblind-safe tokens |
 | [`derived_rules.md`](derived_rules.md) | Cross-paper layout rules for main figures, qualitative panels, and data plots |
 | [`source_links.md`](source_links.md) | Official awards, proceedings, open-access PDFs, and access date |
-| [`figureflow_top_conference_atlas.pdf`](figureflow_top_conference_atlas.pdf) | Eight-page local demonstration of integrated layouts, colors, native outputs, and QA boundary |
-| [`build_atlas.py`](build_atlas.py) | Rebuilds the PDF atlas from repository-native assets and generated demo outputs |
-| [`../../skill/design-research-figures/assets/tikz/conference_overview_template.tex`](../../skill/design-research-figures/assets/tikz/conference_overview_template.tex) | Editable generic input → representation → evidence overview |
+| [`exact_templates/`](exact_templates/) | Twelve allowlisted, paper-faithful TikZ/PGFPlots templates with per-figure provenance |
+| [`exact_templates/manifest.json`](exact_templates/manifest.json) | Figure IDs, official source pages, panel grammar, and semantic palettes |
+| [`figureflow_exact_reproduction_atlas.pdf`](figureflow_exact_reproduction_atlas.pdf) | Exact-template contact-sheet PDF used for visual QA |
+| [`build_exact_reproduction_atlas.py`](build_exact_reproduction_atlas.py) | Rebuilds the contact-sheet PDF from the native templates |
+| [`figureflow_top_conference_atlas.pdf`](figureflow_top_conference_atlas.pdf) | Legacy eight-page style survey; not an exact-paper reproduction route |
+| [`../../skill/design-research-figures/assets/tikz/conference_overview_template.tex`](../../skill/design-research-figures/assets/tikz/conference_overview_template.tex) | Legacy generic input → representation → evidence grammar demo |
 
 The registry deliberately separates `source_evidence` from `derived_rule`.
 Statements about a published figure are observations from the cited official
@@ -41,6 +44,19 @@ diagrams. This registry adds the conference-level design evidence without
 pretending that a style observation is a measured result.
 
 ## Reproducing the local template
+
+The paper-faithful route is allowlisted and independent of the generic FigurePlan
+workflow. List IDs or render one exact template with:
+
+```bash
+python3 skill/design-research-figures/scripts/render_exact_template.py --list
+python3 skill/design-research-figures/scripts/render_exact_template.py \
+  --template met3r_fig5 --output-dir /tmp/figureflow_exact --dpi 220
+```
+
+This creates editable-source provenance next to a one-page PDF and review PNG.
+The output manifest records the source hash, compiler, output hashes, and the
+explicit `layout-faithful / not pixel-identical` boundary.
 
 From the FigureFlow checkout:
 
