@@ -21,10 +21,61 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from demo_core import asset_pipeline, pipeline, planner, reference_search, renderer_adapter  # noqa: E402
-from demo_core.schemas import FigurePlan, StagePlan, display_units  # noqa: E402
+from demo_core.schemas import BBox, CaseEvidenceLayer, FigurePlan, FigureSpec, RevisionSpec, StagePlan, display_units  # noqa: E402
 
 
 class SchemaAndApiTests(unittest.TestCase):
+    def test_role_specific_figure_spec_requires_real_case_contract(self) -> None:
+        layer = CaseEvidenceLayer(
+            id="case-input",
+            source="assets/cases/scene.png",
+            role="input-observation",
+            evidence_status="measured",
+            target_bbox=BBox(x=0.02, y=0.1, width=0.3, height=0.4),
+            frame_indices=[0, 4, 8],
+        )
+        spec = FigureSpec(
+            figure_id="rivet-main",
+            role="main-figure",
+            claim="A real case enters the shared refinement flow and remains source-bound.",
+            reading_order=["case-input", "shared-block", "case-output"],
+            evidence_status="implemented",
+            layout_family="case-study-in-flow",
+            target_width_pt=510,
+            case_share=0.22,
+            case_layers=[layer],
+            preserve_list=["case-input", "shared-block"],
+        )
+        self.assertEqual(spec.case_layers[0].frame_indices, [0, 4, 8])
+        with self.assertRaises(ValidationError):
+            FigureSpec(
+                figure_id="bad-case",
+                role="case-study",
+                claim="Missing case layers should fail.",
+                reading_order=["case"],
+                evidence_status="illustrative",
+                layout_family="case-study-in-flow",
+                target_width_pt=510,
+            )
+
+    def test_revision_spec_keeps_preserve_list_outside_edit_scope(self) -> None:
+        revision = RevisionSpec(
+            base_spec_sha256="a" * 64,
+            editable_ids=["arrow.loop", "label.stop"],
+            preserve_ids=["case.input", "case.output"],
+            requested_operations=["reroute-edge", "relabel"],
+            rationale="Clarify the loop arrow without changing the evidence crops.",
+        )
+        self.assertEqual(revision.preserve_ids, ["case.input", "case.output"])
+        with self.assertRaises(ValidationError):
+            RevisionSpec(
+                base_spec_sha256="a" * 64,
+                editable_ids=["case.input"],
+                preserve_ids=["case.input"],
+                requested_operations=["move"],
+                rationale="This scope intentionally conflicts.",
+            )
+
     def test_preset_and_evidence_contract(self) -> None:
         preset = planner.load_preset()
         self.assertEqual(preset.evidence_status, "synthetic-demo")

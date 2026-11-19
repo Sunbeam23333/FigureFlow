@@ -92,3 +92,23 @@ projection_links:
 The final output must include the editable composition, the original uncropped
 asset, the frame/crop manifest, a paper-width render, and a caption that states
 what the case establishes and what it does not establish.
+
+## Comic storyboard style pack
+
+For a research direction whose intuition benefits from an illustrated action
+scene, FigureFlow now includes
+`assets/case_study_styles/looped_transformer_comic_storyboard.json`. It is based
+on the Looped Transformer v12 B_cir / v13 storyboard study: open panoramic
+composition, navy ink, cobalt/sky/rose watercolor, repeated state ribbons,
+overlapping real-reference tiles, and native arrows/labels over text-free art.
+
+The style pack separates generated assets into five roles: paper wash, hero
+scene, state ribbon, uncertain-anchor vignette, and inspection lens. Prompts
+explicitly forbid text, numbers, formulas, arrows, logos, fake metrics, and
+extra limbs. This preserves the comic feeling while ensuring that all scientific
+claims remain in deterministic vector layers. The real RGB/flow/residual tiles
+remain measured evidence and retain their own provenance.
+
+Do not use the comic pack for a data-analysis figure or a Figure 1 failure-only
+teaser. Use it for a framework/case-study figure whose claim is about a
+mechanism, decision, or evidence acquisition path.

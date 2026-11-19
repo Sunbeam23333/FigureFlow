@@ -25,6 +25,12 @@ Read [references/workflow.md](references/workflow.md) before authoring a new fig
 
 ## Route to the right module
 
+Classify the artifact role before selecting a renderer: `main-figure`,
+`pipeline`, `case-study`, or `data-analysis`. The role controls the allowed
+case-study share, typography density, palette, and QA gates. Use the typed
+`FigureSpec` and bounded `RevisionSpec` contracts in `demo_core.schemas`; never
+let an open-ended prompt silently change role or widen a revision scope.
+
 Choose the renderer only after the claim and evidence status are fixed.
 
 | Need | Module | Editable source | Renderer |

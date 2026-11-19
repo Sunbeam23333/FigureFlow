@@ -19,6 +19,9 @@ EvidenceStatus = Literal[
     "synthetic-demo",
     "failed-gate",
 ]
+FigureRole = Literal["main-figure", "pipeline", "case-study", "data-analysis"]
+CaseLayerRole = Literal["input-observation", "intermediate-state", "output-evidence", "reference-only"]
+RevisionOperation = Literal["move", "resize", "relabel", "restyle", "replace-asset", "reroute-edge", "update-provenance"]
 LayoutFamily = Literal["ribbon", "bowtie", "dual-rail"]
 LayoutPreset = Literal["standard", "presentation-spacious"]
 ThemeName = Literal["academic-audit", "gpu-green-tech", "welm-image-green", "concord-rec"]
@@ -215,6 +218,102 @@ class FigurePlan(BaseModel):
         reference_uris = [asset.uri for asset in self.reference_assets]
         if len(set(reference_uris)) != len(reference_uris):
             raise ValueError("reference asset URIs must be unique")
+        return self
+
+
+class BBox(BaseModel):
+    """Normalized [x, y, width, height] box used by reference/candidate QA."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    x: float = Field(ge=0, le=1)
+    y: float = Field(ge=0, le=1)
+    width: float = Field(gt=0, le=1)
+    height: float = Field(gt=0, le=1)
+
+    @model_validator(mode="after")
+    def stays_on_canvas(self) -> "BBox":
+        if self.x + self.width > 1 or self.y + self.height > 1:
+            raise ValueError("bbox must stay inside the normalized canvas")
+        return self
+
+
+class CaseEvidenceLayer(BaseModel):
+    """One real case-study image/strip carried as an independent evidence layer."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    id: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9][a-z0-9._-]*$")
+    source: str = Field(min_length=1, max_length=2048)
+    role: CaseLayerRole
+    evidence_status: EvidenceStatus
+    crop: BBox | None = None
+    frame_indices: list[int] = Field(default_factory=list, max_length=64)
+    target_bbox: BBox | None = None
+    metric: str | None = Field(default=None, max_length=180)
+    provenance_id: str | None = Field(default=None, max_length=120)
+
+    @field_validator("frame_indices")
+    @classmethod
+    def valid_frames(cls, values: list[int]) -> list[int]:
+        if any(value < 0 for value in values):
+            raise ValueError("frame indices must be non-negative")
+        return values
+
+
+class FigureSpec(BaseModel):
+    """Typed contract for role-specific paper figures and embedded case evidence."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    figure_id: str = Field(min_length=2, max_length=80, pattern=r"^[a-z0-9][a-z0-9._-]*$")
+    role: FigureRole
+    claim: str = Field(min_length=8, max_length=240)
+    reading_order: list[str] = Field(min_length=1, max_length=12)
+    evidence_status: EvidenceStatus
+    layout_family: str = Field(min_length=2, max_length=80)
+    target_width_pt: float = Field(gt=0, le=2000)
+    case_share: float = Field(default=0, ge=0, le=1)
+    case_layers: list[CaseEvidenceLayer] = Field(default_factory=list, max_length=16)
+    source_manifest: str | None = Field(default=None, max_length=2048)
+    reference_bbox: BBox | None = None
+    candidate_bbox: BBox | None = None
+    preserve_list: list[str] = Field(default_factory=list, max_length=32)
+
+    @model_validator(mode="after")
+    def validate_case_contract(self) -> "FigureSpec":
+        ids = [layer.id for layer in self.case_layers]
+        if len(ids) != len(set(ids)):
+            raise ValueError("case layer IDs must be unique")
+        if self.role == "case-study" and not self.case_layers:
+            raise ValueError("case-study figures require at least one case layer")
+        if self.case_layers and self.case_share <= 0:
+            raise ValueError("case_share must be positive when case layers are present")
+        if self.role == "data-analysis" and self.case_layers and self.evidence_status == "measured":
+            if any(layer.evidence_status not in {"measured", "implemented"} for layer in self.case_layers):
+                raise ValueError("measured data figures cannot contain speculative case layers")
+        return self
+
+
+class RevisionSpec(BaseModel):
+    """Typed bounded revision contract that prevents style drift and scope widening."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    base_spec_sha256: str = Field(min_length=64, max_length=64, pattern=r"^[0-9a-f]{64}$")
+    editable_ids: list[str] = Field(min_length=1, max_length=32)
+    preserve_ids: list[str] = Field(default_factory=list, max_length=64)
+    requested_operations: list[RevisionOperation] = Field(min_length=1, max_length=16)
+    rationale: str = Field(min_length=8, max_length=500)
+    reference_bbox: BBox | None = None
+    candidate_bbox: BBox | None = None
+    visual_diagnostics: list[str] = Field(default_factory=list, max_length=24)
+
+    @model_validator(mode="after")
+    def preserve_is_disjoint_from_editable(self) -> "RevisionSpec":
+        overlap = set(self.editable_ids) & set(self.preserve_ids)
+        if overlap:
+            raise ValueError(f"preserve_ids cannot be edited: {sorted(overlap)}")
         return self
 
 

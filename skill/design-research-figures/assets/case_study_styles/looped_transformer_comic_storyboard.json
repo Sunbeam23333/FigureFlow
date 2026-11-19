@@ -1,0 +1,51 @@
+{
+  "style_id": "looped_transformer_comic_storyboard",
+  "source": "LoopedTransformer v12 B_cir / v13 native storyboard plan",
+  "status": "illustrative-style-reference",
+  "canvas": {"aspect_ratio": 2.27, "paper_width_in": 7.06, "background": "paper-wash"},
+  "palette": {
+    "ink": "#0D2B6B",
+    "cobalt": "#165DCE",
+    "sky": "#DCEEFF",
+    "rose": "#E84A7A",
+    "crimson": "#B2174A",
+    "lemon": "#F4D94E",
+    "paper": "#FFFDF8",
+    "steel": "#7C8CA6"
+  },
+  "layout": {
+    "family": "continuous-storyboard",
+    "density": "medium-high",
+    "case_share_range": [0.15, 0.25],
+    "principles": [
+      "open panoramic narrative instead of three large cards",
+      "real evidence strips remain source-colored and independently labeled",
+      "comic scene metaphors are illustrative and never masquerade as model output",
+      "native text, arrows, gates, formulas, and exact geometry stay outside generated art",
+      "inner loop and outer sampler use separate line weights and arrow semantics"
+    ]
+  },
+  "prompt_templates": {
+    "paper_wash": "Create a text-free off-white scientific editorial paper-wash background, white and very pale sky-blue watercolor edges, subtle navy ink texture, clean negative space for native labels and arrows, no objects, no letters, no digits, no logos, no chart, no border, transparent or white background.",
+    "hero_scene": "Create one text-free scientific editorial comic illustration using navy ink contours and restrained cobalt/sky-blue/rose watercolor. Show one clearly recognizable athlete and environment from the supplied case reference, anatomically coherent, with a soft vignette and room for native labels. Do not add arrows, formulas, text, digits, logos, panels, gauges, or invented measurement results.",
+    "state_ribbon": "Create a wide text-free illustration of three repeated conceptual states of the same subject connected by a thin watercolor token ribbon. The repeated figures are hidden-state metaphors, not video frames and not multiple independent modules. Navy ink, cobalt, pale sky, rose accents, transparent outside, no arrows, no labels, no digits, no formulas.",
+    "anchor_vignette": "Create a small text-free conceptual uncertain-anchor illustration: one translucent subject with a pale rose/blue ghost offset and a short row of abstract blue/silver/rose tokens. No text, arrows, numbers, labels, logos, or claimed result; illustrative only.",
+    "inspection_lens": "Create a square text-free scientific editorial illustration of a magnifying lens inspecting a real contact region from the supplied case reference. Crisp navy outline, restrained cobalt and rose accents, transparent outside, no writing, formulas, arrows, gauges, or measurement claims."
+  },
+  "negative_prompt": [
+    "no text or pseudo-text",
+    "no generated formulas or chart labels",
+    "no green, purple, brown, or orange method palette",
+    "no speech balloons, robot, gears, stock brain, or generic AI icon",
+    "no invented benchmark, metric, checkmark, or achieved output",
+    "no extra limbs or duplicate people",
+    "no arrows inside generated assets"
+  ],
+  "qa": {
+    "native_text_required": true,
+    "native_formula_required": true,
+    "real_case_manifest_required": true,
+    "paper_width_render_required": true,
+    "human_approval": "pending"
+  }
+}

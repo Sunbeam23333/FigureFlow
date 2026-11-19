@@ -36,6 +36,13 @@ python -m demo_core.research_harness \
 
 `--source` 可以多次传入 PDF、文本和代码资料。素材清单通过 `--asset-manifest assets.json` 显式传入；每项含 `id`、`path`、`kind`、`meaning`，图片路径仅由调用者登记，模型不能读取任意路径。输出目录必须是新目录。
 
+研究入口现在先选择四种职能之一：`main-figure`、`pipeline`、`case-study`、
+`data-analysis`。规划结果使用 `demo_core.schemas.FigureSpec`，真实案例作为
+独立 evidence layer 保存 source、crop、frame indices、target bbox 和 evidence
+status。修订使用 `RevisionSpec`，固定 base spec SHA-256、editable IDs、preserve
+IDs、typed operations 以及 reference/candidate bbox；如果修订触碰 preserve
+列表，验证会直接失败，不允许静默发生风格漂移。
+
 继续一张已有草稿时，可传 `--initial-scene candidate.scene.json --initial-design design.json --narrow-revision`。配合可重复的 `--editable-id` 限定允许改变的元素：程序会锁住其余元素、画布和顺序，防止局部修订破坏已确认内容。来源与素材仍须显式提供；继续修订有新的独立计时，不重写上一轮的失败记录。元数据中的证据绑定可独立修正，但仍须重新通过审查。
 
 默认最多 24 次模型调用、20 分钟循环预算、`medium` 推理强度；检查预算发生在调用之间，单次请求可能使墙钟时间略超预算。服务端超时也计入本次尝试。`--narrow-revision` 只用于明确的小范围修改，免除六粗稿要求，不免除内容、渲染与审图检查。
