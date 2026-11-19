@@ -1,0 +1,39 @@
+{
+  "assets": [
+    {
+      "id": "parkour_rgb",
+      "path": "parkour_rgb.png",
+      "source": "LoopedTransformer project motion_v9 crop",
+      "license": "project-local/user-provided research asset",
+      "role": "measured case reference"
+    },
+    {
+      "id": "robot_assay_plate",
+      "path": "robot_assay_plate.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Robot_arm_handles_an_assay_plate.jpg",
+      "license": "Public domain; courtesy National Institute of Allergy and Infectious Diseases",
+      "role": "online public-domain case reference"
+    },
+    {
+      "id": "autonomous_vehicle",
+      "path": "autonomous_vehicle.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Droid-autonomous_vehicle_(52858671158).jpg",
+      "license": "CC BY 2.0; author Maxx@night / Wikimedia Commons",
+      "role": "online CC case reference"
+    },
+    {
+      "id": "parkour_flow",
+      "path": "parkour_flow.png",
+      "source": "LoopedTransformer project motion_v9 crop",
+      "license": "project-local/user-provided research asset",
+      "role": "measured motion-reference tile"
+    },
+    {
+      "id": "parkour_residual",
+      "path": "parkour_residual.png",
+      "source": "LoopedTransformer project motion_v9 crop",
+      "license": "project-local/user-provided research asset",
+      "role": "measured residual-reference tile"
+    }
+  ]
+}

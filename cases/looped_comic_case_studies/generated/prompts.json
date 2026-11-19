@@ -1,0 +1,27 @@
+{
+  "style_reference": "LoopedTransformer figures/v12/candidates/B_cir.png",
+  "shared_constraints": [
+    "text-free generated asset",
+    "native labels/arrows added later",
+    "navy ink + cobalt/sky/rose watercolor",
+    "no formulas, numbers, metrics, logos, checkmarks, speech balloons, or invented results",
+    "2.27:1 landscape with watercolor edges and negative space"
+  ],
+  "parkour_storyboard_bg": {
+    "subject": "parkour athlete vaulting a pale concrete wall with ghosted hidden-state silhouettes and a cobalt token ribbon",
+    "prompt_summary": "Scientific editorial comic; realistic anatomy; off-white paper; pale sky-blue wash; cobalt/navy contours; restrained rose accents; no text or arrows."
+  },
+  "robot_storyboard_bg": {
+    "subject": "robotic arm iterating over an assay plate with ghosted internal states and a blue/silver/rose token ribbon",
+    "prompt_summary": "Use the B_cir style and robot photo only as subject reference; clean laboratory; realistic robot geometry; no text, arrows, metrics, or logos."
+  },
+  "vehicle_storyboard_bg": {
+    "subject": "sensor-equipped autonomous car moving through a city intersection with ghosted hidden states and sensor token ribbon",
+    "prompt_summary": "Use the B_cir style and vehicle photo only as subject reference; off-white paper; navy/cobalt/rose; no driving claims, text, arrows, or metrics."
+  },
+  "provenance": {
+    "generator": "built-in image_gen / gpt-image-2 tool path",
+    "model_identifier": "not exposed by tool",
+    "generated_assets_are": "illustrative backgrounds only"
+  }
+}

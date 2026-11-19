@@ -1,0 +1,39 @@
+{
+  "style_pack": "looped_transformer_comic_storyboard",
+  "figures": [
+    {
+      "id": "looped_parkour_refine",
+      "background": "generated/parkour_storyboard_bg.png",
+      "case": "parkour_rgb.png",
+      "extra": [
+        "parkour_flow.png",
+        "parkour_residual.png"
+      ],
+      "status": "illustrative",
+      "native_text": true,
+      "source_label": "DAVIS parkour crop \u2022 RGB / DIS-flow / RGB residual"
+    },
+    {
+      "id": "looped_robot_active_sensing",
+      "background": "generated/robot_storyboard_bg.png",
+      "case": "robot_assay_plate.jpg",
+      "extra": [
+        "robot_assay_plate.jpg"
+      ],
+      "status": "illustrative",
+      "native_text": true,
+      "source_label": "Wikimedia Commons / NIAID \u2022 public-domain assay-plate photo"
+    },
+    {
+      "id": "looped_autonomous_vehicle",
+      "background": "generated/vehicle_storyboard_bg.png",
+      "case": "autonomous_vehicle.jpg",
+      "extra": [
+        "autonomous_vehicle.jpg"
+      ],
+      "status": "illustrative",
+      "native_text": true,
+      "source_label": "Wikimedia Commons / Dllu \u2022 CC BY-SA vehicle image"
+    }
+  ]
+}
