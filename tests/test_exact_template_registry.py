@@ -17,7 +17,7 @@ class ExactTemplateRegistryTests(unittest.TestCase):
             "d4rt_fig1", "ovoxel_fig1", "nitrogen_fig1", "gated_attention_fig1",
             "artificial_hivemind_fig1", "superposition_fig1", "met3r_fig5", "see3d_fig2",
             "mixture_of_scores_fig1", "phase_transition_fig1", "scaling_extrapolation_fig1",
-            "uncertainty_swarm_fig1",
+            "uncertainty_swarm_fig1", "nwm_fig1",
         }
         self.assertEqual({entry["template_id"] for entry in entries}, expected)
         self.assertTrue(all(entry["source_url"].startswith("https://") for entry in entries))
@@ -35,7 +35,7 @@ class ExactTemplateRegistryTests(unittest.TestCase):
 
         atlas = CASE.parent / "figureflow_exact_reproduction_atlas.pdf"
         self.assertTrue(atlas.is_file())
-        self.assertEqual(len(PdfReader(str(atlas)).pages), 6)
+        self.assertEqual(len(PdfReader(str(atlas)).pages), (len(json.loads((CASE / "manifest.json").read_text(encoding="utf-8"))["templates"]) + 1) // 2)
 
     def test_renderer_rejects_unknown_template_without_path_access(self) -> None:
         import importlib.util

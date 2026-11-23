@@ -1,6 +1,6 @@
 # Exact-paper TikZ templates
 
-This directory contains two explicitly separated routes for the 12 requested visual patterns:
+This directory contains two explicitly separated routes for the 13 requested visual patterns:
 
 1. `main.tex` is a paper-informed, editable native TikZ/PGFPlots trace. It is layout-faithful, but cannot be pixel-identical when the published figure contains photographs, rendered meshes, or proprietary icon artwork.
 2. `reference_crop_manifest.json` is the source-locked route. Given the cited published PDF locally, FigureFlow crops the exact figure region and places that crop through a minimal TikZ wrapper. This is the route to use when the requirement is 100% visual identity.
@@ -46,5 +46,6 @@ The renderer accepts only IDs in `manifest.json`, compiles the selected TikZ sou
 | `phase_transition_fig1` | log model-size threshold plot + two mixing-ratio small multiples |
 | `scaling_extrapolation_fig1` | loss-vs-FLOPs + observed/extrapolated optimal-mixture ribbon |
 | `uncertainty_swarm_fig1` | KDE density + ordered CI swarm + specification annotation |
+| `nwm_fig1` | action-conditioned model block + known-environment scoring rail + imagined-trajectory grid |
 
 All labels, formulas, axes, legend anchors, markers, and colors are native TikZ/PGFPlots tokens and can be changed without touching a raster layer.

@@ -38,6 +38,14 @@ object mapping, and post-export reopen checks are documented in
 
 For faithful AlphaEdit Figure 2 reconstruction or replaceable annular/small-multiple CSV charts, read [publication-data-reproduction.md](publication-data-reproduction.md) and use `render_publication_data.py` with a FigureFlow checkout. Its published/user-supplied evidence codes are scoped to the new data module; the shared legacy YAML and `FigurePlan` statuses below are unchanged.
 
+For a 1:1 visual study of a published main figure, select the allowlisted
+`exact-template` route. Read
+`cases/top_conference_visual_research/exact_templates/replication_registry.json`,
+validate it with `validate_mainfigure_registry.py`, then render the native
+TikZ source and compare it to the normalized crop from the cited PDF. Keep the
+published-figure evidence boundary visible; do not treat a native trace as a
+new experiment or as pixel identity.
+
 ## Shared source fields
 
 Every YAML source should identify:

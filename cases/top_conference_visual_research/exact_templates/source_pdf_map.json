@@ -10,5 +10,6 @@
   "mixture_of_scores_fig1": "mos.pdf",
   "phase_transition_fig1": "phase.pdf",
   "scaling_extrapolation_fig1": "optimal.pdf",
-  "uncertainty_swarm_fig1": "progress.pdf"
+  "uncertainty_swarm_fig1": "progress.pdf",
+  "nwm_fig1": "nwm.pdf"
 }

@@ -70,6 +70,13 @@ overview. Use it to choose a grammar (`hero_evidence`, `action_rollout`,
 screenshot into the repository or present a derived style observation as an
 experimental result.
 
+For exact main-figure replication, use
+`exact_templates/replication_registry.json` and validate it with
+`scripts/validate_mainfigure_registry.py` before rendering. Each entry binds
+the official PDF page, normalized crop, reading order, palette, typography,
+fidelity boundary, and paper-width QA. The native TikZ source is editable; a
+source-locked PDF crop is only a local visual reference.
+
 For a workflow intended for slides, select the allowlisted `presentation-spacious` layout preset rather than inventing font-size floats. For GPU systems visuals, `gpu-green-tech` is available as a generic accelerator-systems palette only. For annular publication-data charts, `welm-image-green` records the WeLM-Image Figure 1 inspired green radial grammar and source metadata. For multimodal recommendation mechanism diagrams, `concord-rec` records the user-approved CONCORD-Rec Figure 1/2 jade–iris grammar, with navy backbone, teal conditioning, violet context, amber detached supervision, and shape semantics for stacks/projections/fusion/stores. Neither theme uses a third-party logo or implies endorsement or affiliation.
 
 ## Authoring workflow
@@ -208,6 +215,7 @@ The repository-level FigureFlow app adds GPT-5.6-sol structured planning, three 
 - [references/assets-and-prompts.md](references/assets-and-prompts.md): real cases, ImageGen, crops, and provenance
 - [references/qa.md](references/qa.md): semantic, geometric, PDF, and paper-page QA
 - [../../cases/top_conference_visual_research/README.md](../../cases/top_conference_visual_research/README.md): official top-conference visual registry, derived grammar, and reusable tokens
+- [../../cases/top_conference_visual_research/exact_templates/replication_registry.json](../../cases/top_conference_visual_research/exact_templates/replication_registry.json): source/page/crop/grammar/evidence contract for exact main-figure replication
 - `assets/themes/academic_audit.json`: shared Python/SVG/LaTeX design tokens
 - `assets/themes/gpu_green_tech.json`: generic GPU-systems workflow tokens; no third-party logo or endorsement
 - `assets/themes/welm_image_green.json`: WeLM-Image Figure 1 inspired radial-chart tokens with source metadata

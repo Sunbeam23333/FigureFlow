@@ -14,9 +14,11 @@ third-party figure images or reuse their experimental values.
 | [`catalog.json`](catalog.json) | Machine-readable paper/figure inventory and visual encodings |
 | [`palette_tokens.json`](palette_tokens.json) | White-paper, emerald, action, score, and colorblind-safe tokens |
 | [`derived_rules.md`](derived_rules.md) | Cross-paper layout rules for main figures, qualitative panels, and data plots |
+| [`research_digest_20261124.md`](research_digest_20261124.md) | New official-source survey of world-model main figures and data-chart grammars |
 | [`source_links.md`](source_links.md) | Official awards, proceedings, open-access PDFs, and access date |
-| [`exact_templates/`](exact_templates/) | Twelve allowlisted, paper-faithful TikZ/PGFPlots templates with per-figure provenance |
+| [`exact_templates/`](exact_templates/) | Thirteen allowlisted, paper-faithful TikZ/PGFPlots templates with per-figure provenance |
 | [`exact_templates/manifest.json`](exact_templates/manifest.json) | Figure IDs, official source pages, panel grammar, and semantic palettes |
+| [`exact_templates/replication_registry.json`](exact_templates/replication_registry.json) | Validated source/page/crop/grammar/palette/evidence/QA contract for every exact template |
 | [`figureflow_exact_reproduction_atlas.pdf`](figureflow_exact_reproduction_atlas.pdf) | Exact-template contact-sheet PDF used for visual QA |
 | [`build_exact_reproduction_atlas.py`](build_exact_reproduction_atlas.py) | Rebuilds the contact-sheet PDF from the native templates |
 | [`figureflow_source_locked_atlas.pdf`](figureflow_source_locked_atlas.pdf) | Pixel-faithful crops from the cited published PDFs |
@@ -28,6 +30,30 @@ The registry deliberately separates `source_evidence` from `derived_rule`.
 Statements about a published figure are observations from the cited official
 PDF/HTML; FigureFlow recommendations are marked as derived and should be
 validated against the target paper before use.
+
+The source-grounded exact-template registry is validated independently:
+
+```bash
+python3 skill/design-research-figures/scripts/validate_mainfigure_registry.py
+```
+
+It records source URL, page, normalized crop, reading order, palette,
+typography, evidence boundary, and 540 pt paper-width QA for every allowlisted
+template. The newly added `nwm_fig1` entry covers Navigation World Models
+Figure 1; supply the official PDF locally to render its pixel-faithful crop.
+
+The exact-template registry adds a stricter replication contract: every entry
+has an HTTPS source URL, source page, normalized crop, explicit fidelity
+boundary, renderer route, reading order, palette, typography note, evidence
+status, and 540 pt paper-width QA gate. Validate it before adding a new paper:
+
+```bash
+python3 skill/design-research-figures/scripts/validate_mainfigure_registry.py
+```
+
+The contract stores no paper screenshots or experimental data. A source-locked
+crop is used only as a local QA reference when the cited PDF is supplied; the
+native TikZ/Pgfplots source remains the editable reproduction artifact.
 
 ## Reusable routes
 

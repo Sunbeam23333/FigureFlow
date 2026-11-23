@@ -50,7 +50,10 @@ python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
 保存了一轮基于官方奖项页和论文 PDF 的 CVPR、ICML、NeurIPS、ICLR 视觉
 调研：它包含 33 个代表性条目、主图/定性图/数据图的布局语法、白底与
 emerald/action/score 调色 token、colorblind-safe 系列，以及一个可编辑的
-`input → representation → evidence` TikZ 模板。仓库不复制第三方论文整图，
+`input → representation → evidence` TikZ 模板。最新官方来源 survey 见
+[`research_digest_20261124.md`](cases/top_conference_visual_research/research_digest_20261124.md)，
+其中新增 world-model 主图、RGB/XYZ paired evidence、action rollout、
+quality-cost bubble、scaling-law 和 Pareto/frontier 语法。仓库不复制第三方论文整图，
 只保留来源链接、图号级观察和派生规则；每个论文条目都明确了可复用的
 证据编码与状态边界。
 
