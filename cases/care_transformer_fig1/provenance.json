@@ -1,0 +1,15 @@
+{
+  "paper": "CARE Transformer: Mobile-Friendly Linear Visual Transformer via Decoupled Dual Interaction",
+  "conference": "CVPR 2025",
+  "figure": "Figure 1",
+  "source_pdf": "https://arxiv.org/pdf/2411.16170",
+  "data_source": "Published paper Table 1",
+  "evidence_status": "measured",
+  "evidence_scope": "Values reported by paper authors; no experiment rerun by FigureFlow",
+  "latency_interpretation": "Inferred RTX 4090 batch 64 based on matching Figure 1 coordinates to Table 1. The figure axis itself does not specify device.",
+  "fidelity": "data-grounded reconstruction, not pixel-identical and not author plotting code",
+  "editable_data": "data.csv",
+  "renderer": "render.py",
+  "plot_width_pt": 352.8,
+  "point_count": 27
+}

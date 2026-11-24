@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = ROOT / "cases" / "top_conference_visual_research" / "exact_templates" / "replication_registry.json"
 ALLOWED_RENDERERS = {"native-tikz", "source-locked-pdf", "native-data-replot"}
-ALLOWED_FIDELITY = {"layout-faithful", "pixel-faithful-crop", "data-driven-replot"}
+ALLOWED_FIDELITY = {"layout-faithful", "pixel-faithful-crop", "data-driven-replot", "scaffold-unverified"}
 
 
 class MainFigureRegistryError(ValueError):

@@ -3,7 +3,7 @@
   "reproduction_status": "native-trace-scaffold",
   "source_locked_route": "render_reference_figure.py",
   "evidence_status": "published-figure",
-  "fidelity_boundary": "layout-faithful; not pixel-identical (fonts, raster inputs and antialiasing may differ)",
+  "fidelity_boundary": "native traces are unverified scaffolds unless individually audited against the source; source-locked crops are references, not editable reconstructions",
   "templates": [
     {"template_id":"d4rt_fig1","paper":"D4RT","conference":"CVPR","year":2026,"figure_id":"Figure 1","source_page":1,"source_url":"https://openaccess.thecvf.com/content/CVPR2026/papers/Zhang_Efficiently_Reconstructing_Dynamic_Scenes_One_D4RT_at_a_Time_CVPR_2026_paper.pdf","panels":["video evidence","encoder","global scene representation","decoder/query heads","multi-task outputs"],"palette":{"navy":"#17324D","blue":"#277DA1","cyan":"#64C7D8","yellow":"#F2C14E","green":"#55A630"}},
     {"template_id":"ovoxel_fig1","paper":"O-Voxel","conference":"CVPR","year":2026,"figure_id":"Figure 1","source_page":1,"source_url":"https://openaccess.thecvf.com/content/CVPR2026/papers/Xiang_Native_and_Compact_Structured_Latents_for_3D_Generation_CVPR_2026_paper.pdf","panels":["native 3D input","sparse O-Voxel latent","geometry stream","appearance stream","generated 3D"],"palette":{"navy":"#35285E","purple":"#9467BD","orange":"#F28F3B","teal":"#2A9D8F"}},

@@ -15,6 +15,9 @@ third-party figure images or reuse their experimental values.
 | [`palette_tokens.json`](palette_tokens.json) | White-paper, emerald, action, score, and colorblind-safe tokens |
 | [`derived_rules.md`](derived_rules.md) | Cross-paper layout rules for main figures, qualitative panels, and data plots |
 | [`research_digest_20261124.md`](research_digest_20261124.md) | New official-source survey of world-model main figures and data-chart grammars |
+| [`research_digest_20261125.md`](research_digest_20261125.md) | Six further official-source candidates; research only, not completed templates |
+| [`exact_templates/policy_world_model_fig1/`](exact_templates/policy_world_model_fig1/) | Source-assisted editable three-column reconstruction with real evidence tiles extracted locally |
+| [`../care_transformer_fig1/`](../care_transformer_fig1/) | Data-grounded accuracy–latency–compute plot reconstructed from the paper's Table 1 |
 | [`source_links.md`](source_links.md) | Official awards, proceedings, open-access PDFs, and access date |
 | [`exact_templates/`](exact_templates/) | Thirteen allowlisted, paper-faithful TikZ/PGFPlots templates with per-figure provenance |
 | [`exact_templates/manifest.json`](exact_templates/manifest.json) | Figure IDs, official source pages, panel grammar, and semantic palettes |
@@ -54,6 +57,25 @@ python3 skill/design-research-figures/scripts/validate_mainfigure_registry.py
 The contract stores no paper screenshots or experimental data. A source-locked
 crop is used only as a local QA reference when the cited PDF is supplied; the
 native TikZ/Pgfplots source remains the editable reproduction artifact.
+
+### Visual fidelity review
+
+The historical `exact_templates` name is not a certification of 1:1 fidelity.
+Several existing sources are incomplete scaffolds with missing photo evidence,
+geometry, or data. A source-locked crop reproduces the published pixels but is
+not an editable reconstruction. Generate a side-by-side comparison and record
+the outstanding differences before calling any template faithful:
+
+```bash
+python3 skill/design-research-figures/scripts/compare_replication.py \
+  /path/to/reference.png /path/to/candidate.png --output /tmp/comparison.png
+```
+
+The tool preserves aspect ratios and writes a hash manifest, but intentionally
+does not assign a numerical fidelity score or certify visual similarity. Check
+panel layout, real case assets, labels, data marks and paper-size rendering
+manually. For example, `nwm_fig1` currently uses placeholders for real video
+frames and differs materially from the published Figure 1.
 
 ## Reusable routes
 

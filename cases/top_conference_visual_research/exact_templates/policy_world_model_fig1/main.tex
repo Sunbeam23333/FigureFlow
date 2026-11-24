@@ -1,0 +1,50 @@
+\documentclass[tikz,border=0pt]{standalone}
+\usepackage{graphicx}
+\usetikzlibrary{arrows.meta,shadings}
+\begin{document}
+% Coordinates follow the published panel at 150 dpi; evidence photos are
+% separately extracted from the official paper by extract_assets.py.
+\begin{tikzpicture}[x=0.017cm,y=-0.017cm,>=Stealth,
+ lab/.style={font=\sffamily\bfseries\fontsize{6.3}{7.4}\selectfont,inner sep=0},
+ model/.style={draw=black,very thin,rounded corners=5pt,minimum height=.731cm,align=center,
+ font=\sffamily\bfseries\fontsize{6.3}{7.4}\selectfont,inner sep=3pt}]
+\path[use as bounding box] (0,0) rectangle (825,215);
+\draw[gray!65,densely dashed,thin] (236,0)--(236,214);
+\draw[gray!65,densely dashed,thin] (514,0)--(514,214);
+% Original photo samples: separate raster evidence layer, never invented frames.
+\node[anchor=north west,inner sep=0] at (71,21) {\includegraphics[width=1.377cm]{assets/observation_a.png}};
+\node[anchor=north west,inner sep=0] at (245,21) {\includegraphics[width=1.360cm]{assets/observation_b.png}};
+\node[anchor=north west,inner sep=0] at (425,23) {\includegraphics[width=1.343cm]{assets/state_prediction.png}};
+\node[anchor=north west,inner sep=0] at (519,21) {\includegraphics[width=1.394cm]{assets/observation_c.png}};
+\node[anchor=north west,inner sep=0] at (642,35) {\includegraphics[width=1.309cm]{assets/future_forecasting.png}};
+\node[lab] at (110,12) {Observation};
+\node[lab] at (282,12) {Observation};
+\node[lab] at (454,12) {State Prediction};
+\node[lab] at (555,12) {Observation};
+\node[lab] at (680,27) {Future Forecasting};
+\node[model,fill=cyan!15,minimum width=1.292cm] (video) at (40,100) {Video\\Model};
+\node[model,fill=orange!25,minimum width=1.139cm] (planner) at (180,100) {Planner};
+\node[model,left color=cyan!15,right color=orange!25,minimum width=1.292cm] (unified) at (375,100) {Unified\\Model};
+\node[model,left color=cyan!15,right color=orange!25,minimum width=2.431cm] (pwm) at (682,102) {Policy World Model};
+\draw[->,thin] (40,78) .. controls (40,67) and (74,64) .. (82,65);
+\draw[->,thin] (151,65) .. controls (172,67) and (180,71) .. (180,78);
+\draw[->,thin] (180,122) .. controls (171,141) and (48,141) .. (40,122);
+\node[lab] at (110,148) {Planning};
+\draw[->,thin] (325,50) .. controls (335,53) and (330,94) .. (337,100);
+\node[lab,align=left] at (282,145) {Navigation\\Command};
+\draw[->,thin] (325,145) .. controls (335,144) and (330,108) .. (337,105);
+\draw[->,thin] (413,98) .. controls (424,96) and (417,42) .. (425,43);
+\draw[->,thin] (413,105) .. controls (423,107) and (418,146) .. (427,146);
+\node[lab,anchor=west] at (433,147) {Planning};
+\draw[->,thin] (600,52) .. controls (610,54) and (602,95) .. (610,100);
+\node[lab,align=left] at (559,145) {Navigation\\Command};
+\draw[->,thin] (600,145) .. controls (610,144) and (603,108) .. (610,106);
+\draw[->,thin] (627,79) .. controls (630,56) and (635,54) .. (642,54);
+\draw[->,thin] (719,53) .. controls (733,54) and (737,68) .. (737,79);
+\draw[->,thin] (754,102)--(762,102);
+\node[lab,anchor=west] at (766,102) {Planning};
+\node[font=\rmfamily\fontsize{7}{8.5}\selectfont,align=center] at (116,186) {(a) Conventional world model\\with planner};
+\node[font=\rmfamily\fontsize{7}{8.5}\selectfont,align=center] at (375,186) {(b) Unified world modeling\\and planning};
+\node[font=\rmfamily\fontsize{7}{8.5}\selectfont,align=center] at (670,181) {(c) The proposed policy world model};
+\end{tikzpicture}
+\end{document}
