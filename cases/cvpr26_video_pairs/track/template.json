@@ -1,0 +1,31 @@
+{
+  "id": "edit-by-track-fig1",
+  "family": "paired-trajectory-edit-with-three-case-studies",
+  "title": "Edit-by-Track — Figure 1",
+  "evidence_status": "measured",
+  "evidence_owner": "qualitative results as published by Lee et al.; not a FigureFlow model run",
+  "claim": "An edit to a 3D point-track condition is paired with the corresponding change in a real video example.",
+  "source_url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Lee_Generative_Video_Motion_Editing_with_3D_Point_Tracks_CVPR_2026_paper.pdf",
+  "source_sha256": "f270af7eb9ad5b77e51a7ffe5f9ffcd6519a54c9fbfa912d5c61fc7cb01374bd",
+  "page": 1,
+  "page_crop_top_left_pt": [65, 213, 547, 379],
+  "figure_origin_bottom_left_page_pt": [65.925, 409.974],
+  "figure_scale": 0.39163,
+  "published_layers_back_to_front": ["back", "middle", "front"],
+  "frame_stacks": {
+    "joint.input": [1, 2, 3], "joint.output": [4, 5, 6],
+    "deform.input": [9, 10, 11], "deform.output": [12, 13, 14],
+    "transfer.input": [15, 16, 17], "transfer.output": [18, 19, 20],
+    "removal.input": [21, 22, 23], "removal.output": [24, 25, 26]
+  },
+  "track_projections": {"joint.estimated": 7, "joint.edited": 8},
+  "headings": ["Joint camera & object motion editing", "Non-rigid deformation", "Human motion transfer", "Object removal & motion editing"],
+  "preserve": [
+    "Four top panels: input, estimated poses/tracks, edited poses/tracks, edited video.",
+    "Match all 26 asset identities, affine placements, effective soft masks and back-to-front drawing order.",
+    "The two track projections are published bitmap observations with different content, not rediscovered raw 3D trajectories.",
+    "Bottom pairs stay matched inside each of non-rigid deformation, human transfer, and removal/motion editing (left to right).",
+    "Keep all six direction arrows and four original title rules, native Inter text, white stack borders and original color space.",
+    "Do not infer frame timestamps or indices from the printed three-layer presentation."
+  ]
+}

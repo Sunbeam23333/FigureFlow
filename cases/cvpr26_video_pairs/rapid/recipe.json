@@ -1,0 +1,29 @@
+{
+  "id": "rapid_fig1",
+  "paper": "RAPID: Reusing Attention Sparsity with Inter-step Adaptation for Efficient Video Diffusion",
+  "source": "https://openaccess.thecvf.com/content/CVPR2026/papers/Lin_RAPID_Reusing_Attention_Sparsity_with_Inter-step_Adaptation_for_Efficient_Video_CVPR_2026_paper.pdf",
+  "sha256": "fcde5b4ac52fa160bf3b6b179cc23b22391b8452663ac7f73f0ff21676502aa8",
+  "page_number": 1,
+  "figure": 1,
+  "image_xref": 36,
+  "size_px": [2062, 1016],
+  "page_bbox_pt": [58.5, 229.265, 553.449, 473.258],
+  "palette": {"ink": "#000000", "baseline_latency": "#d32f2f", "sparse_latency": "#388e3c"},
+  "palette_boundary": "Flat interior colors estimated from the printed JPEG. Compression creates many nearby RGB values; these are not an author-supplied palette.",
+  "columns_px": [[0, 402], [404, 817], [819, 1232], [1234, 1647], [1649, 2062]],
+  "rows": [
+    {"id": "dense", "frame_y": [68, 317], "text_y": [0, 65], "accent_word": 3, "accent": "baseline_latency", "text": "Dense Attention | Latency = 66 min",
+     "table1": {"method": "Original", "latency_s": 3971, "printed_min": 66, "psnr": null, "speedup": null},
+     "rgb_sha256": ["2fa3f145231f8fea3ea921acc1f238e0c4e1542cb5a1114addf4489f5d14ede5","8bf75f3ad3b844277c0885835c3970fbf18745ffd99f6bbdd047a1a7dcebf164","70ed58420b1ada9ad321172a8cfef433f594284baefc9edba31814f1629ff4a2","bcdbe2dea83f1594335a619beb6d4c4430938ef965107fbe56111b1761a22cee","40b6c3afd7bac6d05dc04dca0c0b2eaad1feb563bf58e30cd23154f94f050a5b"]},
+    {"id": "rapid", "frame_y": [387, 636], "text_y": [320, 384], "accent_word": 6, "accent": "sparse_latency", "text": "RAPID | PSNR = 26.11 | Latency = 43 min (1.53x)",
+     "table1": {"method": "Ours", "latency_s": 2601, "printed_min": 43, "psnr": 26.112, "speedup": 1.53},
+     "rgb_sha256": ["98106edae2feef7eedc070552d448ab0c85888cc541f7dc8bcc55f4213034c08","564d4514f54bbbe7eb6bc48032b00dc89f8a477458161bcf35c1d93e939cb403","12eecce3a55912ac63bac544ba67ff4ff40f5b9ce2319576ab7eaf19b306c6c9","4946b090da3b43acd37907512c7fb119e4c1f3901a3850118ce50f3adc87735d","c3c1b4347ad1545e13a00f39d56ffa70db1b651cd1c6f62595d15e52d4c937d7"]},
+    {"id": "turbo", "frame_y": [706, 955], "text_y": [638, 704], "accent_word": 7, "accent": "sparse_latency", "text": "RAPID (Turbo) | PSNR = 22.61 | Latency = 37 min (1.79x)",
+     "table1": {"method": "Ours-Turbo", "latency_s": 2221, "printed_min": 37, "psnr": 22.612, "speedup": 1.79},
+     "rgb_sha256": ["5b99a9b3d4134c9052331a922d7c93b1c228010eb2354bc96f7ab54202f07e32","f11106eb3e3aa5489db58cbc4e4c7214971b28852ad386d1d817c901ef3be3e5","454b78da2b31951a1f964678a5ce8ea9411c619e8dc4bedfa554e1971b242fe8","d63dbb9adda1a989de294765cb057467f5178572af7e218cfa46a8e683778621","926a57940d696600097ed74562da1b243494c71b5769236228174a62cc3466bf"]}
+  ],
+  "prompt": {"id": "prompt", "text_y": [960, 1007], "text": "Prompt: An astronaut dancing vigorously on the moon with earth flying past in the background, hyperrealistic"},
+  "metric_scope": "Table 1, VBench-2.0 / Wan2.1-14B / 768P / 81 frames / one NVIDIA A100. Not per-frame or astronaut-clip measurements.",
+  "selection": "Ordinal position 1..5 in each published strip, left to right. Numeric timestamps and the unprinted pixels of the wider video are not supplied.",
+  "preserve": ["Three method rows in published order; same five displayed positions per row", "Narrow first column and four two-pixel source gutters", "Three method headers above their rows; one shared prompt below", "Red only for dense latency; green only for sparse latency/speedup", "No scores, timestamps, regeneration, or motion inferred from the images"]
+}

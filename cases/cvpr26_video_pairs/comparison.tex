@@ -1,0 +1,56 @@
+% FigureFlow review mount. Each artwork is included at 1 PDF bp per original bp.
+% Compile inside a completed review directory that contains track/ and rapid/.
+\documentclass[tikz,multi=tikzpicture,border=0bp]{standalone}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\definecolor{ink}{HTML}{19272E}
+\definecolor{soft}{HTML}{44565D}
+\definecolor{rulegray}{HTML}{CED8D9}
+\definecolor{accent}{HTML}{206B60}
+\newsavebox\original
+\newsavebox\candidate
+\newlength\panelwidth
+\newlength\panelheight
+\newcommand{\pair}[7]{%
+  \sbox\original{\includegraphics{#1/reference.pdf}}%
+  \sbox\candidate{\includegraphics{#1/\displayfile}}%
+  \setlength\panelwidth{\wd\original}\setlength\panelheight{\ht\original}%
+  \begin{tikzpicture}[x=1bp,y=-1bp,inner sep=0pt,outer sep=0pt,
+      every node/.style={text=ink,font=\sffamily,anchor=north west}]
+    \pgfmathsetmacro{\w}{\the\panelwidth/1bp}
+    \pgfmathsetmacro{\h}{\the\panelheight/1bp}
+    \pgfmathsetmacro{\rightx}{\w+40}
+    \pgfmathsetmacro{\rightedge}{2*\w+40}
+    \path[use as bounding box] (0,0) rectangle (\rightedge+20,\h+133);
+    \node[font=\sffamily\bfseries\fontsize{8}{10}\selectfont,text=accent] at (20,13)
+      {FIGUREFLOW \enspace / \enspace SOURCE STUDIES};
+    \node[anchor=north east,font=\sffamily\fontsize{8}{10}\selectfont,text=soft] at (\rightedge,13)
+      {CVPR 2026 \quad / \quad #2 OF 02};
+    \node[font=\sffamily\bfseries\fontsize{17}{19}\selectfont] at (20,27) {#3};
+    \draw[rulegray,line width=.45bp] (20,54) -- (\rightedge,54);
+    \node[font=\sffamily\bfseries\fontsize{8}{10}\selectfont] at (20,62)
+      {01 \quad PUBLISHED FIGURE};
+    \node[font=\sffamily\bfseries\fontsize{8}{10}\selectfont] at (\rightx,62)
+      {02 \quad COMPONENT RECONSTRUCTION};
+    \node at (20,80) {\usebox\original};
+    \node at (\rightx,80) {\usebox\candidate};
+    \draw[rulegray,line width=.45bp] (20,\h+88) -- (\rightedge,\h+88);
+    \node[font=\sffamily\fontsize{8}{10}\selectfont,text=soft] at (20,\h+97) {#4};
+    \node[font=\sffamily\fontsize{8}{10}\selectfont,text=soft] at (20,\h+111) {#5};
+    \node[font=\sffamily\fontsize{8}{10}\selectfont,text=soft] at (\rightx,\h+97) {#6};
+    \node[font=\sffamily\fontsize{8}{10}\selectfont,text=soft] at (\rightx,\h+111) {#7};
+  \end{tikzpicture}}
+\begin{document}
+\def\displayfile{reconstruction.pdf}
+\pair{track}{01}{Edit-by-Track \enspace / \enspace Figure 1}
+  {Source: Yao-Chih Lee et al., CVPR 2026, Figure 1.}
+  {Compare at 100\%: both panels use the published print scale.}
+  {Inspect: three-deep frame stacks, draw order, and both projected tracks.}
+  {The two track views are published 2D projections, not recovered 3D coordinates.}
+\def\displayfile{seamless.pdf}
+\pair{rapid}{02}{RAPID \enspace / \enspace Figure 1}
+  {Source: Shangran Lin et al., CVPR 2026, Figure 1.}
+  {Compare at 100\%: both panels use the published print scale.}
+  {Reassembled at source resolution: 15 real frames, printed labels and narrow gutters.}
+  {Method metrics refer to the benchmark, not to this astronaut clip alone.}
+\end{document}

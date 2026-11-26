@@ -1,0 +1,21 @@
+{
+  "track": {
+    "title": "Edit-by-Track",
+    "paper": "Generative Video Motion Editing with 3D Point Tracks",
+    "credit": "Yao-Chih Lee et al., CVPR 2026",
+    "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Lee_Generative_Video_Motion_Editing_with_3D_Point_Tracks_CVPR_2026_paper.pdf",
+    "sha256": "f270af7eb9ad5b77e51a7ffe5f9ffcd6519a54c9fbfa912d5c61fc7cb01374bd",
+    "minimum_image_placements": 26,
+    "display": "reconstruction.pdf",
+    "regions": {"original_tracks":[0.29,0.10,0.49,0.50], "edited_tracks":[0.52,0.10,0.73,0.50], "input_stack":[0,0.09,0.25,0.52], "output_stack":[0.75,0.09,1,0.52], "nonrigid_pair":[0,0.61,0.31,1], "human_pair":[0.34,0.61,0.66,1], "removal_pair":[0.69,0.61,1,1]}
+  },
+  "rapid": {
+    "title": "RAPID",
+    "paper": "RAPID: Reusing Attention Sparsity with Inter-step Adaptation for Efficient Video Diffusion",
+    "credit": "Shangran Lin et al., CVPR 2026",
+    "url": "https://openaccess.thecvf.com/content/CVPR2026/papers/Lin_RAPID_Reusing_Attention_Sparsity_with_Inter-step_Adaptation_for_Efficient_Video_CVPR_2026_paper.pdf",
+    "sha256": "fcde5b4ac52fa160bf3b6b179cc23b22391b8452663ac7f73f0ff21676502aa8",
+    "minimum_image_placements": 15,
+    "display": "seamless.pdf"
+  }
+}

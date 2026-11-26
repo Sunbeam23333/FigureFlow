@@ -76,6 +76,15 @@ checkout. List case IDs with `python3 cases/paper_rebuilds/render.py --list`.
 This route rebuilds published artwork from pinned local PDFs and supplies
 same-scale comparisons; its traced chart paths are not newly measured data.
 
+For Edit-by-Track Fig. 1 (paired edit examples around projected trajectories) or
+RAPID Fig. 1 (method-by-time video grid with benchmark annotations), route to
+[the two video comparison templates](../../cases/cvpr26_video_pairs/README.md)
+in a FigureFlow checkout. Use the **display** branch to compare a published
+figure; use the **editable** recipe/assets to change the science or text.
+Do not infer 3D coordinates from projected tracks, timestamps from ordinal
+columns, or single-clip scores from aggregate metrics. Compare at native paper
+width and verify the named evidence regions before accepting a revision.
+
 For older main-figure replication templates, use
 `exact_templates/replication_registry.json` and validate it with
 `scripts/validate_mainfigure_registry.py` before rendering. Each entry binds

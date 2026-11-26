@@ -46,6 +46,8 @@ python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
 
 ### 顶会构图研究与可复用模板
 
+[Edit-by-Track 与 RAPID · CVPR 2026 Fig. 1](cases/cvpr26_video_pairs/README.md)：两种真实视频案例模板，分别保留三层帧叠片与投影轨迹、三种方法 × 五个对齐帧位。可离线重建，并将原图和重建图按发表尺寸并排输出；含逐帧、遮挡、色彩与指标来源验收。
+
 [六篇论文的九张分层复刻](cases/paper_rebuilds/README.md)：VideoWorld、Janus、Epona、GraphMimic、Motus、DynaVieW。给定对应版本的论文 PDF，即可生成同尺度的「原图 / 重建图」图册、离线 HTML 画廊、独立案例图块、可编辑 SVG 和纸面尺寸 PDF。原图仅用于对照；图块、原生图元和按需解析的论文矢量轮廓各有独立标识。
 
 [`cases/top_conference_visual_research/`](cases/top_conference_visual_research/)

@@ -45,6 +45,15 @@ The reference PDF, its digitized vector artwork in `scene.json`, `preview.png`, 
 
 Glyph paths in the digitized scene reproduce already-typeset artwork; they do not contain a reusable font program or grant rights to font software. The source PDF is retained as the officially published reference, not offered as a font distribution. FigureFlow's independently written extraction, rendering and analysis code is MIT, subject to the separately licensed dependencies used to run it.
 
+## CVPR 2026 video Figure 1 pair
+
+The CVPR 2026 video Figure 1 pair ships recipes and verification code, not the
+authors' paper PDFs, embedded fonts, figures or video frames. Rendered local
+comparison sheets contain published portions of [Edit-by-Track](https://openaccess.thecvf.com/content/CVPR2026/html/Lee_Generative_Video_Motion_Editing_with_3D_Point_Tracks_CVPR_2026_paper.html)
+and [RAPID](https://openaccess.thecvf.com/content/CVPR2026/papers/Lin_RAPID_Reusing_Attention_Sparsity_with_Inter-step_Adaptation_for_Efficient_Video_CVPR_2026_paper.pdf).
+Attribution and source manifests travel with those outputs; the MIT code
+license does not apply to third-party pixels, typefaces, or derived artwork.
+
 ## Online services
 
 Use of the OpenAI API and generated output is also governed by the applicable OpenAI terms and policies. The MIT License for this repository does not grant API access, model weights, service credits, or rights beyond those terms.

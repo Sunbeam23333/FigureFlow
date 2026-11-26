@@ -28,6 +28,7 @@ dist/
 
 # Generated demo artifacts
 /cases/paper_rebuilds/local/
+/cases/cvpr26_video_pairs/local/
 demo/output/
 skill/design-research-figures/demo/output/
 
