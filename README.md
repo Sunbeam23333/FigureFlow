@@ -46,6 +46,8 @@ python scripts/build_alphaedit_demo.py --output-dir demo/output/alphaedit_demo
 
 ### 顶会构图研究与可复用模板
 
+[六篇论文的九张分层复刻](cases/paper_rebuilds/README.md)：VideoWorld、Janus、Epona、GraphMimic、Motus、DynaVieW。给定对应版本的论文 PDF，即可生成同尺度的「原图 / 重建图」图册、离线 HTML 画廊、独立案例图块、可编辑 SVG 和纸面尺寸 PDF。原图仅用于对照；图块、原生图元和按需解析的论文矢量轮廓各有独立标识。
+
 [`cases/top_conference_visual_research/`](cases/top_conference_visual_research/)
 保存了一轮基于官方奖项页和论文 PDF 的 CVPR、ICML、NeurIPS、ICLR 视觉
 调研：它包含 33 个代表性条目、主图/定性图/数据图的布局语法、白底与

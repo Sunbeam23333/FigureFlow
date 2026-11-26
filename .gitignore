@@ -27,6 +27,7 @@ build/
 dist/
 
 # Generated demo artifacts
+/cases/paper_rebuilds/local/
 demo/output/
 skill/design-research-figures/demo/output/
 

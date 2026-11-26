@@ -70,7 +70,13 @@ overview. Use it to choose a grammar (`hero_evidence`, `action_rollout`,
 screenshot into the repository or present a derived style observation as an
 experimental result.
 
-For exact main-figure replication, use
+For VideoWorld, Janus, Epona, GraphMimic, Motus or DynaVieW figures, use the
+[layered paper rebuilds](../../cases/paper_rebuilds/README.md) in the FigureFlow
+checkout. List case IDs with `python3 cases/paper_rebuilds/render.py --list`.
+This route rebuilds published artwork from pinned local PDFs and supplies
+same-scale comparisons; its traced chart paths are not newly measured data.
+
+For older main-figure replication templates, use
 `exact_templates/replication_registry.json` and validate it with
 `scripts/validate_mainfigure_registry.py` before rendering. Each entry binds
 the official PDF page, normalized crop, reading order, palette, typography,

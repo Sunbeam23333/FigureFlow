@@ -15,7 +15,7 @@ third-party figure images or reuse their experimental values.
 | [`palette_tokens.json`](palette_tokens.json) | White-paper, emerald, action, score, and colorblind-safe tokens |
 | [`derived_rules.md`](derived_rules.md) | Cross-paper layout rules for main figures, qualitative panels, and data plots |
 | [`research_digest_20261124.md`](research_digest_20261124.md) | New official-source survey of world-model main figures and data-chart grammars |
-| [`research_digest_20261125.md`](research_digest_20261125.md) | Six further official-source candidates; research only, not completed templates |
+| [`research_digest_20261125.md`](research_digest_20261125.md) | Six source papers, now implemented as [nine layered figure rebuilds](../paper_rebuilds/README.md) |
 | [`exact_templates/policy_world_model_fig1/`](exact_templates/policy_world_model_fig1/) | Source-assisted editable three-column reconstruction with real evidence tiles extracted locally |
 | [`../care_transformer_fig1/`](../care_transformer_fig1/) | Data-grounded accuracy–latency–compute plot reconstructed from the paper's Table 1 |
 | [`source_links.md`](source_links.md) | Official awards, proceedings, open-access PDFs, and access date |
